@@ -285,16 +285,12 @@ const actions = {
 };
 
 subscribe(values => {
-  console.log("Array changed");
-}, items);
-
-subscribe(values => {
   console.log("Item in array changed");
 }, unchanged(items));
 
-actions.addItem(); // Logs "Array changed"
+actions.addItem(); // No effect
 
-actions.updateItem(1, "newValue"); // Logs "Item in array changed"
+actions.updateItem(1, "newValue"); // Logs "Item in array changed",
 ```
 
 ### Utils
