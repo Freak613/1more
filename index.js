@@ -115,7 +115,7 @@ function updateContent(refs, v) {
       this.applyData(refs, v);
     }
   } else {
-    if (typeof v === "object") {
+    if (typeof v === "object" && v.n === inst.n) {
       updateValue(v, inst);
     } else {
       removeVNode(inst);
@@ -495,6 +495,7 @@ const createVirtualNode = () => ({
   k: undefined, // key
   v: undefined, // render
   c: undefined, // component props
+  n: undefined, // component init
 });
 
 function removeVNode(vnode) {
@@ -510,8 +511,10 @@ function insertVNode(vnode, parent, afterNode) {
 }
 
 function renderValue(props, parent, afterNode) {
+  const init = props.n;
   const vnode = createVirtualNode();
-  const render = props.n(vnode);
+  vnode.n = init;
+  const render = init(vnode);
   vnode.v = render;
   vnode.c = props.p;
 
