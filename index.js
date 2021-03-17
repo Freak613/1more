@@ -514,6 +514,8 @@ function unmountWalk(vnode) {
     const inst = refs[point.instKey];
     if ((inst.t & 4) !== 0) {
       unmountWalk(inst);
+    } else if ((inst.t & 2) !== 0) {
+      inst.n.forEach(unmountWalk);
     }
   }
 
