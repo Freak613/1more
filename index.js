@@ -455,6 +455,8 @@ function compileTemplate(strings) {
   const refsSize = correctIndices(ways, argsWays, events, insertionPoints);
   const producer = getProducer(refsSize);
 
+  const unmountPoints = insertionPoints.reduce((acc, v) => [...acc, ...v], []);
+
   // Used in type detection to differ templates from each other
   let type = 8 | (TEMPLATE_COUNTER++ << 6);
 
@@ -474,6 +476,7 @@ function compileTemplate(strings) {
     templateNode,
     size,
     insertionPoints,
+    unmountPoints,
     type,
   };
 }
@@ -505,15 +508,12 @@ const createVirtualNode = () => ({
 function unmountWalk(vnode) {
   const refs = vnode.r;
   const template = vnode.p.p;
-  const { insertionPoints } = template;
-  for (const insertions of insertionPoints) {
-    if (insertions) {
-      for (const insertion of insertions) {
-        const inst = refs[insertion.instKey];
-        if ((inst.t & 4) !== 0) {
-          unmountWalk(inst);
-        }
-      }
+
+  const { unmountPoints } = template;
+  for (const point of unmountPoints) {
+    const inst = refs[point.instKey];
+    if ((inst.t & 4) !== 0) {
+      unmountWalk(inst);
     }
   }
 
