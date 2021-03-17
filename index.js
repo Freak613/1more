@@ -95,6 +95,7 @@ function updateContent(refs, v) {
           if ((notSingleNode & 2) !== 0) {
             nodes.forEach(removeVNode);
           } else {
+            nodes.forEach(unmountWalk);
             nodeSetTextContent.call(parent, "");
           }
           inst.n = [];
@@ -104,12 +105,13 @@ function updateContent(refs, v) {
           return renderValue(props, parent, afterNode);
         });
       } else {
-        inst.n = updateArray(v, nodes, parent, afterNode);
+        inst.n = updateArray(v, nodes, parent, afterNode, notSingleNode);
       }
     } else {
       if ((notSingleNode & 2) !== 0) {
         nodes.forEach(removeVNode);
       } else {
+        nodes.forEach(unmountWalk);
         nodeSetTextContent.call(parent, "");
       }
       this.applyData(refs, v);
@@ -490,15 +492,46 @@ export function html() {
 }
 
 const createVirtualNode = () => ({
+  t: 4,
   p: undefined, // props
   r: undefined, // refs
   k: undefined, // key
   v: undefined, // render
   c: undefined, // component props
   n: undefined, // component init
+  u: undefined, // unmount
 });
 
+function unmountWalk(vnode) {
+  const refs = vnode.r;
+  const template = vnode.p.p;
+  const { insertionPoints } = template;
+  for (const insertions of insertionPoints) {
+    if (insertions) {
+      for (const insertion of insertions) {
+        const inst = refs[insertion.instKey];
+        if ((inst.t & 4) !== 0) {
+          unmountWalk(inst);
+        }
+      }
+    }
+  }
+
+  if (vnode.u !== undefined) {
+    const unmount = vnode.u;
+    if (typeof unmount === "function") {
+      unmount();
+    } else {
+      for (const hook of unmount) {
+        hook();
+      }
+    }
+  }
+}
+
 function removeVNode(vnode) {
+  unmountWalk(vnode);
+
   elementRemove.call(vnode.r[0]);
 }
 
@@ -696,7 +729,7 @@ function setupGlobalHandler(name) {
   GLOBAL_HANDLERS[name] = 1;
 }
 
-function updateArray(newArray, nodes, parent, afterNode) {
+function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
   let newNodes = nodes;
 
   let a1 = 0,
@@ -824,7 +857,13 @@ function updateArray(newArray, nodes, parent, afterNode) {
 
     if (reusingNodes === 0) {
       // Full replace
-      nodeSetTextContent.call(parent, "");
+      if ((notSingleNode & 2) !== 0) {
+        nodes.forEach(removeVNode);
+      } else {
+        nodes.forEach(unmountWalk);
+        nodeSetTextContent.call(parent, "");
+      }
+
       newNodes = newArray.map(function (props) {
         return renderValue(props, parent, afterNode);
       });
@@ -981,4 +1020,19 @@ export function invalidate(vnode) {
   }
 
   vnode.p = view;
+}
+
+function addHook(hooks, hook) {
+  if (!hooks) {
+    return hook;
+  }
+  if (typeof hooks === "function") {
+    return [hooks, hook];
+  }
+  hooks.push(hook);
+  return hooks;
+}
+
+export function useUnmount(component, hook) {
+  component.u = addHook(component.u, hook);
 }
