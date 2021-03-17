@@ -1,6 +1,7 @@
 # 1more
 
 (One more) R&D project to bring performant DOM rendering to acceptable developer experience using template literals.
+Works completely in-browser, doesn't require compiler, weights 3.7 kB (+ 817 B - box.js).
 
 ## Hello world
 
@@ -30,7 +31,7 @@ html`<div>${`Hello ${world}`}</div>`;
 
 Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase.
 
-Note: `html` uses XML-like string compiler instead of native DOM parsing. Primarily to speed up template compilation. Therefore it will have differences with real HTML. For example, mixing plain text and insertion points inside one parent may not work properly. Some issues may be fixed, but some may require going back to DOM parsing or significantly complicate parser.
+Note: `html` uses custom XML-like string compiler instead of native DOM parsing. Therefore it will have differences with real HTML. For example, mixing plain text and insertion points inside one parent may not work properly. Some issues may be fixed, but some may require going back to DOM parsing or significantly complicate parser.
 
 ##### Attributes
 
@@ -147,6 +148,24 @@ const SomeComponent = component(c => {
 
 On invalidate, component render function will be called and results will be diffed and applied accordingly.
 
+#### useUnmount
+
+```js
+import { component, html, useUnmount } from "1more";
+
+const SomeComponent = component(c => {
+  useUnmount(c, () => {
+    console.log("Component unmounted");
+  });
+
+  return () => {
+    return html`<div>Some</div>`;
+  };
+});
+```
+
+Allows to attach callback, that going to be called before component unmounted.
+
 ### Observables
 
 #### box
@@ -165,151 +184,56 @@ const unsub = subscribe(value => {
 write(2, state); // Logs "Current value: 2"
 ```
 
-Primitive observable implementation.
+Complementary primitive observable implementation, used mainly to support library in benchmarks. Tries to have low memory footprint, uses linked-lists to effectively manage subscriptions. Can be used as a cheap state management or as reference for integrating other libraries and writing hooks.
 
-#### createSelector
+#### useSubscription
 
 ```js
 import { component, html } from "1more";
-import { box, createSelector } from "1more/box";
+import { box, useSubscription } from "1more/box";
 
 const items = box([]);
-
-let compRef;
-const getItemsCount = createSelector(
-  // Source observable
-  items,
-  // Get reference for invalidation
-  () => compRef,
-  // Optional selector
-  items => items.count,
-);
 
 const SomeComponent = component(c => {
-  compRef = c;
+  const getItemsCount = useSubscription(
+    // Component reference
+    c,
+    // Source
+    items,
+    // Optional selector
+    (items, prop) => items.count,
+  );
 
-  return () => {
-    return html`<div>${getItemsCount()}</div>`;
+  return prop => {
+    return html`<div>${getItemsCount(prop)}</div>`;
   };
 });
 ```
 
-Setup subscription to target observable and returns getter function to read current value. When observable emits new value, it triggers validation of given component.
+Setup subscription to source observable and returns getter function to read current value. When observable emits new value, it triggers update of the component.
 
-It's important to call selector in component render function, to keep its internal state updated when component was rerendered by parent or by other selector.
-
-#### keyedSelector
+#### usePropSubscription
 
 ```js
-import { component, html } from "1more";
-import { box, read, keyedSelector } from "1more/box";
-import { memo } from "1more/utils";
+import { component, html, render } from "1more";
+import { box, read, usePropSubscription } from "1more/box";
 
-const selected = box(undefined);
-const items = box([]);
-
-const itemsRefs = new WeakMap();
-
-const isSelected = keyedSelector(
-  // Source observable that trigger recomputation
-  selected,
-  // Get cache keys
-  () => read(items),
-  // Item selector
-  (item, selected) => item.id === selected,
-  // WeakMap to lookup for component reference
-  itemsRefs,
-);
-
-const Item = component(c => {
-  const setup = memo(item => {
-    itemsRefs.set(item, c);
-  });
-
-  return item => {
-    setup(item);
-
-    return html`
-      <div class=${isSelected(item) ? "selected" : null}>${item.label}</div>
-    `;
-  };
-});
-```
-
-Setup shared selector for multiple components. When source observable emits value, it runs selector computation for each key item and store results internally using WeakMap for diffing and triggering updates only for changed items. For that reason, `getKeys` parameter needed to iterate over weak cache and get cached values for comparison. Changed key then used to lookup for component reference in given map and trigger its update. Returned selector uses key item to get cached value.
-
-Using WeakMap for this task gives automatic garbage collection of cache values when source key object has no other references. And because of using WeakMap, only mutable objects can be used as keys.
-
-#### unchanged
-
-```js
-import { box, write, unchanged } from "1more/box";
-
-const source = box(1);
-
-subscribe(value => {
-  console.log("Value is not changed", value);
-}, unchanged(source));
-
-write(2, source); // No effect
-write(2, source); // Logs: "Value is not changed 2"
-```
-
-Utility observable that takes source observable and returns new one, that emits values when 2 or more values from source are referentially equal (using `===`).
-
-`unchanged` can be used to solve problem of separation array items updates from structural updates (adding/removal):
-
-```js
-import { box, read, write, subscribe, unchanged } from "1more/box";
-
-const items = box([]);
-
-let nextId = 1;
-const actions = {
-  addItem: () => {
-    const values = read(items);
-    // Creates new array instance
-    const nextValues = values.concat({ id: nextId++, value: "" });
-    write(nextValues, items);
-  },
-  updateItem: (id, newValue) => {
-    const values = read(items);
-    values.forEach(item => {
-      if (item.id === id) {
-        item.value = newValue;
-      }
-      return item;
-    });
-    write(values, items);
-  },
+const item = {
+  value: box(""),
 };
 
-subscribe(values => {
-  console.log("Item in array changed");
-}, unchanged(items));
+const Item = component(c => {
+  const getValue = usePropSubscription(c);
 
-actions.addItem(); // No effect
+  return item => {
+    return html`<div>${getValue(item.label)}</div>`;
+  };
+});
 
-actions.updateItem(1, "newValue"); // Logs "Item in array changed",
+render(Item(item), document.body);
 ```
 
-### Utils
-
-#### memo
-
-```js
-import { memo } from "1more/utils";
-
-const getItemsCount = memo(items => items.length);
-
-const items = [];
-
-getItemsCount(items);
-
-getItemsCount(items); // Used previous value
-```
-
-Setup memoized function with cache size = 1. Compares input value with previous one, and re-runs provided function.
+Allows to consume observable from component props. When receiving observable, it sets up subscription to it.
 
 ### Synthetic events
 
@@ -319,7 +243,7 @@ Current implementation is very limited, it doesn't support bubble and capture ph
 
 ### Does this implementation use Virtual DOM?
 
-It is similar to vdom. On each render app generates immutable virtual tree structure that is used to diff against previous tree to calculate changed parts. Comparing to vdom, template nodes handled as one single entity with insertion points. This allows to compact tree structure, separate static parts from dynamic, thus reducing amount of used memory and speed up diffing phase.
+It is similar to vdom. On each render app generates immutable virtual tree structure that is used to diff against previous tree to calculate changed parts. Comparing to vdom, template nodes handled as one single entity with insertion points. This allows to compact tree structure in memory, separate static parts from dynamic, and as a result speed up diffing phase.
 
 ## Examples
 

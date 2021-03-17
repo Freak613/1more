@@ -11,7 +11,7 @@ const plugins = [
   terser(),
 ];
 
-const files = ["index", "box", "utils"];
+const files = ["index", "box"];
 
 export default files.map(name => ({
   input: `${name}.js`,
