@@ -69,13 +69,14 @@ const memo = fn => {
 };
 
 export const useSubscription = (c, source, select = v => v) => {
-  let _prop, _prev;
+  let _prop, _prev, _value;
   const setup = memo(prop => {
     _prop = prop;
-    _prev = select(read(source), prop);
+    _value = read(source);
   });
 
   const unsub = subscribe(value => {
+    _value = value;
     const next = select(value, _prop);
     if (next !== _prev) {
       _prev = next;
@@ -87,7 +88,7 @@ export const useSubscription = (c, source, select = v => v) => {
 
   return prop => {
     setup(prop);
-    return _prev;
+    return (_prev = select(_value, prop));
   };
 };
 

@@ -3,11 +3,9 @@ import {
   box,
   read,
   write,
-  keyedSelector,
-  createSelector,
-  unchanged,
+  useSubscription,
+  usePropSubscription,
 } from "1more/box";
-import { memo } from "1more/utils";
 
 function random(max) {
   return Math.round(Math.random() * 1000) % max;
@@ -76,9 +74,9 @@ function buildData(count) {
   for (let i = 0; i < count; i++) {
     data[i] = {
       id: nextId++,
-      label: `${A[random(A.length)]} ${C[random(C.length)]} ${
-        N[random(N.length)]
-      }`,
+      label: box(
+        `${A[random(A.length)]} ${C[random(C.length)]} ${N[random(N.length)]}`,
+      ),
     };
   }
   return data;
@@ -108,9 +106,8 @@ const actions = {
     const data = read(state.data);
     for (let i = 0; i < data.length; i += 10) {
       const item = data[i];
-      item.label = item.label + " !!!";
+      write(read(item.label) + " !!!", item.label);
     }
-    write(data, state.data);
   },
   select(id) {
     write(id, state.selected);
@@ -130,52 +127,34 @@ const actions = {
   },
 };
 
-const itemsRefs = new WeakMap();
-
-const isSelected = keyedSelector(
-  state.selected,
-  () => read(state.data),
-  (item, selected) => item.id === selected,
-  itemsRefs,
-);
-
-const getLabel = keyedSelector(
-  unchanged(state.data),
-  () => read(state.data),
-  item => item.label,
-  itemsRefs,
-);
-
 const Item = component(c => {
-  const setup = memo(item => {
-    itemsRefs.set(item, c);
-  });
+  const getSelected = useSubscription(
+    c,
+    state.selected,
+    (selected, id) => id === selected,
+  );
+  const getLabel = usePropSubscription(c);
 
-  return item => {
-    setup(item);
-
-    return html`
-      <tr class=${isSelected(item) ? "danger" : null}>
-        <td class="col-md-1">${item.id}</td>
-        <td class="col-md-4">
-          <a onclick=${() => actions.select(item.id)}>${getLabel(item)}</a>
-        </td>
-        <td class="col-md-1">
-          <a onclick=${() => actions.remove(item.id)}>
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-          </a>
-        </td>
-        <td class="col-md-6"></td>
-      </tr>
-    `;
-  };
+  return item => html`
+    <tr class=${getSelected(item.id) ? "danger" : null}>
+      <td class="col-md-1">${item.id}</td>
+      <td class="col-md-4">
+        <a onclick=${() => actions.select(item.id)}>
+          ${getLabel(item.label)}
+        </a>
+      </td>
+      <td class="col-md-1">
+        <a onclick=${() => actions.remove(item.id)}>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </a>
+      </td>
+      <td class="col-md-6"></td>
+    </tr>
+  `;
 });
 
-let appRef;
-const getData = createSelector(state.data, () => appRef);
-
 const App = component(c => {
-  appRef = c;
+  const getData = useSubscription(c, state.data);
 
   return () => html`
     <div class="container">

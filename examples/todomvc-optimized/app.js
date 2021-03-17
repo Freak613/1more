@@ -6,14 +6,12 @@
 import { component, html, key, render } from "1more";
 import {
   box,
-  write,
-  createSelector,
   read,
-  keyedSelector,
+  write,
   subscribe,
-  unchanged,
+  useSubscription,
+  usePropSubscription,
 } from "1more/box";
-import { memo } from "1more/utils";
 
 const ENTER_KEY = 13;
 
@@ -29,13 +27,24 @@ const STORAGE_KEY = "todos-1more";
 
 const appStore = {
   fetch: () => JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"),
-  save: todos => localStorage.setItem(STORAGE_KEY, JSON.stringify(todos)),
+  save: todos =>
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(
+        todos.map(t => ({
+          ...t,
+          done: read(t.done),
+          editing: read(t.editing),
+          value: read(t.value),
+        })),
+      ),
+    ),
 };
 
 const FILTERS = {
   All: () => true,
-  Active: ({ done }) => done === false,
-  Completed: ({ done }) => done === true,
+  Active: t => read(t.done) === false,
+  Completed: t => read(t.done) === true,
 };
 
 const state = {
@@ -43,27 +52,20 @@ const state = {
   placeholder: "What needs to be done?",
   todos: box(
     appStore.fetch().map(todo => {
-      todo.age = 0;
-      todo.editing = false;
+      todo.done = box(todo.done);
+      todo.editing = box(false);
+      todo.value = box(todo.value);
       return todo;
     }),
   ),
   filter: box(FILTERS.All),
 };
 
-/**
- * Use `age` flag to mark changed items.
- *
- * Since it's going to be used as a key in
- * WeakMap, creating new object on each change
- * will cause improper cache invalidation.
- */
 const NewTodo = value => ({
   id: uuid(),
-  age: 0,
-  done: false,
-  editing: false,
-  value,
+  done: box(false),
+  editing: box(false),
+  value: box(value),
 });
 
 const actions = {
@@ -79,24 +81,16 @@ const actions = {
   toggleAll: isCheckedAll => {
     const todos = read(state.todos);
     todos.forEach(t => {
-      t.age++;
-      t.done = isCheckedAll;
+      write(isCheckedAll, t.done);
     });
     appStore.save(todos);
-    /**
-     * Keep updating todos observable.
-     *
-     * Array reference equality will
-     * be considered as internal item change.
-     */
     write(todos, state.todos);
   },
   toggleTodo: id => {
     const todos = read(state.todos);
     todos.forEach(t => {
       if (t.id === id) {
-        t.age++;
-        t.done = !t.done;
+        write(!read(t.done), t.done);
       }
     });
     appStore.save(todos);
@@ -106,8 +100,7 @@ const actions = {
     const todos = read(state.todos);
     todos.forEach(t => {
       if (t.id === id) {
-        t.age++;
-        t.editing = true;
+        write(true, t.editing);
       }
     });
     appStore.save(todos);
@@ -122,9 +115,8 @@ const actions = {
     const todos = read(state.todos);
     todos.forEach(t => {
       if (t.id === id) {
-        t.age++;
-        t.editing = false;
-        t.value = newTitle;
+        write(false, t.editing);
+        write(newTitle, t.value);
       }
     });
     appStore.save(todos);
@@ -180,12 +172,8 @@ const TodoHeader = component(() => () => {
   `;
 });
 
-let todoInputRef;
-
-const getInputValue = createSelector(state.input, () => todoInputRef);
-
 const TodoInput = component(c => {
-  todoInputRef = c;
+  const getInputValue = useSubscription(c, state.input);
 
   return () => {
     const onKeyDown = e => {
@@ -229,16 +217,12 @@ const TodoToggleAll = component(() => () => {
   `;
 });
 
-let todoSectionRef;
-
-const hasIncompletedTodos = createSelector(
-  state.todos,
-  () => todoSectionRef,
-  todos => todos.filter(t => !t.done).length > 0,
-);
-
 const TodoSection = component(c => {
-  todoSectionRef = c;
+  const hasIncompletedTodos = useSubscription(
+    c,
+    state.todos,
+    todos => todos.filter(t => !read(t.done)).length > 0,
+  );
 
   return () => {
     return html`
@@ -249,54 +233,16 @@ const TodoSection = component(c => {
   };
 });
 
-const todoItemsRefs = new WeakMap();
-
-const readTodoAge = keyedSelector(
-  /**
-   * Look for internal todos changes.
-   *
-   * For example adding/removal
-   * will not trigger recomputation.
-   */
-  unchanged(state.todos),
-  /**
-   * Check only visible todos
-   */
-  () => read(filteredTodos),
-  /**
-   * Changed todos going
-   * to have `age` updated.
-   */
-  t => t.age,
-  todoItemsRefs,
-);
-
 const TodoItem = component(c => {
-  /**
-   * When `todo` prop changed,
-   * store component ref under new key.
-   */
-  const setup = memo(todo => {
-    todoItemsRefs.set(todo, c);
-  });
+  const isDone = usePropSubscription(c);
+  const isEditing = usePropSubscription(c);
+  const getValue = usePropSubscription(c);
 
   return todo => {
-    setup(todo);
-
-    /**
-     * Despite this selector doesn't provide
-     * useful information, call it
-     * from component render phase,
-     * to keep age cache up-to-date in
-     * case component was re-rendered
-     * for reasons unrelated to item age change.
-     */
-    readTodoAge(todo);
-
     const cn = [
       "todo",
-      todo.done ? "completed" : "",
-      todo.editing ? "editing" : "",
+      isDone(todo.done) ? "completed" : "",
+      isEditing(todo.editing) ? "editing" : "",
     ]
       .filter(v => !!v)
       .join(" ");
@@ -323,10 +269,10 @@ const TodoItem = component(c => {
           <input
             type="checkbox"
             class="toggle"
-            checked=${!!todo.done}
+            checked=${!!isDone(todo.done)}
             onclick=${() => actions.toggleTodo(todo.id)}
           />
-          <label ondblclick=${onDoubleClick}>${todo.value}</label>
+          <label ondblclick=${onDoubleClick}>${getValue(todo.value)}</label>
           <button
             class="destroy"
             onclick=${() => actions.removeTodo(todo.id)}
@@ -335,7 +281,7 @@ const TodoItem = component(c => {
         <input
           type="text"
           class="edit"
-          value=${todo.value}
+          value=${getValue(todo.value)}
           onkeyup=${onKeyUp}
           onblur=${onBlur}
         />
@@ -344,12 +290,8 @@ const TodoItem = component(c => {
   };
 });
 
-let todoListRef;
-
-const getFilteredTodos = createSelector(filteredTodos, () => todoListRef);
-
 const TodoList = component(c => {
-  todoListRef = c;
+  const getFilteredTodos = useSubscription(c, filteredTodos);
 
   return () => {
     return html`
@@ -360,34 +302,20 @@ const TodoList = component(c => {
   };
 });
 
-const todoFilterItemsRefs = new WeakMap();
-
-const isFilterSelected = keyedSelector(
-  state.filter,
-  () => Object.values(FILTERS),
-  (filter, stateFilter) => filter === stateFilter,
-  todoFilterItemsRefs,
-);
-
 const TodoFilterItem = component(c => {
-  const setup = memo(filter => {
-    todoFilterItemsRefs.set(filter, c);
-  });
+  const isSelected = useSubscription(
+    c,
+    state.filter,
+    (stateFilter, filter) => filter === stateFilter,
+  );
 
   return filterName => {
-    /**
-     * To store component ref in WeakMap cache,
-     * convert name prop to some object reference.
-     * Actual filter callback is good candidate.
-     */
     const filter = FILTERS[filterName];
-
-    setup(filter);
 
     return html`
       <li>
         <a
-          class=${isFilterSelected(filter) ? "selected" : null}
+          class=${isSelected(filter) ? "selected" : null}
           onclick=${() => actions.filterTodo(filter)}
         >
           ${filterName}
@@ -405,22 +333,18 @@ const TodoClearCompleted = component(() => () => {
   `;
 });
 
-let todoFilterRef;
-
-const getNumberOfIncompletedTodos = createSelector(
-  state.todos,
-  () => todoFilterRef,
-  todos => todos.filter(t => !t.done).length,
-);
-
-const hasCompletedTodos = createSelector(
-  state.todos,
-  () => todoFilterRef,
-  todos => todos.filter(t => t.done).length > 0,
-);
-
 const TodoFilter = component(c => {
-  todoFilterRef = c;
+  const getNumberOfIncompletedTodos = useSubscription(
+    c,
+    state.todos,
+    todos => todos.filter(t => !read(t.done)).length,
+  );
+
+  const hasCompletedTodos = useSubscription(
+    c,
+    state.todos,
+    todos => todos.filter(t => read(t.done)).length > 0,
+  );
 
   return () => {
     const itemsLeft = `${getNumberOfIncompletedTodos()} item left`;
