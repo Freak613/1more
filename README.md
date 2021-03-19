@@ -144,9 +144,11 @@ const SomeComponent = component(c => {
 });
 ```
 
-`invalidate` accepts component reference object and will trigger update of this component. It allows to react on changes locally, without re-rendering the whole app.
+`invalidate` accepts component reference object and will schedule update of this component. It allows to react on changes locally, without re-rendering the whole app.
 
 On invalidate, component render function will be called and results will be diffed and applied accordingly.
+
+Note: `invalidate` does not trigger update immediately. Instead update delayed till the end of current call stack. It allows to schedule multiple updates for different components and ensure that components are re-rendered only once and no unnecessary DOM modifications applied. If updates scheduled for multiple components, they going to be applied in order of depth, i.e. parent going to be re-rendered before its children.
 
 #### useUnmount
 

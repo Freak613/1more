@@ -26,6 +26,11 @@ const characterDataSetData = getDescriptor(characterDataProto, "data").set;
 
 const indexOf = arrayProto.indexOf;
 
+let _depth = 0;
+function _resetState() {
+  _depth = 0;
+}
+
 // VNodes
 const TEXT_TYPE = 1;
 const ARRAY_TYPE = 2;
@@ -496,6 +501,8 @@ export function html() {
 
 const createVirtualNode = () => ({
   t: 4,
+  f: 0, // flags
+  d: _depth, // depth
   p: undefined, // props
   r: undefined, // refs
   k: undefined, // key
@@ -529,6 +536,7 @@ function unmountWalk(vnode) {
       }
     }
   }
+  vnode.f = 4;
 }
 
 function removeVNode(vnode) {
@@ -565,7 +573,11 @@ function renderValue(props, parent, afterNode) {
   refs[0] = tNode;
 
   for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
+
+  const currentDepth = _depth;
+  _depth = currentDepth + 1;
   for (let a of argsWays) a.applyData(refs, view[a.propIdx]);
+  _depth = currentDepth;
 
   vnode.k = props.k;
 
@@ -580,25 +592,34 @@ function renderValue(props, parent, afterNode) {
   return vnode;
 }
 
-function updateValue(b, vnode) {
-  if (b.p === vnode.c) return;
-
-  vnode.c = b.p;
-  const view = vnode.v(b.p);
+function checkUpdates(vnode) {
+  const view = vnode.v(vnode.c);
 
   const prev = vnode.p;
   const refs = vnode.r;
 
+  const currentDepth = vnode.d;
+  _depth = currentDepth + 1;
   for (let a of vnode.p.p.argsWays) {
     if (prev[a.propIdx] !== view[a.propIdx]) {
       a.updateData(refs, view[a.propIdx]);
     }
   }
+  _depth = currentDepth;
 
   vnode.p = view;
+  vnode.f = 0;
+}
+
+function updateValue(b, vnode) {
+  if (b.p === vnode.c) return;
+  vnode.c = b.p;
+  checkUpdates(vnode);
 }
 
 export function render(component, container) {
+  _resetState();
+
   if (container.$INST !== undefined) {
     updateValue(component, container.$INST);
   } else {
@@ -1009,21 +1030,6 @@ export function key(key, cNode) {
   return cNode;
 }
 
-export function invalidate(vnode) {
-  const view = vnode.v(vnode.c);
-
-  const prev = vnode.p;
-  const refs = vnode.r;
-
-  for (let a of vnode.p.p.argsWays) {
-    if (prev[a.propIdx] !== view[a.propIdx]) {
-      a.updateData(refs, view[a.propIdx]);
-    }
-  }
-
-  vnode.p = view;
-}
-
 function addHook(hooks, hook) {
   if (!hooks) {
     return hook;
@@ -1037,4 +1043,44 @@ function addHook(hooks, hook) {
 
 export function useUnmount(component, hook) {
   component.u = addHook(component.u, hook);
+}
+
+// Scheduling
+
+const box = v => ({ v });
+
+let _flags = 0;
+const _resolvedPromise = Promise.resolve();
+const _pendingUpdates = box({});
+
+function flushUpdates() {
+  const index = _pendingUpdates.v;
+  for (const depth of Object.keys(index)) {
+    const vnodes = index[depth];
+    for (const vnode of vnodes) {
+      if ((vnode.f & 2) !== 0) {
+        checkUpdates(vnode);
+      }
+    }
+  }
+  _flags = 0;
+  _pendingUpdates.v = {};
+}
+
+export function invalidate(vnode) {
+  vnode.f = 2;
+
+  const index = _pendingUpdates.v;
+  const depth = vnode.d;
+  let d;
+  if ((d = index[depth])) {
+    d.push(vnode);
+  } else {
+    index[depth] = [vnode];
+  }
+
+  if ((_flags & 2) === 0) {
+    _flags = 2;
+    _resolvedPromise.then(flushUpdates);
+  }
 }
