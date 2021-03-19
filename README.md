@@ -15,6 +15,8 @@ const App = component(() => () => {
 render(App(), document.getElementById("app"));
 ```
 
+You can try it [on Codesandbox](https://codesandbox.io/s/1more-bfoni)
+
 ## API Reference
 
 ### Rendering
