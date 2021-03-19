@@ -56,7 +56,7 @@ Partial attributes are not supported. Most attributes are assigned directly to D
 
 ##### Children
 
-Valid childrens are: strings, numbers, ComponentNode, array of keyed ComponentNodes.
+Valid childrens are: strings, numbers, ComponentNode, array of ComponentNodes.
 
 ```js
 import { html, key } from "1more";
@@ -120,8 +120,6 @@ html`
 ```
 
 Assign given key to ComponentNode. This key is used in nodes reconciliation algorithm, to differentiate nodes from each other and perform proper updates.
-
-Note: only arrays of keyed components are supported. Trying to render array of non-keyed items will not work properly.
 
 #### invalidate
 
