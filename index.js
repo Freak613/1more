@@ -250,6 +250,19 @@ function correctIndices(ways, args, events, insertionPoints) {
     });
   });
 
+  args.forEach(a => {
+    if (a.afterNodeFn === afterNodeInstance) {
+      const keys = [a.afterKey];
+      let instArg = a;
+      while (instArg.afterNodeFn === afterNodeInstance) {
+        const afterInst = args.find(arg => arg.instKey === instArg.afterKey);
+        keys.push(afterInst.afterKey);
+        instArg = afterInst;
+      }
+      a.afterKey = keys;
+    }
+  });
+
   return nextIdx;
 }
 
@@ -262,11 +275,30 @@ function afterNodeDefault(refs) {
 }
 
 function afterNodeInstance(refs) {
-  // return refs[this.afterKey] !== undefined ? refs[this.afterKey].node : null;
-  return null;
+  let i = 0;
+  const len = this.afterKey.length;
+  let result;
+  while (i < len) {
+    const next = refs[this.afterKey[i++]];
+    if (next) {
+      if (i === len) {
+        result = next;
+      } else if ((next.t & 1) !== 0) {
+        result = next.n;
+      } else if ((next.t & 2) !== 0) {
+        if (next.n.length > 0) {
+          result = next.n[0].r[0];
+        }
+      } else if ((next.t & 4) !== 0) {
+        result = next.r[0];
+      }
+    }
+    if (result) break;
+  }
+  return result;
 }
 
-function afterNodeNoop(refs) {
+function afterNodeNoop() {
   return null;
 }
 
