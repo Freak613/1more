@@ -6,7 +6,7 @@
     "start": "ws"
   },
   "dependencies": {
-    "1more": "0.1.1"
+    "1more": "0.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
