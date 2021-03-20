@@ -1,7 +1,9 @@
 # 1more
 
+[![Size](https://badgen.net/bundlephobia/minzip/1more)](https://unpkg.com/1more@0.1.2/dist/index.min.js)
+
 (One more) R&D project to bring performant DOM rendering to acceptable developer experience using template literals.
-Works completely in-browser, doesn't require compiler, weights 3.7 kB (+ 817 B - box.js).
+Works completely in-browser, doesn't require compiler.
 
 ## Hello world
 
