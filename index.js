@@ -541,7 +541,8 @@ const createVirtualNode = () => ({
   v: undefined, // render
   c: undefined, // component props
   n: undefined, // component init
-  u: undefined, // unmount
+  u: undefined, // unmount,
+  z: undefined, // roots (for fragments)
 });
 
 function unmountWalk(vnode) {
@@ -574,14 +575,28 @@ function unmountWalk(vnode) {
 function removeVNode(vnode) {
   unmountWalk(vnode);
 
-  elementRemove.call(vnode.r[0]);
+  if ((vnode.t & 8) !== 0) {
+    vnode.z.forEach(n => elementRemove.call(n));
+  } else {
+    elementRemove.call(vnode.r[0]);
+  }
 }
 
 function insertVNode(vnode, parent, afterNode) {
-  if (afterNode) {
-    nodeInsertBefore.call(parent, vnode.r[0], afterNode);
+  if ((vnode.t & 8) !== 0) {
+    vnode.z.forEach(n => {
+      if (afterNode) {
+        nodeInsertBefore.call(parent, n, afterNode);
+      } else {
+        nodeAppendChild.call(parent, n);
+      }
+    });
   } else {
-    nodeAppendChild.call(parent, vnode.r[0]);
+    if (afterNode) {
+      nodeInsertBefore.call(parent, vnode.r[0], afterNode);
+    } else {
+      nodeAppendChild.call(parent, vnode.r[0]);
+    }
   }
 }
 
@@ -595,14 +610,21 @@ function renderValue(props, parent, afterNode) {
 
   const view = render(props.p);
 
-  const { templateNode, ways, argsWays, producer } = view.p;
+  const { type, templateNode, ways, argsWays, producer } = view.p;
 
   const tNode = nodeCloneNode.call(templateNode, true);
 
   const refs = producer();
   vnode.r = refs;
 
-  refs[0] = tNode;
+  if ((type & 16) !== 0) {
+    const nodes = Array.from(nodeGetChildNodes.call(tNode));
+    vnode.z = nodes;
+    refs[0] = nodes[0];
+    vnode.t |= 8;
+  } else {
+    refs[0] = tNode;
+  }
 
   for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
 
@@ -690,6 +712,14 @@ function findNodeInstance(insertions, nodeIndex, refs) {
       const nodes = inst.n;
       if (nodeIndex <= nodes.length + shift - 1) {
         nodeInstance = nodes[nodeIndex - shift];
+        break;
+      } else {
+        shift += nodes.length;
+      }
+    } else if ((t & 8) !== 0) {
+      const nodes = inst.z;
+      if (nodeIndex <= nodes.length + shift - 1) {
+        nodeInstance = inst;
         break;
       } else {
         shift += nodes.length;
