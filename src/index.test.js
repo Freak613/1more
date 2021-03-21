@@ -72,4 +72,10 @@ describe("compiler", () => {
       ).toMatchSnapshot();
     });
   });
+
+  describe("mixed content", () => {
+    it("mixed 1", () => {
+      expect(html`<div>Hello ${"World"}</div>`.p).toMatchSnapshot();
+    });
+  });
 });

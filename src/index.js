@@ -465,7 +465,8 @@ function compileTemplate(strings) {
           nextArgNode.afterNodeFn = afterNodeNoop;
         }
 
-        const hasPrevStaticSibling = goBack === true;
+        const hasPrevStaticSibling =
+          goBack === true || str[str.length - 1] !== ">";
         const hasPrevDynamicSibling = str === "" && idx > 0;
         const hasPrevSibling = hasPrevStaticSibling || hasPrevDynamicSibling;
         if (hasPrevSibling) nextArgNode.flag |= 2;

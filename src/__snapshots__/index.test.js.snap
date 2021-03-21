@@ -386,3 +386,47 @@ Object {
   ],
 }
 `;
+
+exports[`compiler mixed content mixed 1 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 1,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    Hello 
+  </div>,
+  "type": 392,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [],
+}
+`;
