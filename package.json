@@ -5,13 +5,17 @@
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "build-prod": "rollup -c"
+    "build-prod": "rollup -c",
+    "test": "jest",
+    "test-dev": "jest --watchAll"
   },
   "author": "Pavel Martynov <martynov.pl@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "7.4.5",
-    "@babel/preset-env": "7.4.5",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
     "rollup": "1.13.0",
     "rollup-plugin-babel": "4.3.2",
     "rollup-plugin-node-resolve": "5.0.1",
