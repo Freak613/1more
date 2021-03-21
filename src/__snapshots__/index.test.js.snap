@@ -1,0 +1,388 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compiler afterNode afterNode 1 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 1,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 2,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <div />
+  </div>,
+  "type": 136,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 2,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
+
+exports[`compiler afterNode afterNode 2 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": Array [
+        3,
+        1,
+      ],
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 1,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 2,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+      Object {
+        "instKey": 3,
+        "propIdx": 2,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <div />
+  </div>,
+  "type": 200,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 2,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 3,
+      "propIdx": 2,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
+
+exports[`compiler basic basic 1 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 2 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 4,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 5,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        0,
+        1,
+      ],
+      "prevRef": 1,
+      "propIdx": 3,
+      "refKey": 7,
+      "type": "click",
+      "updateData": null,
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        0,
+        0,
+        1,
+      ],
+      "prevRef": 1,
+      "propIdx": 5,
+      "refKey": 8,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
+    undefined,
+    Array [
+      Object {
+        "instKey": 5,
+        "propIdx": 2,
+        "staticElemsBefore": 0,
+      },
+    ],
+    undefined,
+    Array [
+      Object {
+        "instKey": 6,
+        "propIdx": 4,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <tr>
+    <td
+      class="col-md-1"
+    />
+    <td
+      class="col-md-4"
+    >
+      <a />
+    </td>
+    <td
+      class="col-md-1"
+    >
+      <a>
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-remove"
+        />
+      </a>
+    </td>
+    <td
+      class="col-md-6"
+    />
+  </tr>,
+  "type": 72,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 5,
+      "propIdx": 2,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 6,
+      "propIdx": 4,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+  ],
+}
+`;
+
+exports[`compiler fragments fragments 1 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 2,
+  "templateNode": <DocumentFragment>
+    <div />
+    <div />
+  </DocumentFragment>,
+  "type": 280,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler fragments fragments 2 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 2,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+    ],
+    Array [
+      Object {
+        "instKey": 3,
+        "propIdx": 2,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 2,
+  "templateNode": <DocumentFragment>
+    <div />
+    <div />
+  </DocumentFragment>,
+  "type": 344,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 2,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 3,
+      "propIdx": 2,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
