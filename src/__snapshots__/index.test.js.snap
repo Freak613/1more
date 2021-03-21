@@ -32,7 +32,7 @@ Object {
   "templateNode": <div>
     <div />
   </div>,
-  "type": 136,
+  "type": 8,
   "unmountPoints": Array [
     Object {
       "instKey": 2,
@@ -103,7 +103,7 @@ Object {
   "templateNode": <div>
     <div />
   </div>,
-  "type": 200,
+  "type": 8,
   "unmountPoints": Array [
     Object {
       "instKey": 2,
@@ -261,7 +261,7 @@ Object {
       class="col-md-6"
     />
   </tr>,
-  "type": 72,
+  "type": 8,
   "unmountPoints": Array [
     Object {
       "instKey": 5,
@@ -294,6 +294,44 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 3 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <span>
+      Space should be preserved when on single line 
+    </span>
+    <div />
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 4 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <span>
+      Spacing should be removed when on separate line
+    </span>
+    <div />
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],
@@ -305,7 +343,7 @@ Object {
     <div />
     <div />
   </DocumentFragment>,
-  "type": 280,
+  "type": 24,
   "unmountPoints": Array [],
   "ways": Array [],
 }
@@ -364,7 +402,7 @@ Object {
     <div />
     <div />
   </DocumentFragment>,
-  "type": 344,
+  "type": 24,
   "unmountPoints": Array [
     Object {
       "instKey": 2,
@@ -419,7 +457,7 @@ Object {
   "templateNode": <div>
     Hello 
   </div>,
-  "type": 392,
+  "type": 8,
   "unmountPoints": Array [
     Object {
       "instKey": 1,

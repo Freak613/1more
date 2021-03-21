@@ -31,6 +31,10 @@ function _resetState() {
   _depth = 0;
 }
 
+export function _resetTemplateCounter() {
+  TEMPLATE_COUNTER = 0;
+}
+
 // VNodes
 const TEXT_TYPE = 1;
 const ARRAY_TYPE = 2;

@@ -1,6 +1,10 @@
-import { html } from "./index";
+import { html, _resetTemplateCounter } from "./index";
 
 describe("compiler", () => {
+  afterEach(() => {
+    _resetTemplateCounter();
+  });
+
   describe("basic", () => {
     it("basic 1", () => {
       expect(html`<div></div>`.p).toMatchSnapshot();
@@ -24,6 +28,31 @@ describe("compiler", () => {
             </td>
             <td class="col-md-6"></td>
           </tr>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("basic 3", () => {
+      expect(
+        html`
+          <div>
+            <span>Space should be preserved when on single line </span>
+            <div></div>
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("basic 4", () => {
+      expect(
+        // prettier-ignore
+        html`
+          <div>
+            <span>
+              Spacing should be removed when on separate line
+            </span>
+            <div></div>
+          </div>
         `.p,
       ).toMatchSnapshot();
     });
