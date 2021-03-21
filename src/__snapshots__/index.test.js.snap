@@ -448,7 +448,7 @@ Object {
       Object {
         "instKey": 1,
         "propIdx": 1,
-        "staticElemsBefore": 0,
+        "staticElemsBefore": 1,
       },
     ],
   ],
@@ -462,9 +462,1085 @@ Object {
     Object {
       "instKey": 1,
       "propIdx": 1,
-      "staticElemsBefore": 0,
+      "staticElemsBefore": 1,
     },
   ],
   "ways": Array [],
+}
+`;
+
+exports[`compiler mixed content mixed 2 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 2,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 4,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 3,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 5,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 4,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 5,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 6,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    Zero 
+    <input />
+     Fifth 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 4,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 5,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 6,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 3 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 4,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 15,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 5,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 16,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 6,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 17,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 8,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 18,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 11,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 19,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 5,
+      "refKey": 7,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 12,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 20,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 6,
+      "refKey": 7,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 21,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 7,
+      "refKey": 7,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 13,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 22,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 8,
+      "refKey": 10,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 14,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 23,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 9,
+      "refKey": 10,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 24,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 10,
+      "refKey": 10,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    undefined,
+    Array [
+      Object {
+        "instKey": 15,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 16,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    Array [
+      Object {
+        "instKey": 17,
+        "propIdx": 3,
+        "staticElemsBefore": 0,
+      },
+      Object {
+        "instKey": 18,
+        "propIdx": 4,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 19,
+        "propIdx": 5,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 20,
+        "propIdx": 6,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 21,
+        "propIdx": 7,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 22,
+        "propIdx": 8,
+        "staticElemsBefore": 0,
+      },
+      Object {
+        "instKey": 23,
+        "propIdx": 9,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 24,
+        "propIdx": 10,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <div>
+      Zero 
+       Second 
+       Fourth
+    </div>
+    <div>
+       Second 
+       Fourth
+    </div>
+    <div>
+      Zero 
+       Second 
+       Fourth 
+    </div>
+    <div>
+       Second 
+       Fourth 
+    </div>
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 15,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 16,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 17,
+      "propIdx": 3,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 18,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 19,
+      "propIdx": 5,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 20,
+      "propIdx": 6,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 21,
+      "propIdx": 7,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 22,
+      "propIdx": 8,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 23,
+      "propIdx": 9,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 24,
+      "propIdx": 10,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 6,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 7,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 6,
+      "refKey": 8,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 7,
+      "refKey": 9,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 7,
+      "refKey": 10,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 9,
+      "refKey": 11,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 11,
+      "refKey": 12,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 10,
+      "refKey": 13,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 13,
+      "refKey": 14,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 4 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 5,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 7,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 6,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 8,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 9,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    undefined,
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 7,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 8,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 9,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 2,
+  "templateNode": <DocumentFragment>
+    <div />
+    <div>
+      <div />
+      <div>
+        Zero 
+         Second 
+         Fourth 
+      </div>
+    </div>
+  </DocumentFragment>,
+  "type": 24,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 7,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 8,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 9,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 5,
+      "refKey": 6,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 5 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 2,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 4,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 5,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 2,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 3,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 7,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 4,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 6,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 7,
+        "propIdx": 4,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    Array [
+      Object {
+        "instKey": 5,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    Zero 
+    <div>
+      Second 
+    </div>
+     Fifth 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 4,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 6,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 7,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 5,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 6 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 2,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 4,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 3,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 5,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 4,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 5,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 6,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    Zero 
+     Second 
+     Fourth 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 4,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 5,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 6,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 7 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 1,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 2,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 4,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 5,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 3,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+      Object {
+        "instKey": 4,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 5,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+     Second 
+     Fourth 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 3,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+    Object {
+      "instKey": 4,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 5,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 8 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 6,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 8,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 4,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 7,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 9,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 4,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 10,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 4,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 8,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 9,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 10,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <div />
+    <div>
+      <div />
+      <div>
+        Zero 
+         Second 
+         Fourth 
+      </div>
+    </div>
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 8,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 9,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 10,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 5,
+      "refKey": 6,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 6,
+      "refKey": 7,
+    },
+  ],
 }
 `;

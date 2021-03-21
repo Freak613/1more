@@ -106,5 +106,80 @@ describe("compiler", () => {
     it("mixed 1", () => {
       expect(html`<div>Hello ${"World"}</div>`.p).toMatchSnapshot();
     });
+
+    it("mixed 2", () => {
+      expect(
+        html`
+          <div>
+            Zero ${"First"}
+            <input />
+            ${"Fourth"} Fifth ${"Sixth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 3", () => {
+      expect(
+        html`
+          <div>
+            <div>Zero ${"First"} Second ${"Third"} Fourth</div>
+            <div>${"First"} Second ${"Third"} Fourth</div>
+            <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
+            <div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 4", () => {
+      expect(
+        html`
+          <div></div>
+          <div>
+            <div></div>
+            <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 5", () => {
+      expect(
+        html`
+          <div>
+            Zero ${"First"}
+            <div>Second ${"Third"}</div>
+            ${"Fourth"} Fifth ${"Sixth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 6", () => {
+      expect(
+        html`<div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 7", () => {
+      expect(
+        html`<div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 8", () => {
+      expect(
+        html`
+          <div>
+            <div></div>
+            <div>
+              <div></div>
+              <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
+            </div>
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
   });
 });

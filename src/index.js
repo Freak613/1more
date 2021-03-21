@@ -310,7 +310,15 @@ function compileTemplate(strings) {
   let instanceIdx = 0;
 
   const html = strings
-    .map(s => s.replace(/\w+=$/, ""))
+    .map(s => {
+      const result = s.replace(/\w+=$/, "");
+      const trimmed = result.trim();
+      if (trimmed.length > 0 && !trimmed.match(/^(<\/?|\/?>)/)) {
+        return `<!-- -->${result}`;
+      } else {
+        return result;
+      }
+    })
     .join("")
     .replace(/\n\s+(\w+=)/g, " $1")
     .replace(/\n\s+/g, "")
@@ -335,17 +343,54 @@ function compileTemplate(strings) {
     lastRef: ref,
     lastDataRef: prev.lastDataRef,
     eventsPath: prev.eventsPath,
+    fullPath: prev.fullPath,
   });
 
   let goBack = false,
     nextContentKey = null,
-    stackInfo = getStackInfo(null, { lastDataRef: null, eventsPath: "" }),
+    stackInfo = getStackInfo(null, {
+      lastDataRef: null,
+      eventsPath: "",
+      fullPath: "",
+    }),
     nextNode = null;
 
   strings.forEach((str, idx) => {
     str = str.trim();
 
+    const strLen = str.length;
+
+    const attr = str.match(/(\S+)=$/);
+
     let commands = str.match(/<\/?|\/>/g);
+
+    let removeScheduled = false;
+    if (strLen > 0 && !attr) {
+      if (!str.match(/^(<\/?|\/?>)/)) {
+        if (commands) {
+          commands.unshift("<", "/>");
+        } else {
+          commands = ["<", "/>"];
+        }
+
+        removeScheduled = true;
+
+        if (str.match(/<\/?\w+>/) && str[strLen - 1] !== ">") {
+          if (commands) {
+            commands.push("<", "/>");
+          } else {
+            commands = ["<", "/>"];
+          }
+        }
+      } else if (str[strLen - 1] !== ">") {
+        if (commands) {
+          commands.push("<", "/>");
+        } else {
+          commands = ["<", "/>"];
+        }
+      }
+    }
+
     if (commands !== null) {
       if (idx === lastIdx) commands = [commands[0]];
 
@@ -363,7 +408,20 @@ function compileTemplate(strings) {
           nextNode.prevKey = stackInfo.lastRef;
 
           if (ways.length > 0) {
-            stackInfo.eventsPath += goBack === true ? "0" : "1";
+            const next = goBack === true ? "0" : "1";
+            stackInfo.eventsPath += next;
+            stackInfo.fullPath += next;
+          }
+
+          if (removeScheduled) {
+            const toRemovePath = stackInfo.fullPath.split("").map(Number);
+            const commentNode = tracebackReference(
+              toRemovePath,
+              COMPILER_TEMPLATE.content.firstChild,
+            );
+            const parent = commentNode.parentNode;
+            parent.removeChild(commentNode);
+            removeScheduled = false;
           }
 
           if (nextNode.refKey === nextContentKey) {
@@ -396,7 +454,6 @@ function compileTemplate(strings) {
       nextArgNode.propIdx = idx + 1;
       nextArgNode.refKey = stackInfo.lastRef;
 
-      const attr = str.match(/(\S+)=$/);
       let skipArg = false;
       if (attr !== null) {
         const attrName = attr[1];
@@ -455,7 +512,9 @@ function compileTemplate(strings) {
         // Look for afterKey
         const nextIdx = idx + 1;
         const nextStr = strings[nextIdx].trim();
-        const hasNextStaticSibling = nextStr.match(/^<\w/g) !== null;
+        const hasNextStaticSibling =
+          nextStr.match(/^<\w/g) !== null ||
+          (nextStr.length > 0 && nextStr[0] !== "<");
         const hasNextDynamicSibling = nextIdx !== lastIdx && nextStr === "";
         const hasNextSibling = hasNextStaticSibling || hasNextDynamicSibling;
 
@@ -469,8 +528,7 @@ function compileTemplate(strings) {
           nextArgNode.afterNodeFn = afterNodeNoop;
         }
 
-        const hasPrevStaticSibling =
-          goBack === true || str[str.length - 1] !== ">";
+        const hasPrevStaticSibling = goBack === true;
         const hasPrevDynamicSibling = str === "" && idx > 0;
         const hasPrevSibling = hasPrevStaticSibling || hasPrevDynamicSibling;
         if (hasPrevSibling) nextArgNode.flag |= 2;
