@@ -309,15 +309,24 @@ function afterNodeNoop() {
 function compileTemplate(strings) {
   let instanceIdx = 0;
 
+  let insideTag = false;
   const html = strings
     .map(s => {
       const result = s.replace(/\w+=$/, "");
       const trimmed = result.trim();
-      if (trimmed.length > 0 && !trimmed.match(/^(<\/?|\/?>)/)) {
-        return `<!-- -->${result}`;
+      let output;
+      if (trimmed.length > 0 && !insideTag && !trimmed.match(/^(<\/?|\/?>)/)) {
+        output = `<!-- -->${result}`;
       } else {
-        return result;
+        output = result;
       }
+      const openTags = trimmed.match(/</g);
+      const closedTags = trimmed.match(/>/g);
+      const flip =
+        (openTags ? openTags.length : 0) !==
+        (closedTags ? closedTags.length : 0);
+      if (flip) insideTag = !insideTag;
+      return output;
     })
     .join("")
     .replace(/\n\s+(\w+=)/g, " $1")
@@ -355,6 +364,7 @@ function compileTemplate(strings) {
     }),
     nextNode = null;
 
+  insideTag = false;
   strings.forEach((str, idx) => {
     str = str.trim();
 
@@ -365,7 +375,7 @@ function compileTemplate(strings) {
     let commands = str.match(/<\/?|\/>/g);
 
     let removeScheduled = false;
-    if (strLen > 0 && !attr) {
+    if (strLen > 0 && !attr && !insideTag) {
       if (!str.match(/^(<\/?|\/?>)/)) {
         if (commands) {
           commands.unshift("<", "/>");
@@ -547,6 +557,12 @@ function compileTemplate(strings) {
 
       if (!skipArg) argsWays.push(nextArgNode);
     }
+
+    const openTags = str.match(/</g);
+    const closedTags = str.match(/>/g);
+    const flip =
+      (openTags ? openTags.length : 0) !== (closedTags ? closedTags.length : 0);
+    if (flip) insideTag = !insideTag;
   });
 
   ways = foldStaticTrees(ways.slice(1), activeWayNodes);

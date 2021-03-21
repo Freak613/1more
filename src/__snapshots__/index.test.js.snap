@@ -332,6 +332,103 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 5 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <button
+    disabled=""
+    id="test1"
+  >
+     class=value2 disabled
+  </button>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 6 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <button
+    disabled=""
+    id="test1"
+  >
+     class=value2 disabled
+  </button>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 7 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <input
+    disabled=""
+    id="test1"
+  />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],

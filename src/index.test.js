@@ -56,6 +56,32 @@ describe("compiler", () => {
         `.p,
       ).toMatchSnapshot();
     });
+
+    it("basic 5", () => {
+      expect(
+        html`
+          <button id="test1" class=${"value2"} disabled>
+            class=value2 disabled
+          </button>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("basic 6", () => {
+      expect(
+        html`
+          <button id="test1" disabled class=${"value2"}>
+            class=value2 disabled
+          </button>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("basic 7", () => {
+      expect(
+        html`<input id="test1" class=${"value2"} disabled />`.p,
+      ).toMatchSnapshot();
+    });
   });
 
   describe("afterNode", () => {
