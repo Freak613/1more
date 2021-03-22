@@ -364,9 +364,23 @@ function compileTemplate(strings) {
     }),
     nextNode = null;
 
+  // Append <p /> to non DOM nodes,
+  // to help compiler detect such content
+  const process = str => {
+    const terms = str.trim().split(/(<\/?[\w|\s]+\/?>)/g);
+    terms.unshift(...terms.shift().split(/^(\/>)/g));
+    terms.push(...terms.pop().split(/(<\w.*)$/g));
+    return terms
+      .map(v => {
+        if (v.match(/<|>/g)) return v;
+        return v.trim().length > 0 ? `${v}<p />` : v;
+      })
+      .join("");
+  };
+
   insideTag = false;
   strings.forEach((str, idx) => {
-    str = str.trim();
+    str = process(str);
 
     const strLen = str.length;
 
@@ -375,30 +389,8 @@ function compileTemplate(strings) {
     let commands = str.match(/<\/?|\/>/g);
 
     let removeScheduled = false;
-    if (strLen > 0 && !attr && !insideTag) {
-      if (!str.match(/^(<\/?|\/?>)/)) {
-        if (commands) {
-          commands.unshift("<", "/>");
-        } else {
-          commands = ["<", "/>"];
-        }
-
-        removeScheduled = true;
-
-        if (str.match(/<\/?\w+>/) && str[strLen - 1] !== ">") {
-          if (commands) {
-            commands.push("<", "/>");
-          } else {
-            commands = ["<", "/>"];
-          }
-        }
-      } else if (str[strLen - 1] !== ">") {
-        if (commands) {
-          commands.push("<", "/>");
-        } else {
-          commands = ["<", "/>"];
-        }
-      }
+    if (strLen > 0 && !attr && !insideTag && !str.match(/^(<\/?|\/?>)/)) {
+      removeScheduled = true;
     }
 
     if (commands !== null) {

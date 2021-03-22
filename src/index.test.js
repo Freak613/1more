@@ -207,5 +207,82 @@ describe("compiler", () => {
         `.p,
       ).toMatchSnapshot();
     });
+
+    it("mixed 9", () => {
+      expect(
+        html`
+          <div>
+            <input class=${1} />
+            Zero
+            <div>First</div>
+            Second
+            <div>Third</div>
+            Fourth
+            <input class=${1} />
+            Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 10", () => {
+      expect(
+        html`
+          <div>
+            <input class=${1} />
+            Zero
+            <div>First</div>
+            Second
+            <div>Third</div>
+            Fourth
+            <input class=${1} />
+            Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
+          </div>
+          <div>
+            <input class=${1} />
+            Zero
+            <div>First</div>
+            Second
+            <div>Third</div>
+            Fourth
+            <input class=${1} />
+            Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 11", () => {
+      expect(
+        html`
+          <div>
+            Zero <input /> ${"First"} ${"Fourth"} <input /> Fifth ${"Sixth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 12", () => {
+      expect(
+        html`
+          <div>
+            Zero <input /> One <input /> ${"First"} ${"Fourth"} <input /> Fifth
+            ${"Sixth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 13", () => {
+      expect(
+        html`
+          <div>
+            Zero <input /> Something else
+            <div>Text</div>
+            <input /> Fifth ${"Sixth"}
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
   });
 });
