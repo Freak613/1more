@@ -10,11 +10,11 @@ Works completely in-browser, doesn't require compiler.
 ```js
 import { component, html, render } from "1more";
 
-const App = component(() => () => {
-  return html`<div>Hello world</div>`;
+const Hello = component(() => name => {
+  return html`<div>Hello ${name}</div>`;
 });
 
-render(App(), document.getElementById("app"));
+render(Hello("World"), document.getElementById("app"));
 ```
 
 You can try it [on Codesandbox](https://codesandbox.io/s/1more-bfoni)
@@ -30,12 +30,12 @@ import { html } from "1more";
 
 const world = "World";
 
-html`<div>${`Hello ${world}`}</div>`;
+html`<div>Hello ${world}</div>`;
 ```
 
 Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase. It's possible to use Fragments (template with multiple root nodes).
 
-Note: `html` uses custom XML-like string compiler instead of native DOM parsing. Therefore it will have differences with real HTML. For example, mixing plain text and insertion points inside one parent may not work properly. Some issues may be fixed, but some may require going back to DOM parsing or significantly complicate parser.
+Note: `html` uses custom XML-like string compiler instead of native DOM parsing. Therefore it may have differences with real HTML.
 
 ##### Attributes
 
