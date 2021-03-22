@@ -2375,3 +2375,245 @@ Object {
   "ways": Array [],
 }
 `;
+
+exports[`compiler mixed content mixed 14 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 1,
+      "refKey": 4,
+      "type": "click",
+      "updateData": null,
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        0,
+      ],
+      "prevRef": 0,
+      "propIdx": 3,
+      "refKey": 5,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 2,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+    ],
+    Array [
+      Object {
+        "instKey": 3,
+        "propIdx": 4,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 2,
+  "templateNode": <DocumentFragment>
+    <div>
+      First row: 
+    </div>
+    <div>
+      Second row: 
+    </div>
+  </DocumentFragment>,
+  "type": 24,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 2,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 3,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 15 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 3,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 5,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 7,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 2,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 1,
+      "refKey": 8,
+      "type": "click",
+      "updateData": null,
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        0,
+      ],
+      "prevRef": 0,
+      "propIdx": 3,
+      "refKey": 9,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 6,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    Array [
+      Object {
+        "instKey": 7,
+        "propIdx": 4,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 2,
+  "templateNode": <DocumentFragment>
+    <div>
+      First row: 
+      <!-- -->
+       by me
+    </div>
+    <div>
+      Second row: 
+       by me
+    </div>
+  </DocumentFragment>,
+  "type": 24,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 6,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 7,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+  ],
+}
+`;

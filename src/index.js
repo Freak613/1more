@@ -368,7 +368,7 @@ function compileTemplate(strings) {
   // to help compiler detect such content
   const process = str => {
     const terms = str.trim().split(/(<\/?[\w|\s]+\/?>)/g);
-    terms.unshift(...terms.shift().split(/^(\/>)/g));
+    terms.unshift(...terms.shift().split(/^(\/?>)/g));
     terms.push(...terms.pop().split(/(<\w.*)$/g));
     return terms
       .map(v => {

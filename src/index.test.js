@@ -284,5 +284,23 @@ describe("compiler", () => {
         `.p,
       ).toMatchSnapshot();
     });
+
+    it("mixed 14", () => {
+      expect(
+        html`
+          <div onclick=${() => {}}>First row: ${1}</div>
+          <div onclick=${() => {}}>Second row: ${2}</div>
+        `.p,
+      ).toMatchSnapshot();
+    });
+
+    it("mixed 15", () => {
+      expect(
+        html`
+          <div onclick=${() => {}}>First row: ${1} by me</div>
+          <div onclick=${() => {}}>Second row: ${2} by me</div>
+        `.p,
+      ).toMatchSnapshot();
+    });
   });
 });
