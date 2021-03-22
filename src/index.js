@@ -386,7 +386,7 @@ function compileTemplate(strings) {
 
     const attr = str.match(/(\S+)=$/);
 
-    let commands = str.match(/<\/?|\/>/g);
+    let commands = str.match(/<\/?|[\/-]>/g);
 
     let removeScheduled = false;
     if (strLen > 0 && !attr && !insideTag && !str.match(/^(<\/?|\/?>)/)) {

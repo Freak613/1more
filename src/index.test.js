@@ -302,5 +302,26 @@ describe("compiler", () => {
         `.p,
       ).toMatchSnapshot();
     });
+
+    it("mixed 16", () => {
+      expect(
+        html`
+          <div>
+            <!--
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+              sed do eiusmod tempor incididunt ut labore et dolore magna 
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+              ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            -->
+
+            <!-- Render a string or number directly -->
+            <div>The message is: ${"message"}, count is: ${1}</div>
+
+            <!-- Some other comment -->
+            <div>The reversed message is: ${"message"}</div>
+          </div>
+        `.p,
+      ).toMatchSnapshot();
+    });
   });
 });

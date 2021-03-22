@@ -2617,3 +2617,146 @@ Object {
   ],
 }
 `;
+
+exports[`compiler mixed content mixed 16 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 6,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 8,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 9,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 10,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 7,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    undefined,
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 8,
+        "propIdx": 1,
+        "staticElemsBefore": 1,
+      },
+      Object {
+        "instKey": 9,
+        "propIdx": 2,
+        "staticElemsBefore": 1,
+      },
+    ],
+    undefined,
+    undefined,
+    undefined,
+    Array [
+      Object {
+        "instKey": 10,
+        "propIdx": 3,
+        "staticElemsBefore": 1,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. -->
+    <!-- Render a string or number directly -->
+    <div>
+      The message is: 
+      , count is: 
+    </div>
+    <!-- Some other comment -->
+    <div>
+      The reversed message is: 
+    </div>
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 8,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 9,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+    Object {
+      "instKey": 10,
+      "propIdx": 3,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 5,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 6,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 5,
+      "refKey": 7,
+    },
+  ],
+}
+`;
