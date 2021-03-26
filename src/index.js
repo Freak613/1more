@@ -931,35 +931,25 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
       b = newArray[b2];
     }
 
-    // Fast path to swap backward
-    a = nodes[a2];
-    b = newArray[b1];
-    while (a.k === b.k) {
+    // Fast path for symmetric swap or reverse
+    while (nodes[a1].k === newArray[b2].k && nodes[a2].k === newArray[b1].k) {
       loop = true;
-      updateValue(b, a);
-      insertVNode(a, parent, newNodes[b1].r[0]);
-      newNodes[b1] = a;
-      a2--;
-      b1++;
-      if (a2 < a1 || b2 < b1) break fixes;
       a = nodes[a2];
       b = newArray[b1];
-    }
-
-    // Fast path to swap forward
-    a = nodes[a1];
-    b = newArray[b2];
-    while (a.k === b.k) {
-      loop = true;
+      updateValue(b, a);
+      insertVNode(a, parent, nodes[a1].r[0]);
+      newNodes[b1] = a;
+      a = nodes[a1];
+      b = newArray[b2];
       updateValue(b, a);
       insertVNode(a, parent, afterNode);
       newNodes[b2] = a;
       a1++;
+      b1++;
+      a2--;
       b2--;
       afterNode = a.r[0];
       if (a2 < a1 || b2 < b1) break fixes;
-      a = nodes[a1];
-      b = newArray[b2];
     }
   }
 
@@ -1041,14 +1031,13 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
 
           lisIdx--;
         } else {
-          const n =
-            P[i] === -1
-              ? renderValue(newArray[i], parent, afterNode)
-              : nodes[P[i]];
-
-          // TODO: Insertion needed only when moving node
-          // renderValue will automatically mount it
-          insertVNode(n, parent, afterNode);
+          let n;
+          if (P[i] === -1) {
+            n = renderValue(newArray[i], parent, afterNode);
+          } else {
+            n = nodes[P[i]];
+            insertVNode(n, parent, afterNode);
+          }
 
           newNodes[i] = n;
           afterNode = n.r[0];

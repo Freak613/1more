@@ -1,4 +1,4 @@
-import { html, render, component, _resetTemplateCounter } from "./index";
+import { html, render, component, _resetTemplateCounter, key } from "./index";
 
 describe("compiler", () => {
   beforeEach(() => {
@@ -327,5 +327,77 @@ describe("compiler", () => {
         `,
       );
     });
+  });
+});
+
+describe("reconcile", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
+  const testReconcile = (first, second) => {
+    const container = document.getElementById("app");
+
+    const Item = component(() => item => html`<span>${item}</span>`);
+
+    const App = component(() => state => html`
+      <div>${state.map(item => key(item, Item(item)))}</div>
+    `);
+
+    render(App(first), container);
+    expect(container).toMatchSnapshot();
+
+    render(App(second), container);
+    expect(container).toMatchSnapshot();
+  };
+
+  it("reconcile 1", () => {
+    testReconcile([1, 2], [3, 4, 1, 2]);
+  });
+
+  it("reconcile 2", () => {
+    testReconcile([1, 2], [1, 3, 4, 2]);
+  });
+
+  it("reconcile 3", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [1, 5, 3, 4, 2, 6]);
+  });
+
+  it("reconcile 4", () => {
+    testReconcile([1, 2, 3, 4, 5], [1, 4, 3, 2, 5]);
+  });
+
+  it("reconcile 5", () => {
+    testReconcile([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]);
+  });
+
+  it("reconcile 6", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1]);
+  });
+
+  it("reconcile 7", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [2, 3, 4, 5, 6, 1]);
+  });
+
+  it("reconcile 8", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [3, 4, 5, 6, 1, 2]);
+  });
+
+  it("reconcile 9", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [6, 1, 2, 3, 4, 5]);
+  });
+
+  it("reconcile 10", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [3, 4, 5, 6, 2]);
+  });
+
+  it("reconcile 11", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [2, 3, 4, 5, 6, 7, 1]);
+  });
+
+  it("reconcile 12", () => {
+    testReconcile([1, 2, 3, 4, 5, 6, 7], [1, 5, 6, 4, 2, 3, 7]);
   });
 });
