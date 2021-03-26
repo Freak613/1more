@@ -50,6 +50,17 @@ Object {
 }
 `;
 
+exports[`compiler afterNode afterNode 1 2`] = `
+<div
+  id="app"
+>
+  <div>
+    1
+    <div />
+  </div>
+</div>
+`;
+
 exports[`compiler afterNode afterNode 2 1`] = `
 Object {
   "argsWays": Array [
@@ -126,6 +137,18 @@ Object {
 }
 `;
 
+exports[`compiler afterNode afterNode 2 2`] = `
+<div
+  id="app"
+>
+  <div>
+    1
+    2
+    <div />
+  </div>
+</div>
+`;
+
 exports[`compiler basic basic 1 1`] = `
 Object {
   "argsWays": Array [],
@@ -138,6 +161,14 @@ Object {
   "unmountPoints": Array [],
   "ways": Array [],
 }
+`;
+
+exports[`compiler basic basic 1 2`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
 `;
 
 exports[`compiler basic basic 2 1`] = `
@@ -294,6 +325,42 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 2 2`] = `
+<div
+  id="app"
+>
+  <tr
+    class="danger"
+  >
+    <td
+      class="col-md-1"
+    >
+      1
+    </td>
+    <td
+      class="col-md-4"
+    >
+      <a>
+        test
+      </a>
+    </td>
+    <td
+      class="col-md-1"
+    >
+      <a>
+        <span
+          aria-hidden="true"
+          class="glyphicon glyphicon-remove"
+        />
+      </a>
+    </td>
+    <td
+      class="col-md-6"
+    />
+  </tr>
+</div>
+`;
+
 exports[`compiler basic basic 3 1`] = `
 Object {
   "argsWays": Array [],
@@ -313,6 +380,19 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 3 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      Space should be preserved when on single line 
+    </span>
+    <div />
+  </div>
+</div>
+`;
+
 exports[`compiler basic basic 4 1`] = `
 Object {
   "argsWays": Array [],
@@ -330,6 +410,19 @@ Object {
   "unmountPoints": Array [],
   "ways": Array [],
 }
+`;
+
+exports[`compiler basic basic 4 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      Spacing should be removed when on separate line
+    </span>
+    <div />
+  </div>
+</div>
 `;
 
 exports[`compiler basic basic 5 1`] = `
@@ -365,6 +458,20 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 5 2`] = `
+<div
+  id="app"
+>
+  <button
+    class="value2"
+    disabled=""
+    id="test1"
+  >
+     class=value2 disabled
+  </button>
+</div>
+`;
+
 exports[`compiler basic basic 6 1`] = `
 Object {
   "argsWays": Array [
@@ -398,6 +505,20 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 6 2`] = `
+<div
+  id="app"
+>
+  <button
+    class="value2"
+    disabled=""
+    id="test1"
+  >
+     class=value2 disabled
+  </button>
+</div>
+`;
+
 exports[`compiler basic basic 7 1`] = `
 Object {
   "argsWays": Array [
@@ -429,6 +550,18 @@ Object {
 }
 `;
 
+exports[`compiler basic basic 7 2`] = `
+<div
+  id="app"
+>
+  <input
+    class="value2"
+    disabled=""
+    id="test1"
+  />
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],
@@ -444,6 +577,15 @@ Object {
   "unmountPoints": Array [],
   "ways": Array [],
 }
+`;
+
+exports[`compiler fragments fragments 1 2`] = `
+<div
+  id="app"
+>
+  <div />
+  <div />
+</div>
 `;
 
 exports[`compiler fragments fragments 2 1`] = `
@@ -522,6 +664,19 @@ Object {
 }
 `;
 
+exports[`compiler fragments fragments 2 2`] = `
+<div
+  id="app"
+>
+  <div>
+    1
+  </div>
+  <div>
+    2
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 1 1`] = `
 Object {
   "argsWays": Array [
@@ -564,6 +719,17 @@ Object {
   ],
   "ways": Array [],
 }
+`;
+
+exports[`compiler mixed content mixed 1 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello 
+    World
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 2 1`] = `
@@ -672,6 +838,21 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 2 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    First
+    <input />
+    Fourth
+     Fifth 
+    Sixth
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 3 1`] = `
@@ -1026,6 +1207,43 @@ Object {
 }
 `;
 
+exports[`compiler mixed content mixed 3 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div>
+      Zero 
+      First
+       Second 
+      Third
+       Fourth
+    </div>
+    <div>
+      First
+       Second 
+      Third
+       Fourth
+    </div>
+    <div>
+      Zero 
+      First
+       Second 
+      Third
+       Fourth 
+      Fifth
+    </div>
+    <div>
+      First
+       Second 
+      Third
+       Fourth 
+      Fifth
+    </div>
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 4 1`] = `
 Object {
   "argsWays": Array [
@@ -1156,6 +1374,25 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 4 2`] = `
+<div
+  id="app"
+>
+  <div />
+  <div>
+    <div />
+    <div>
+      Zero 
+      First
+       Second 
+      Third
+       Fourth 
+      Fifth
+    </div>
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 5 1`] = `
@@ -1294,6 +1531,24 @@ Object {
 }
 `;
 
+exports[`compiler mixed content mixed 5 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    First
+    <div>
+      Second 
+      Third
+    </div>
+    Fourth
+     Fifth 
+    Sixth
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 6 1`] = `
 Object {
   "argsWays": Array [
@@ -1402,6 +1657,21 @@ Object {
 }
 `;
 
+exports[`compiler mixed content mixed 6 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    First
+     Second 
+    Third
+     Fourth 
+    Fifth
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 7 1`] = `
 Object {
   "argsWays": Array [
@@ -1502,6 +1772,20 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 7 2`] = `
+<div
+  id="app"
+>
+  <div>
+    First
+     Second 
+    Third
+     Fourth 
+    Fifth
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 8 1`] = `
@@ -1640,6 +1924,27 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 8 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+    <div>
+      <div />
+      <div>
+        Zero 
+        First
+         Second 
+        Third
+         Fourth 
+        Fifth
+      </div>
+    </div>
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 9 1`] = `
@@ -1792,6 +2097,35 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 9 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <input
+      class="1"
+    />
+    Zero
+    <div>
+      First
+    </div>
+    Second
+    <div>
+      Third
+    </div>
+    Fourth
+    <input
+      class="1"
+    />
+    Fifth  
+    Sixth
+    <input />
+     Seventh 
+    Eighth
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 10 1`] = `
@@ -2089,6 +2423,57 @@ Object {
 }
 `;
 
+exports[`compiler mixed content mixed 10 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <input
+      class="1"
+    />
+    Zero
+    <div>
+      First
+    </div>
+    Second
+    <div>
+      Third
+    </div>
+    Fourth
+    <input
+      class="1"
+    />
+    Fifth  
+    Sixth
+    <input />
+     Seventh 
+    Eighth
+  </div>
+  <div>
+    <input
+      class="1"
+    />
+    Zero
+    <div>
+      First
+    </div>
+    Second
+    <div>
+      Third
+    </div>
+    Fourth
+    <input
+      class="1"
+    />
+    Fifth  
+    Sixth
+    <input />
+     Seventh 
+    Eighth
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 11 1`] = `
 Object {
   "argsWays": Array [
@@ -2199,6 +2584,22 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 11 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    <input />
+    First
+    Fourth
+    <input />
+     Fifth 
+    Sixth
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 12 1`] = `
@@ -2325,6 +2726,24 @@ Object {
 }
 `;
 
+exports[`compiler mixed content mixed 12 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    <input />
+     One 
+    <input />
+    First
+    Fourth
+    <input />
+     Fifth
+    Sixth
+  </div>
+</div>
+`;
+
 exports[`compiler mixed content mixed 13 1`] = `
 Object {
   "argsWays": Array [
@@ -2374,6 +2793,24 @@ Object {
   ],
   "ways": Array [],
 }
+`;
+
+exports[`compiler mixed content mixed 13 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Zero 
+    <input />
+     Something else
+    <div>
+      Text
+    </div>
+    <input />
+     Fifth 
+    Sixth
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 14 1`] = `
@@ -2483,6 +2920,21 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 14 2`] = `
+<div
+  id="app"
+>
+  <div>
+    First row: 
+    1
+  </div>
+  <div>
+    Second row: 
+    2
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 15 1`] = `
@@ -2616,6 +3068,24 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 15 2`] = `
+<div
+  id="app"
+>
+  <div>
+    First row: 
+    1
+    <!-- -->
+     by me
+  </div>
+  <div>
+    Second row: 
+    2
+     by me
+  </div>
+</div>
 `;
 
 exports[`compiler mixed content mixed 16 1`] = `
@@ -2759,4 +3229,26 @@ Object {
     },
   ],
 }
+`;
+
+exports[`compiler mixed content mixed 16 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. -->
+    <!-- Render a string or number directly -->
+    <div>
+      The message is: 
+      message
+      , count is: 
+      1
+    </div>
+    <!-- Some other comment -->
+    <div>
+      The reversed message is: 
+      message
+    </div>
+  </div>
+</div>
 `;

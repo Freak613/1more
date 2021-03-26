@@ -1,12 +1,20 @@
-import { html, _resetTemplateCounter } from "./index";
+import { html, render, component, _resetTemplateCounter } from "./index";
 
 describe("compiler", () => {
-  afterEach(() => {
+  beforeEach(() => {
     _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
   });
 
   const testTemplate = template => {
     expect(template.p).toMatchSnapshot();
+
+    const container = document.getElementById("app");
+    const App = component(() => () => template);
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
   };
 
   describe("basic", () => {
