@@ -5,46 +5,46 @@ describe("compiler", () => {
     _resetTemplateCounter();
   });
 
+  const testTemplate = template => {
+    expect(template.p).toMatchSnapshot();
+  };
+
   describe("basic", () => {
     it("basic 1", () => {
-      expect(html`<div></div>`.p).toMatchSnapshot();
+      testTemplate(html`<div></div>`);
     });
 
     it("basic 2", () => {
-      expect(
-        html`
-          <tr class=${"danger"}>
-            <td class="col-md-1">${1}</td>
-            <td class="col-md-4">
-              <a onclick=${() => {}}> ${"test"} </a>
-            </td>
-            <td class="col-md-1">
-              <a onclick=${() => {}}>
-                <span
-                  class="glyphicon glyphicon-remove"
-                  aria-hidden="true"
-                ></span>
-              </a>
-            </td>
-            <td class="col-md-6"></td>
-          </tr>
-        `.p,
-      ).toMatchSnapshot();
+      testTemplate(html`
+        <tr class=${"danger"}>
+          <td class="col-md-1">${1}</td>
+          <td class="col-md-4">
+            <a onclick=${() => {}}> ${"test"} </a>
+          </td>
+          <td class="col-md-1">
+            <a onclick=${() => {}}>
+              <span
+                class="glyphicon glyphicon-remove"
+                aria-hidden="true"
+              ></span>
+            </a>
+          </td>
+          <td class="col-md-6"></td>
+        </tr>
+      `);
     });
 
     it("basic 3", () => {
-      expect(
-        html`
-          <div>
-            <span>Space should be preserved when on single line </span>
-            <div></div>
-          </div>
-        `.p,
-      ).toMatchSnapshot();
+      testTemplate(html`
+        <div>
+          <span>Space should be preserved when on single line </span>
+          <div></div>
+        </div>
+      `);
     });
 
     it("basic 4", () => {
-      expect(
+      testTemplate(
         // prettier-ignore
         html`
           <div>
@@ -53,100 +53,96 @@ describe("compiler", () => {
             </span>
             <div></div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("basic 5", () => {
-      expect(
+      testTemplate(
         html`
           <button id="test1" class=${"value2"} disabled>
             class=value2 disabled
           </button>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("basic 6", () => {
-      expect(
+      testTemplate(
         html`
           <button id="test1" disabled class=${"value2"}>
             class=value2 disabled
           </button>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("basic 7", () => {
-      expect(
-        html`<input id="test1" class=${"value2"} disabled />`.p,
-      ).toMatchSnapshot();
+      testTemplate(html`<input id="test1" class=${"value2"} disabled />`);
     });
   });
 
   describe("afterNode", () => {
     it("afterNode 1", () => {
-      expect(
-        html`
-          <div>
-            ${1}
-            <div></div>
-          </div>
-        `.p,
-      ).toMatchSnapshot();
+      testTemplate(html`
+        <div>
+          ${1}
+          <div></div>
+        </div>
+      `);
     });
 
     it("afterNode 2", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             ${1} ${2}
             <div></div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
   });
 
   describe("fragments", () => {
     it("fragments 1", () => {
-      expect(
+      testTemplate(
         html`
           <div></div>
           <div></div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("fragments 2", () => {
-      expect(
+      testTemplate(
         html`
           <div>${1}</div>
           <div>${2}</div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
   });
 
   describe("mixed content", () => {
     it("mixed 1", () => {
-      expect(html`<div>Hello ${"World"}</div>`.p).toMatchSnapshot();
+      testTemplate(html`<div>Hello ${"World"}</div>`);
     });
 
     it("mixed 2", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             Zero ${"First"}
             <input />
             ${"Fourth"} Fifth ${"Sixth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 3", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             <div>Zero ${"First"} Second ${"Third"} Fourth</div>
@@ -154,48 +150,48 @@ describe("compiler", () => {
             <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
             <div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 4", () => {
-      expect(
+      testTemplate(
         html`
           <div></div>
           <div>
             <div></div>
             <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 5", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             Zero ${"First"}
             <div>Second ${"Third"}</div>
             ${"Fourth"} Fifth ${"Sixth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 6", () => {
-      expect(
-        html`<div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`.p,
-      ).toMatchSnapshot();
+      testTemplate(
+        html`<div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`,
+      );
     });
 
     it("mixed 7", () => {
-      expect(
-        html`<div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`.p,
-      ).toMatchSnapshot();
+      testTemplate(
+        html`<div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`,
+      );
     });
 
     it("mixed 8", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             <div></div>
@@ -204,12 +200,12 @@ describe("compiler", () => {
               <div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>
             </div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 9", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             <input class=${1} />
@@ -221,12 +217,12 @@ describe("compiler", () => {
             <input class=${1} />
             Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 10", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             <input class=${1} />
@@ -248,63 +244,63 @@ describe("compiler", () => {
             <input class=${1} />
             Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 11", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             Zero <input /> ${"First"} ${"Fourth"} <input /> Fifth ${"Sixth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 12", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             Zero <input /> One <input /> ${"First"} ${"Fourth"} <input /> Fifth
             ${"Sixth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 13", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             Zero <input /> Something else
             <div>Text</div>
             <input /> Fifth ${"Sixth"}
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 14", () => {
-      expect(
+      testTemplate(
         html`
           <div onclick=${() => {}}>First row: ${1}</div>
           <div onclick=${() => {}}>Second row: ${2}</div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 15", () => {
-      expect(
+      testTemplate(
         html`
           <div onclick=${() => {}}>First row: ${1} by me</div>
           <div onclick=${() => {}}>Second row: ${2} by me</div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
 
     it("mixed 16", () => {
-      expect(
+      testTemplate(
         html`
           <div>
             <!--
@@ -320,8 +316,8 @@ describe("compiler", () => {
             <!-- Some other comment -->
             <div>The reversed message is: ${"message"}</div>
           </div>
-        `.p,
-      ).toMatchSnapshot();
+        `,
+      );
     });
   });
 });
