@@ -3,7 +3,7 @@
 [![Size](https://badgen.net/bundlephobia/minzip/1more)](https://unpkg.com/1more/dist/index.min.js)
 
 (One more) R&D project to bring performant DOM rendering to acceptable developer experience using template literals.
-Works completely in-browser.
+Works completely in-browser, doesn't require compiler.
 
 ## Hello world
 
@@ -33,9 +33,7 @@ const world = "World";
 html`<div>Hello ${world}</div>`;
 ```
 
-Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase. It's possible to use Fragments (template with multiple root nodes).
-
-Note: `html` uses custom XML-like string compiler instead of native DOM parsing. Therefore it may have differences with real HTML.
+Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase. Fragments are supported (template with multiple root nodes).
 
 ##### Attributes
 
@@ -254,3 +252,7 @@ It is similar to vdom. On each render app generates immutable virtual tree struc
 - [JS Frameworks Benchmark](https://github.com/Freak613/1more/tree/master/examples/js-framework-benchmark)
 - [Todo MVC](https://github.com/Freak613/1more/tree/master/examples/todomvc)
 - [Todo MVC - Optimized](https://github.com/Freak613/1more/tree/master/examples/todomvc-optimized)
+
+## Credits
+
+- [ivi](https://github.com/localvoid/ivi) - inspired component and hooks API and a lot of hi-perf optimizations.
