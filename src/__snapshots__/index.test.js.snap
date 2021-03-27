@@ -692,6 +692,48 @@ exports[`compiler basic basic 9 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 10 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+    Test
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 10 2`] = `
+<div
+  id="app"
+>
+  <div
+    style="color: red;"
+  >
+    Test
+  </div>
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],

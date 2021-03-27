@@ -10,6 +10,8 @@ const elementProto = Element.prototype;
 const characterDataProto = CharacterData.prototype;
 const arrayProto = Array.prototype;
 
+const objectHasOwnProperty = Object.prototype.hasOwnProperty;
+
 const nodeCloneNode = nodeProto.cloneNode;
 const nodeInsertBefore = nodeProto.insertBefore;
 const nodeAppendChild = nodeProto.appendChild;
@@ -22,7 +24,8 @@ const nodeGetChildNodes = getDescriptor(nodeProto, "childNodes").get;
 const elementSetClassName = getDescriptor(elementProto, "className").set;
 const elementRemove = elementProto.remove;
 const elementSetAttribute = elementProto.setAttribute;
-const elementRemoveAttribute = elementProto.removeAttribute;
+
+const htmlElementGetStyle = getDescriptor(HTMLElement.prototype, "style").get;
 
 const characterDataSetData = getDescriptor(characterDataProto, "data").set;
 
@@ -151,6 +154,47 @@ function refSet(refs, v) {
 
 function refUpdate(refs, v) {
   refs[this.instKey] = v(refs[this.refKey], refs[this.instKey]);
+}
+
+function setStyle(refs, v) {
+  const style = htmlElementGetStyle.call(refs[this.refKey]);
+  let key;
+  for (key in v) {
+    style.setProperty(key, v[key]);
+  }
+  refs[this.instKey] = v;
+}
+
+function updateStyle(refs, b) {
+  const style = htmlElementGetStyle.call(refs[this.refKey]);
+  const a = refs[this.instKey];
+  let key;
+  let bValue;
+  let matchCount = 0;
+  let i = 0;
+  for (key in a) {
+    const aValue = a[key];
+    bValue =
+      objectHasOwnProperty.call(b, key) === true
+        ? (matchCount++, b[key])
+        : void 0;
+    if (aValue !== bValue) {
+      if (bValue !== void 0) {
+        style.setProperty(key, bValue);
+      } else {
+        style.removeProperty(key);
+      }
+    }
+  }
+  const keys = Object.keys(b);
+  for (; matchCount < keys.length && i < keys.length; ++i) {
+    key = keys[i];
+    if (objectHasOwnProperty.call(a, key) === false) {
+      ++matchCount;
+      style.setProperty(key, b[key]);
+    }
+  }
+  refs[this.instKey] = b;
 }
 
 function createAttributeSetter(key) {
@@ -508,6 +552,10 @@ function compileTemplate(strings) {
             case "ref":
               nextArgNode.applyData = refSet;
               nextArgNode.updateData = refUpdate;
+              break;
+            case "style":
+              nextArgNode.applyData = setStyle;
+              nextArgNode.updateData = updateStyle;
               break;
             default:
               nextArgNode.applyData = createAttributeSetter(attrName);

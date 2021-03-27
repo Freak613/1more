@@ -109,6 +109,10 @@ describe("compiler", () => {
         />`,
       );
     });
+
+    it("basic 10", () => {
+      testTemplate(html`<div style=${{ color: "red" }}>Test</div>`);
+    });
   });
 
   describe("afterNode", () => {
