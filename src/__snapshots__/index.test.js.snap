@@ -562,6 +562,136 @@ exports[`compiler basic basic 7 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 8 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <input />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 8 2`] = `
+<div
+  id="app"
+>
+  <input
+    class="some"
+    type="checkbox"
+  />
+</div>
+`;
+
+exports[`compiler basic basic 9 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <input />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 9 2`] = `
+<div
+  id="app"
+>
+  <input
+    data-testid="fancy-checkbox"
+    type="checkbox"
+  />
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],

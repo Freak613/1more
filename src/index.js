@@ -21,6 +21,8 @@ const nodeGetChildNodes = getDescriptor(nodeProto, "childNodes").get;
 
 const elementSetClassName = getDescriptor(elementProto, "className").set;
 const elementRemove = elementProto.remove;
+const elementSetAttribute = elementProto.setAttribute;
+const elementRemoveAttribute = elementProto.removeAttribute;
 
 const characterDataSetData = getDescriptor(characterDataProto, "data").set;
 
@@ -136,7 +138,7 @@ function updateContent(refs, v) {
 }
 
 function setClassname(refs, v) {
-  if (v !== null) elementSetClassName.call(refs[this.refKey], v);
+  if (v) elementSetClassName.call(refs[this.refKey], v);
 }
 
 function updateClassname(refs, v) {
@@ -151,15 +153,29 @@ function refUpdate(refs, v) {
   refs[this.instKey] = v(refs[this.refKey], refs[this.instKey]);
 }
 
-function createAttributeSetter(attrName) {
+function createAttributeSetter(key) {
   return function (refs, v) {
-    refs[this.refKey][attrName] = v;
+    if (!v) return;
+
+    const node = refs[this.refKey];
+    if (key in node) {
+      node[key] = v;
+    } else {
+      elementSetAttribute.call(node, key, v);
+    }
   };
 }
 
-function createAttributeUpdater(attrName) {
+function createAttributeUpdater(key) {
   return function (refs, v) {
-    refs[this.refKey][attrName] = v;
+    const node = refs[this.refKey];
+    if (key in node) {
+      node[key] = v;
+    } else if (v === false) {
+      elementRemoveAttribute.call(node, key);
+    } else {
+      elementSetAttribute.call(node, key, v);
+    }
   };
 }
 
@@ -312,7 +328,7 @@ function compileTemplate(strings) {
   let insideTag = false;
   const html = strings
     .map(s => {
-      const result = s.replace(/\w+=$/, "");
+      const result = s.replace(/[\w-]+=$/, "");
       const trimmed = result.trim();
       let output;
       if (trimmed.length > 0 && !insideTag && !trimmed.match(/^(<\/?|\/?>)/)) {
@@ -367,18 +383,23 @@ function compileTemplate(strings) {
   // Append <p /> to non DOM nodes,
   // to help compiler detect such content
   const process = str => {
-    const terms = str.trim().split(/(<\/?[\w|\s]+\/?>)/g);
+    str = str.trim();
+
+    const terms = str.split(/(<\/?[\w|\s]+\/?>)/g);
+
     terms.unshift(...terms.shift().split(/^(\/?>)/g));
     terms.push(...terms.pop().split(/(<\w.*)$/g));
     return terms
       .map(v => {
         if (v.match(/<|>/g)) return v;
+        if (v.match(/\w+=$/g)) return v;
         return v.trim().length > 0 ? `${v}<p />` : v;
       })
       .join("");
   };
 
   insideTag = false;
+
   strings.forEach((str, idx) => {
     str = process(str);
 

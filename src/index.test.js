@@ -15,6 +15,8 @@ describe("compiler", () => {
     render(App(), container);
 
     expect(container).toMatchSnapshot();
+
+    return container;
   };
 
   describe("basic", () => {
@@ -87,6 +89,25 @@ describe("compiler", () => {
 
     it("basic 7", () => {
       testTemplate(html`<input id="test1" class=${"value2"} disabled />`);
+    });
+
+    it("basic 8", () => {
+      const container = testTemplate(
+        html`<input type=${"checkbox"} checked=${true} class=${"some"} />`,
+      );
+
+      const checkbox = container.firstChild;
+      expect(checkbox.checked).toBe(true);
+    });
+
+    it("basic 9", () => {
+      testTemplate(
+        html`<input
+          type=${"checkbox"}
+          checked=${false}
+          data-testid=${"fancy-checkbox"}
+        />`,
+      );
     });
   });
 
