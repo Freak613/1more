@@ -6,6 +6,7 @@
   "module": "index.js",
   "scripts": {
     "build-prod": "rollup -c",
+    "coverage": "jest --collectCoverage",
     "test": "jest",
     "test-dev": "jest --watchAll"
   },
