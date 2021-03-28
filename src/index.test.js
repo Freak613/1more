@@ -964,6 +964,25 @@ describe("events", () => {
 
     expect(state).toBe(0);
   });
+
+  it("events 10", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const Child = component(() => () =>
+      html`<div onclick=${() => (state = 1)} />`,
+    );
+    const App = component(() => () =>
+      html`<div id="target">${"test"}${Child()}</div>`,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.firstChild.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
 });
 
 describe("invalidate", () => {

@@ -341,10 +341,10 @@ function afterNodeInstance(refs) {
         result = next.n;
       } else if ((next.t & 2) !== 0) {
         if (next.n.length > 0) {
-          result = next.n[0].r[0];
+          result = getDomNode(next.n[0]);
         }
       } else {
-        result = next.r[0];
+        result = getDomNode(next);
       }
     }
     if (result) break;
@@ -653,36 +653,42 @@ export function html() {
   return arguments;
 }
 
-const createVirtualNode = () => ({
+const createTemplateVirtualNode = () => ({
   t: 4,
-  f: 0, // flags
-  d: _depth, // depth
   p: undefined, // props
   r: undefined, // refs
+  z: undefined, // roots (for fragments)
+});
+
+const createComponentVirtualNode = () => ({
+  t: 16,
+  f: 0, // flags
+  d: _depth, // depth
   k: undefined, // key
   v: undefined, // render
   c: undefined, // component props
   n: undefined, // component init
   u: undefined, // unmount,
-  z: undefined, // roots (for fragments)
+  q: undefined, // children
 });
 
-function unmountWalk(vnode) {
+function unmountWalk(cnode) {
+  const vnode = cnode.q;
   const refs = vnode.r;
   const template = vnode.p.p;
 
   const { unmountPoints } = template;
   for (const point of unmountPoints) {
     const inst = refs[point.instKey];
-    if ((inst.t & 4) !== 0) {
+    if ((inst.t & 16) !== 0) {
       unmountWalk(inst);
     } else if ((inst.t & 2) !== 0) {
       inst.n.forEach(unmountWalk);
     }
   }
 
-  if (vnode.u !== undefined) {
-    const unmount = vnode.u;
+  if (cnode.u !== undefined) {
+    const unmount = cnode.u;
     if (typeof unmount === "function") {
       unmount();
     } else {
@@ -691,11 +697,13 @@ function unmountWalk(vnode) {
       }
     }
   }
-  vnode.f = 4;
+  cnode.f = 4;
 }
 
-function removeVNode(vnode) {
-  unmountWalk(vnode);
+function removeVNode(cnode) {
+  unmountWalk(cnode);
+
+  const vnode = cnode.q;
 
   if ((vnode.t & 8) !== 0) {
     vnode.z.forEach(n => elementRemove.call(n));
@@ -705,7 +713,9 @@ function removeVNode(vnode) {
 }
 
 function insertVNode(vnode, parent, afterNode) {
-  if ((vnode.t & 8) !== 0) {
+  if ((vnode.t & 16) !== 0) {
+    insertVNode(vnode.q, parent, afterNode);
+  } else if ((vnode.t & 8) !== 0) {
     vnode.z.forEach(n => {
       if (afterNode) {
         nodeInsertBefore.call(parent, n, afterNode);
@@ -723,14 +733,21 @@ function insertVNode(vnode, parent, afterNode) {
 }
 
 function renderValue(props, parent, afterNode) {
+  const cnode = createComponentVirtualNode();
+  cnode.k = props.k;
+
   const init = props.n;
-  const vnode = createVirtualNode();
-  vnode.n = init;
-  const render = init(vnode);
-  vnode.v = render;
-  vnode.c = props.p;
+  cnode.n = init;
+
+  const render = init(cnode);
+  cnode.v = render;
+  cnode.c = props.p;
+
+  const vnode = createTemplateVirtualNode();
+  cnode.q = vnode;
 
   const view = render(props.p);
+  vnode.p = view;
 
   const { type, templateNode, ways, argsWays, producer } = view.p;
 
@@ -755,26 +772,24 @@ function renderValue(props, parent, afterNode) {
   for (let a of argsWays) a.applyData(refs, view[a.propIdx]);
   _depth = currentDepth;
 
-  vnode.k = props.k;
-
   if (afterNode) {
     nodeInsertBefore.call(parent, tNode, afterNode);
   } else {
     nodeAppendChild.call(parent, tNode);
   }
 
-  vnode.p = view;
-
-  return vnode;
+  return cnode;
 }
 
-function checkUpdates(vnode) {
-  const view = vnode.v(vnode.c);
+function checkUpdates(cnode) {
+  const view = cnode.v(cnode.c);
+
+  const vnode = cnode.q;
 
   const prev = vnode.p;
   const refs = vnode.r;
 
-  const currentDepth = vnode.d;
+  const currentDepth = cnode.d;
   _depth = currentDepth + 1;
   for (let a of vnode.p.p.argsWays) {
     if (prev[a.propIdx] !== view[a.propIdx]) {
@@ -784,13 +799,13 @@ function checkUpdates(vnode) {
   _depth = currentDepth;
 
   vnode.p = view;
-  vnode.f = 0;
+  cnode.f = 0;
 }
 
-function updateValue(b, vnode) {
-  if (b.p === vnode.c) return;
-  vnode.c = b.p;
-  checkUpdates(vnode);
+function updateValue(b, cnode) {
+  if (b.p === cnode.c) return;
+  cnode.c = b.p;
+  checkUpdates(cnode);
 }
 
 export function render(component, container) {
@@ -835,9 +850,9 @@ function findNodeInstance(insertions, nodeIndex, refs) {
       let node;
       for (node of nodes) {
         let size;
-        const { t } = node;
+        const { t } = node.q;
         if ((t & 8) !== 0) {
-          size = node.z.length;
+          size = node.q.z.length;
         } else {
           size = 1;
         }
@@ -848,17 +863,27 @@ function findNodeInstance(insertions, nodeIndex, refs) {
           shift += size;
         }
       }
-    } else if ((t & 8) !== 0) {
-      const nodes = inst.z;
-      if (nodeIndex <= nodes.length - 1 + shift) {
-        nodeInstance = inst;
-        break;
+    } else if ((t & 16) !== 0) {
+      const tnode = inst.q;
+      const { t } = tnode;
+      if ((t & 8) !== 0) {
+        const nodes = tnode.z;
+        if (nodeIndex <= nodes.length - 1 + shift) {
+          nodeInstance = inst;
+          break;
+        } else {
+          shift += nodes.length;
+        }
       } else {
-        shift += nodes.length;
+        if (nodeIndex === shift) {
+          nodeInstance = inst;
+          break;
+        } else {
+          shift++;
+        }
       }
     } else {
       if (nodeIndex === shift) {
-        nodeInstance = inst;
         break;
       } else {
         shift++;
@@ -869,8 +894,10 @@ function findNodeInstance(insertions, nodeIndex, refs) {
   return nodeInstance;
 }
 
-function findEventTarget(nodeInstance, event, targets) {
+function findEventTarget(cnode, event, targets) {
   const eventName = event.type;
+
+  const nodeInstance = cnode.q;
 
   const { p: props, r: refs } = nodeInstance;
   const { events, insertionPoints } = props.p;
@@ -946,6 +973,15 @@ function setupGlobalHandler(name) {
   GLOBAL_HANDLERS[name] = 1;
 }
 
+function getDomNode(vnode) {
+  const { t } = vnode;
+  if ((t & 4) !== 0) {
+    return vnode.r[0];
+  } else {
+    return getDomNode(vnode.q);
+  }
+}
+
 function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
   let newNodes = nodes;
 
@@ -986,7 +1022,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
       newNodes[b2] = a;
       a2--;
       b2--;
-      afterNode = a.r[0];
+      afterNode = getDomNode(a);
       if (a2 < a1 || b2 < b1) break fixes;
       a = nodes[a2];
       b = newArray[b2];
@@ -998,7 +1034,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
       a = nodes[a2];
       b = newArray[b1];
       updateValue(b, a);
-      insertVNode(a, parent, nodes[a1].r[0]);
+      insertVNode(a, parent, getDomNode(nodes[a1]));
       newNodes[b1] = a;
       a = nodes[a1];
       b = newArray[b2];
@@ -1009,7 +1045,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
       b1++;
       a2--;
       b2--;
-      afterNode = a.r[0];
+      afterNode = getDomNode(a);
       if (a2 < a1 || b2 < b1) break fixes;
     }
   }
@@ -1088,7 +1124,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
           updateValue(b, n);
 
           newNodes[i] = n;
-          afterNode = n.r[0];
+          afterNode = getDomNode(n);
 
           lisIdx--;
         } else {
@@ -1101,7 +1137,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode) {
           }
 
           newNodes[i] = n;
-          afterNode = n.r[0];
+          afterNode = getDomNode(n);
         }
       }
 
