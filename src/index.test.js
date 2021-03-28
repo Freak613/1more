@@ -891,33 +891,32 @@ describe("events", () => {
     expect(state1).toBe(0);
   });
 
-  // TODO: Fix events for arrays of fragments
-  // it("events 7", () => {
-  //   const container = document.getElementById("app");
+  it("events 7", () => {
+    const container = document.getElementById("app");
 
-  //   let state1 = 0;
-  //   let state2 = 0;
-  //   const Child = component(() => ({ id, onclick }) =>
-  //     html`
-  //       <div></div>
-  //       <div id=${id} onclick=${onclick}></div>
-  //     `,
-  //   );
-  //   const App = component(() => () =>
-  //     html`<div>
-  //       ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
-  //       ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
-  //     </div>`,
-  //   );
+    let state1 = 0;
+    let state2 = 0;
+    const Child = component(() => ({ id, onclick }) =>
+      html`
+        <div></div>
+        <div id=${id} onclick=${onclick}></div>
+      `,
+    );
+    const App = component(() => () =>
+      html`<div>
+        ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
+        ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
+      </div>`,
+    );
 
-  //   render(App(), container);
+    render(App(), container);
 
-  //   const target = document.getElementById("target2");
-  //   target.dispatchEvent(new Event("click"));
+    const target = document.getElementById("target2");
+    target.dispatchEvent(new Event("click"));
 
-  //   expect(state2).toBe(1);
-  //   expect(state1).toBe(0);
-  // });
+    expect(state2).toBe(1);
+    expect(state1).toBe(0);
+  });
 
   it("events 8", () => {
     const container = document.getElementById("app");

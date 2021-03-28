@@ -824,7 +824,7 @@ function findNodeInstance(insertions, nodeIndex, refs) {
   let nodeInstance = null,
     shift = 0;
 
-  for (let insertionEl of insertions) {
+  outer: for (let insertionEl of insertions) {
     shift += insertionEl.staticElemsBefore;
 
     const inst = refs[insertionEl.instKey];
@@ -832,15 +832,25 @@ function findNodeInstance(insertions, nodeIndex, refs) {
 
     if ((t & 2) !== 0) {
       const nodes = inst.n;
-      if (nodeIndex <= nodes.length + shift - 1) {
-        nodeInstance = nodes[nodeIndex - shift];
-        break;
-      } else {
-        shift += nodes.length;
+      let node;
+      for (node of nodes) {
+        let size;
+        const { t } = node;
+        if ((t & 8) !== 0) {
+          size = node.z.length;
+        } else {
+          size = 1;
+        }
+        if (nodeIndex <= size - 1 + shift) {
+          nodeInstance = node;
+          break outer;
+        } else {
+          shift += size;
+        }
       }
     } else if ((t & 8) !== 0) {
       const nodes = inst.z;
-      if (nodeIndex <= nodes.length + shift - 1) {
+      if (nodeIndex <= nodes.length - 1 + shift) {
         nodeInstance = inst;
         break;
       } else {
