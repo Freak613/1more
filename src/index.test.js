@@ -126,6 +126,10 @@ describe("compiler", () => {
       const Child = component(() => () => html`<span>child</span>`);
       testTemplate(html`<div>${Child()}</div>`);
     });
+
+    it("basic 12", () => {
+      testTemplate(html`<div class=${""} />`);
+    });
   });
 
   describe("afterNode", () => {
@@ -462,6 +466,14 @@ describe("reconcile", () => {
     render(App([6, 7, 8, 9, 10]), container);
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 16", () => {
+    testReconcile([1, 2, 3, 4, 5, 6, 8, 9, 10], [1, 9, 3, 6, 5, 4, 8, 2, 10]);
+  });
+
+  it("reconcile 17", () => {
+    testReconcile([1, 2, 3, 4, 5, 6], [1, 2, 3, 6]);
+  });
 });
 
 describe("update", () => {
@@ -587,10 +599,10 @@ describe("update", () => {
 
     const App = component(() => style => html`<div style=${style} />`);
 
-    render(App({}), container);
+    render(App({ display: "block" }), container);
     expect(container).toMatchSnapshot();
 
-    render(App({ color: "red" }), container);
+    render(App({ display: "block", color: "red" }), container);
     expect(container).toMatchSnapshot();
   });
 
@@ -728,6 +740,23 @@ describe("update", () => {
       [key(2, Child(2)), key(1, Child(1))],
     );
   });
+
+  it("update 27", () => {
+    const Child = component(() => () => html`<span>chile</span>`);
+    testUpdate("", Child());
+  });
+
+  it("update 28", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => style => html`<div style=${style} />`);
+
+    render(App({ display: "block", color: "red" }), container);
+    expect(container).toMatchSnapshot();
+
+    render(App({ display: "block", color: "blue" }), container);
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("events", () => {
@@ -742,7 +771,7 @@ describe("events", () => {
 
     let state = 0;
     const App = component(() => () =>
-      html`<div id="target" onclick=${() => (state = 1)}>${"text"}</div>`,
+      html`<div id="target" onclick=${() => state++}>${"text"}</div>`,
     );
 
     render(App(), container);
@@ -751,6 +780,9 @@ describe("events", () => {
     target.dispatchEvent(new Event("click"));
 
     expect(state).toBe(1);
+
+    target.dispatchEvent(new Event("click"));
+    expect(state).toBe(2);
   });
 
   it("events 2", () => {
@@ -886,6 +918,53 @@ describe("events", () => {
   //   expect(state2).toBe(1);
   //   expect(state1).toBe(0);
   // });
+
+  it("events 8", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div id="target" onkeydown=${() => {}} onclick=${() => state++}>
+          <div onclick=${() => {}}></div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+
+    target.dispatchEvent(new Event("click"));
+    expect(state).toBe(2);
+  });
+
+  it("events 9", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const Child = component(() => () =>
+      html`<div onclick=${() => state++}></div>`,
+    );
+    const App = component(() => () =>
+      html`
+        <div>
+          ${Child()}
+          <div id="target"></div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
 });
 
 describe("invalidate", () => {

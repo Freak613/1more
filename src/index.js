@@ -42,16 +42,13 @@ export function _resetTemplateCounter() {
 }
 
 // VNodes
-const TEXT_TYPE = 1;
-const ARRAY_TYPE = 2;
-
 const createTextNode = () => ({
-  t: TEXT_TYPE,
+  t: 1,
   n: undefined,
 });
 
 const createArrayNode = () => ({
-  t: ARRAY_TYPE,
+  t: 2,
   n: undefined,
 });
 
@@ -346,7 +343,7 @@ function afterNodeInstance(refs) {
         if (next.n.length > 0) {
           result = next.n[0].r[0];
         }
-      } else if ((next.t & 4) !== 0) {
+      } else {
         result = next.r[0];
       }
     }
@@ -532,11 +529,9 @@ function compileTemplate(strings) {
           stackInfo.lastDataRef = stackInfo.lastRef;
           stackInfo.eventsPath = "";
 
-          if (stack.length > 0) {
-            const prevStack = stack[0];
-            prevStack.lastDataRef = stackInfo.lastDataRef;
-            prevStack.eventsPath = stackInfo.eventsPath;
-          }
+          const prevStack = stack[0];
+          prevStack.lastDataRef = stackInfo.lastDataRef;
+          prevStack.eventsPath = stackInfo.eventsPath;
           switch (attrName) {
             case "class":
               nextArgNode.applyData = setClassname;
@@ -598,11 +593,9 @@ function compileTemplate(strings) {
         stackInfo.lastDataRef = parentRef;
         stackInfo.eventsPath = "";
 
-        if (stack.length > 0) {
-          const prevStack = stack[0];
-          prevStack.lastDataRef = stackInfo.lastDataRef;
-          prevStack.eventsPath = stackInfo.eventsPath;
-        }
+        const prevStack = stack[0];
+        prevStack.lastDataRef = stackInfo.lastDataRef;
+        prevStack.eventsPath = stackInfo.eventsPath;
       }
 
       if (!skipArg) argsWays.push(nextArgNode);

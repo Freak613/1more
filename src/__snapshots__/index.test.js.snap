@@ -788,6 +788,42 @@ exports[`compiler basic basic 11 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 12 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 12 2`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],
@@ -4279,6 +4315,126 @@ exports[`reconcile reconcile 15 2`] = `
 </div>
 `;
 
+exports[`reconcile reconcile 16 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      5
+    </span>
+    <span>
+      6
+    </span>
+    <span>
+      8
+    </span>
+    <span>
+      9
+    </span>
+    <span>
+      10
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 16 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      9
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      6
+    </span>
+    <span>
+      5
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      8
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      10
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 17 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      5
+    </span>
+    <span>
+      6
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 17 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      6
+    </span>
+  </div>
+</div>
+`;
+
 exports[`update update 1 1`] = `
 <div
   id="app"
@@ -4533,7 +4689,9 @@ exports[`update update 13 1`] = `
 <div
   id="app"
 >
-  <div />
+  <div
+    style="display: block;"
+  />
 </div>
 `;
 
@@ -4542,7 +4700,7 @@ exports[`update update 13 2`] = `
   id="app"
 >
   <div
-    style="color: red;"
+    style="display: block; color: red;"
   />
 </div>
 `;
@@ -4858,5 +5016,45 @@ exports[`update update 26 2`] = `
       1
     </span>
   </div>
+</div>
+`;
+
+exports[`update update 27 1`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 27 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      chile
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 28 1`] = `
+<div
+  id="app"
+>
+  <div
+    style="display: block; color: red;"
+  />
+</div>
+`;
+
+exports[`update update 28 2`] = `
+<div
+  id="app"
+>
+  <div
+    style="display: block; color: blue;"
+  />
 </div>
 `;
