@@ -1,4 +1,12 @@
-import { html, render, component, _resetTemplateCounter, key } from "./index";
+import {
+  html,
+  render,
+  component,
+  _resetTemplateCounter,
+  key,
+  useUnmount,
+  invalidate,
+} from "./index";
 
 describe("compiler", () => {
   beforeEach(() => {
@@ -112,6 +120,11 @@ describe("compiler", () => {
 
     it("basic 10", () => {
       testTemplate(html`<div style=${{ color: "red" }}>Test</div>`);
+    });
+
+    it("basic 11", () => {
+      const Child = component(() => () => html`<span>child</span>`);
+      testTemplate(html`<div>${Child()}</div>`);
     });
   });
 
@@ -424,5 +437,549 @@ describe("reconcile", () => {
 
   it("reconcile 12", () => {
     testReconcile([1, 2, 3, 4, 5, 6, 7], [1, 5, 6, 4, 2, 3, 7]);
+  });
+
+  it("reconcile 13", () => {
+    testReconcile([1, 2, 3, 4, 5], [1, 2, 3]);
+  });
+
+  it("reconcile 14", () => {
+    testReconcile([1, 2, 3, 4, 5], [6, 7, 8, 9, 10]);
+  });
+
+  it("reconcile 15", () => {
+    const container = document.getElementById("app");
+
+    const Item = component(() => item => html`<span>${item}</span>`);
+
+    const App = component(() => state => html`
+      <div>${state.map(item => key(item, Item(item)))} After</div>
+    `);
+
+    render(App([1, 2, 3, 4, 5]), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([6, 7, 8, 9, 10]), container);
+    expect(container).toMatchSnapshot();
+  });
+});
+
+describe("update", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
+  const testUpdate = (state1, state2) => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`<div>${state}</div>`);
+
+    render(App(state1), container);
+    expect(container).toMatchSnapshot();
+
+    render(App(state2), container);
+    expect(container).toMatchSnapshot();
+  };
+
+  it("update 1", () => {
+    testUpdate("one", "two");
+  });
+
+  it("update 2", () => {
+    const Child = component(() => () => html`<span>child</span>`);
+    testUpdate("one", Child());
+  });
+
+  it("update 3", () => {
+    const Child = component(() => () => html`<span>child</span>`);
+    testUpdate([Child()], []);
+  });
+
+  it("update 4", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`
+      <div>${state} After content</div>
+    `);
+
+    const Child = component(() => () => html`<span>child</span>`);
+
+    render(App([Child()]), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 5", () => {
+    const Child = component(() => () => html`<span>child</span>`);
+    testUpdate([], [Child()]);
+  });
+
+  it("update 6", () => {
+    testUpdate([], "text");
+  });
+
+  it("update 7", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`
+      <div>${state} After content</div>
+    `);
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+
+    render(App("text"), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 8", () => {
+    const Child = component(() => () => html`<span>child</span>`);
+    testUpdate(Child(), Child());
+  });
+
+  it("update 9", () => {
+    const Child = component(() => () => html`<span>child</span>`);
+    testUpdate(Child(), "text");
+  });
+
+  it("update 10", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`<div class=${state} />`);
+
+    render(App("one"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App("two"), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 11", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => style => html`<div style=${style} />`);
+
+    render(App({ color: "red" }), container);
+    expect(container).toMatchSnapshot();
+
+    render(App({ color: "blue" }), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 12", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => style => html`<div style=${style} />`);
+
+    render(App({ color: "red" }), container);
+    expect(container).toMatchSnapshot();
+
+    render(App({}), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 13", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => style => html`<div style=${style} />`);
+
+    render(App({}), container);
+    expect(container).toMatchSnapshot();
+
+    render(App({ color: "red" }), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 14", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => id => html`<div id=${id} />`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App("test2"), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 15", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => id => html`<div data-testid=${id} />`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App("test2"), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 16", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => id => html`<div data-testid=${id} />`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App(false), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 17", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`<div>${state} ${"two"}</div>`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 18", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => state => html`<div>${state} ${[]}</div>`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 19", () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => () => html`<span>child</span>`);
+
+    const App = component(() => state =>
+      html`<div>${state} ${[Child()]}</div>`,
+    );
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 20", () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => () => html`<span>child</span>`);
+
+    const App = component(() => state => html`<div>${state} ${Child()}</div>`);
+
+    render(App("test"), container);
+    expect(container).toMatchSnapshot();
+
+    render(App([]), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 21", () => {
+    const Child = component(c => {
+      useUnmount(c, () => {});
+      return () => html`<span>child</span>`;
+    });
+    testUpdate(Child(), "text");
+  });
+
+  it("update 22", () => {
+    const Child = component(c => {
+      useUnmount(c, () => {});
+      useUnmount(c, () => {});
+      useUnmount(c, () => {});
+      return () => html`<span>child</span>`;
+    });
+    testUpdate(Child(), "text");
+  });
+
+  it("update 23", () => {
+    const DeepChild = component(() => () => html`<span>deep child</span>`);
+    const Child = component(() => () => html`<span>${DeepChild()}</span>`);
+    testUpdate(Child(), "text");
+  });
+
+  it("update 24", () => {
+    const DeepChild = component(() => () => html`<span>deep child</span>`);
+    const Child = component(() => () => html`<span>${[DeepChild()]}</span>`);
+    testUpdate(Child(), "text");
+  });
+
+  it("update 25", () => {
+    const Child = component(() => () => html`<span>one</span><span>two</span>`);
+    testUpdate(Child(), "text");
+  });
+
+  it("update 26", () => {
+    const Child = component(() => v =>
+      html`<span>First row: ${v}</span><span>Second row: ${v}</span>`,
+    );
+    testUpdate(
+      [key(1, Child(1)), key(2, Child(2))],
+      [key(2, Child(2)), key(1, Child(1))],
+    );
+  });
+});
+
+describe("events", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
+  it("events 1", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`<div id="target" onclick=${() => (state = 1)}>${"text"}</div>`,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 2", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const Child = component(() => () =>
+      html`<div id="target" onclick=${() => (state = 1)} />`,
+    );
+    const App = component(() => () => html`<div>${Child()}</div>`);
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 3", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const Child = component(() => () =>
+      html`<div id="target" onclick=${() => (state = 1)} />`,
+    );
+    const App = component(() => () => html`<div>${"test"}${Child()}</div>`);
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 4", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const Child = component(() => () =>
+      html`
+        <div></div>
+        <div id="target" onclick=${() => (state = 1)}></div>
+      `,
+    );
+    const App = component(() => () => html`<div>${Child()}</div>`);
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 5", () => {
+    const container = document.getElementById("app");
+
+    let state1 = 0;
+    let state2 = 0;
+
+    const Child = component(() => ({ id, onclick }) =>
+      html`
+        <div></div>
+        <div id=${id} onclick=${onclick}></div>
+      `,
+    );
+    const App = component(() => () =>
+      html`<div>
+        ${Child({ id: "target1", onclick: () => (state1 = 1) })}
+        ${Child({ id: "target2", onclick: () => (state2 = 1) })}
+      </div>`,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target2");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state2).toBe(1);
+    expect(state1).toBe(0);
+  });
+
+  it("events 6", () => {
+    const container = document.getElementById("app");
+
+    let state1 = 0;
+    let state2 = 0;
+    const Child = component(() => ({ id, onclick }) =>
+      html`<div id=${id} onclick=${onclick}></div>`,
+    );
+    const App = component(() => () =>
+      html`<div>
+        ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
+        ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
+      </div>`,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target2");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state2).toBe(1);
+    expect(state1).toBe(0);
+  });
+
+  // TODO: Fix events for arrays of fragments
+  // it("events 7", () => {
+  //   const container = document.getElementById("app");
+
+  //   let state1 = 0;
+  //   let state2 = 0;
+  //   const Child = component(() => ({ id, onclick }) =>
+  //     html`
+  //       <div></div>
+  //       <div id=${id} onclick=${onclick}></div>
+  //     `,
+  //   );
+  //   const App = component(() => () =>
+  //     html`<div>
+  //       ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
+  //       ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
+  //     </div>`,
+  //   );
+
+  //   render(App(), container);
+
+  //   const target = document.getElementById("target2");
+  //   target.dispatchEvent(new Event("click"));
+
+  //   expect(state2).toBe(1);
+  //   expect(state1).toBe(0);
+  // });
+});
+
+describe("invalidate", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
+  const wait = t => {
+    return new Promise(resolve => {
+      setTimeout(() => resolve(), t);
+    });
+  };
+
+  it("invalidate 1", async () => {
+    const container = document.getElementById("app");
+
+    let renderCount = 0;
+    const App = component(c => {
+      let state = 0;
+      return () => {
+        renderCount++;
+
+        return html`
+          <div
+            id="target"
+            onclick=${() => {
+              state++;
+              invalidate(c);
+              invalidate(c);
+            }}
+          >
+            ${state}
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+    expect(renderCount).toBe(1);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+    expect(renderCount).toBe(2);
+  });
+
+  it("invalidate 2", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(c => {
+      let state = 0;
+      return onchange => {
+        return html`
+          <div
+            id="target"
+            onclick=${() => {
+              state += 2;
+              invalidate(c);
+
+              onchange(state);
+            }}
+          >
+            ${state}
+          </div>
+        `;
+      };
+    });
+
+    const App = component(c => {
+      let state = 0;
+      return () =>
+        html`
+          <div>
+            ${Child(next => {
+              state = next;
+              invalidate(c);
+            })}
+            ${state}
+          </div>
+        `;
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
   });
 });

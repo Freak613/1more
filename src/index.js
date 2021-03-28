@@ -24,6 +24,7 @@ const nodeGetChildNodes = getDescriptor(nodeProto, "childNodes").get;
 const elementSetClassName = getDescriptor(elementProto, "className").set;
 const elementRemove = elementProto.remove;
 const elementSetAttribute = elementProto.setAttribute;
+const elementRemoveAttribute = elementProto.removeAttribute;
 
 const htmlElementGetStyle = getDescriptor(HTMLElement.prototype, "style").get;
 
@@ -146,14 +147,6 @@ function setClassname(refs, v) {
 
 function updateClassname(refs, v) {
   elementSetClassName.call(refs[this.refKey], v);
-}
-
-function refSet(refs, v) {
-  refs[this.instKey] = v(refs[this.refKey], undefined);
-}
-
-function refUpdate(refs, v) {
-  refs[this.instKey] = v(refs[this.refKey], refs[this.instKey]);
 }
 
 function setStyle(refs, v) {
@@ -548,10 +541,6 @@ function compileTemplate(strings) {
             case "class":
               nextArgNode.applyData = setClassname;
               nextArgNode.updateData = updateClassname;
-              break;
-            case "ref":
-              nextArgNode.applyData = refSet;
-              nextArgNode.updateData = refUpdate;
               break;
             case "style":
               nextArgNode.applyData = setStyle;

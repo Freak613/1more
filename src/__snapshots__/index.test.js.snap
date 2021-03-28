@@ -734,6 +734,60 @@ exports[`compiler basic basic 10 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 11 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Array [
+      Object {
+        "instKey": 1,
+        "propIdx": 1,
+        "staticElemsBefore": 0,
+      },
+    ],
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div />,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 11 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],
@@ -3425,6 +3479,60 @@ exports[`compiler mixed content mixed 16 2`] = `
 </div>
 `;
 
+exports[`invalidate invalidate 1 1`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  >
+    0
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 1 2`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  >
+    1
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 2 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    >
+      0
+    </div>
+    0
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 2 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    >
+      2
+    </div>
+    2
+  </div>
+</div>
+`;
+
 exports[`reconcile reconcile 1 1`] = `
 <div
   id="app"
@@ -4026,6 +4134,728 @@ exports[`reconcile reconcile 12 2`] = `
     </span>
     <span>
       7
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 13 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      5
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 13 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 14 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      5
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 14 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      6
+    </span>
+    <span>
+      7
+    </span>
+    <span>
+      8
+    </span>
+    <span>
+      9
+    </span>
+    <span>
+      10
+    </span>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 15 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      1
+    </span>
+    <span>
+      2
+    </span>
+    <span>
+      3
+    </span>
+    <span>
+      4
+    </span>
+    <span>
+      5
+    </span>
+     After
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 15 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      6
+    </span>
+    <span>
+      7
+    </span>
+    <span>
+      8
+    </span>
+    <span>
+      9
+    </span>
+    <span>
+      10
+    </span>
+     After
+  </div>
+</div>
+`;
+
+exports[`update update 1 1`] = `
+<div
+  id="app"
+>
+  <div>
+    one
+  </div>
+</div>
+`;
+
+exports[`update update 1 2`] = `
+<div
+  id="app"
+>
+  <div>
+    two
+  </div>
+</div>
+`;
+
+exports[`update update 2 1`] = `
+<div
+  id="app"
+>
+  <div>
+    one
+  </div>
+</div>
+`;
+
+exports[`update update 2 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 3 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 3 2`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 4 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+     After content
+  </div>
+</div>
+`;
+
+exports[`update update 4 2`] = `
+<div
+  id="app"
+>
+  <div>
+     After content
+  </div>
+</div>
+`;
+
+exports[`update update 5 1`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 5 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 6 1`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 6 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 7 1`] = `
+<div
+  id="app"
+>
+  <div>
+     After content
+  </div>
+</div>
+`;
+
+exports[`update update 7 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+     After content
+  </div>
+</div>
+`;
+
+exports[`update update 8 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 8 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 9 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 9 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 10 1`] = `
+<div
+  id="app"
+>
+  <div
+    class="one"
+  />
+</div>
+`;
+
+exports[`update update 10 2`] = `
+<div
+  id="app"
+>
+  <div
+    class="two"
+  />
+</div>
+`;
+
+exports[`update update 11 1`] = `
+<div
+  id="app"
+>
+  <div
+    style="color: red;"
+  />
+</div>
+`;
+
+exports[`update update 11 2`] = `
+<div
+  id="app"
+>
+  <div
+    style="color: blue;"
+  />
+</div>
+`;
+
+exports[`update update 12 1`] = `
+<div
+  id="app"
+>
+  <div
+    style="color: red;"
+  />
+</div>
+`;
+
+exports[`update update 12 2`] = `
+<div
+  id="app"
+>
+  <div
+    style=""
+  />
+</div>
+`;
+
+exports[`update update 13 1`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 13 2`] = `
+<div
+  id="app"
+>
+  <div
+    style="color: red;"
+  />
+</div>
+`;
+
+exports[`update update 14 1`] = `
+<div
+  id="app"
+>
+  <div
+    id="test"
+  />
+</div>
+`;
+
+exports[`update update 14 2`] = `
+<div
+  id="app"
+>
+  <div
+    id="test2"
+  />
+</div>
+`;
+
+exports[`update update 15 1`] = `
+<div
+  id="app"
+>
+  <div
+    data-testid="test"
+  />
+</div>
+`;
+
+exports[`update update 15 2`] = `
+<div
+  id="app"
+>
+  <div
+    data-testid="test2"
+  />
+</div>
+`;
+
+exports[`update update 16 1`] = `
+<div
+  id="app"
+>
+  <div
+    data-testid="test"
+  />
+</div>
+`;
+
+exports[`update update 16 2`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 17 1`] = `
+<div
+  id="app"
+>
+  <div>
+    test
+    two
+  </div>
+</div>
+`;
+
+exports[`update update 17 2`] = `
+<div
+  id="app"
+>
+  <div>
+    two
+  </div>
+</div>
+`;
+
+exports[`update update 18 1`] = `
+<div
+  id="app"
+>
+  <div>
+    test
+  </div>
+</div>
+`;
+
+exports[`update update 18 2`] = `
+<div
+  id="app"
+>
+  <div />
+</div>
+`;
+
+exports[`update update 19 1`] = `
+<div
+  id="app"
+>
+  <div>
+    test
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 19 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 20 1`] = `
+<div
+  id="app"
+>
+  <div>
+    test
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 20 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 21 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 21 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 22 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      child
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 22 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 23 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      <span>
+        deep child
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 23 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 24 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      <span>
+        deep child
+      </span>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 24 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 25 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      one
+    </span>
+    <span>
+      two
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 25 2`] = `
+<div
+  id="app"
+>
+  <div>
+    text
+  </div>
+</div>
+`;
+
+exports[`update update 26 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      First row: 
+      1
+    </span>
+    <span>
+      Second row: 
+      1
+    </span>
+    <span>
+      First row: 
+      2
+    </span>
+    <span>
+      Second row: 
+      2
+    </span>
+  </div>
+</div>
+`;
+
+exports[`update update 26 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <span>
+      First row: 
+      2
+    </span>
+    <span>
+      Second row: 
+      2
+    </span>
+    <span>
+      First row: 
+      1
+    </span>
+    <span>
+      Second row: 
+      1
     </span>
   </div>
 </div>
