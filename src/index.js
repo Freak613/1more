@@ -220,9 +220,12 @@ function correctIndices(ways, args, events, insertionPoints) {
   insertionPoints.splice(0, insertionPoints.length);
 
   insertionPointsClone.forEach((points, insertionIdx) => {
-    insertionPoints[idxMap[insertionIdx]] = points.map(point => {
-      point.instKey = idxMap[point.instKey];
-      return point;
+    insertionPoints.push({
+      refIdx: idxMap[insertionIdx],
+      points: points.map(point => {
+        point.instKey = idxMap[point.instKey];
+        return point;
+      }),
     });
   });
 
@@ -530,7 +533,10 @@ function compileTemplate(strings) {
   const refsSize = correctIndices(ways, argsWays, events, insertionPoints);
   const producer = getProducer(refsSize);
 
-  const unmountPoints = insertionPoints.reduce((acc, v) => [...acc, ...v], []);
+  const unmountPoints = insertionPoints.reduce(
+    (acc, v) => [...acc, ...v.points],
+    [],
+  );
 
   // Used in type detection to differ templates from each other
   let type = 8 | (TEMPLATE_COUNTER++ << 6);
@@ -992,7 +998,7 @@ function findEventTarget(vnode, event, targets, parent) {
     });
 
     const eventsRefs = events.map(({ refKey }) => refs[refKey]);
-    const insertionRefs = insertionPoints.map((_, idx) => refs[idx]);
+    const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
     let idx = 0;
     for (let target of targets) {
@@ -1021,7 +1027,11 @@ function findEventTarget(vnode, event, targets, parent) {
             targets[idx + 1],
           );
 
-          const inst = findNodeInstance(insertionPoints[i2], nodeIdx, refs);
+          const inst = findNodeInstance(
+            insertionPoints[i2].points,
+            nodeIdx,
+            refs,
+          );
           if (inst !== null) {
             handled = findEventTarget(
               inst,

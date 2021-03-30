@@ -19,13 +19,16 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 2,
-        "propIdx": 1,
-        "staticElemsBefore": 0,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 2,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -96,18 +99,21 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 2,
-        "propIdx": 1,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 3,
-        "propIdx": 2,
-        "staticElemsBefore": 0,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 2,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 3,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -250,22 +256,26 @@ Object {
     },
   ],
   "insertionPoints": Array [
-    undefined,
-    Array [
-      Object {
-        "instKey": 5,
-        "propIdx": 2,
-        "staticElemsBefore": 0,
-      },
-    ],
-    undefined,
-    Array [
-      Object {
-        "instKey": 6,
-        "propIdx": 4,
-        "staticElemsBefore": 0,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 5,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 1,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 6,
+          "propIdx": 4,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 3,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -753,13 +763,16 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 1,
-        "propIdx": 1,
-        "staticElemsBefore": 0,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -882,20 +895,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 2,
-        "propIdx": 1,
-        "staticElemsBefore": 0,
-      },
-    ],
-    Array [
-      Object {
-        "instKey": 3,
-        "propIdx": 2,
-        "staticElemsBefore": 0,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 2,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 3,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 1,
+    },
   ],
   "producer": [Function],
   "size": 2,
@@ -958,13 +977,16 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 1,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -1039,23 +1061,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 4,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 5,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 6,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 4,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 5,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 6,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -1253,71 +1278,76 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    undefined,
-    Array [
-      Object {
-        "instKey": 15,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 16,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    Array [
-      Object {
-        "instKey": 17,
-        "propIdx": 3,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 18,
-        "propIdx": 4,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 19,
-        "propIdx": 5,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 20,
-        "propIdx": 6,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 21,
-        "propIdx": 7,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 22,
-        "propIdx": 8,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 23,
-        "propIdx": 9,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 24,
-        "propIdx": 10,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 15,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 16,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 1,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 17,
+          "propIdx": 3,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 18,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 3,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 19,
+          "propIdx": 5,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 20,
+          "propIdx": 6,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 21,
+          "propIdx": 7,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 7,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 22,
+          "propIdx": 8,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 23,
+          "propIdx": 9,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 24,
+          "propIdx": 10,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 10,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -1551,26 +1581,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    undefined,
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 7,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 8,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 9,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 7,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 8,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 9,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 3,
+    },
   ],
   "producer": [Function],
   "size": 2,
@@ -1715,31 +1745,36 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 4,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 6,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 7,
-        "propIdx": 4,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    Array [
-      Object {
-        "instKey": 5,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 4,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 6,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 7,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 5,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 2,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -1856,23 +1891,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 4,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 5,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 6,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 4,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 5,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 6,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -1979,23 +2017,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 3,
-        "propIdx": 1,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 4,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 5,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 3,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 4,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 5,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -2095,27 +2136,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 8,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 9,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 10,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 8,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 9,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 10,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 4,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -2267,18 +2307,21 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 12,
-        "propIdx": 3,
-        "staticElemsBefore": 8,
-      },
-      Object {
-        "instKey": 13,
-        "propIdx": 4,
-        "staticElemsBefore": 2,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 12,
+          "propIdx": 3,
+          "staticElemsBefore": 8,
+        },
+        Object {
+          "instKey": 13,
+          "propIdx": 4,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -2500,31 +2543,36 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 22,
-        "propIdx": 3,
-        "staticElemsBefore": 8,
-      },
-      Object {
-        "instKey": 23,
-        "propIdx": 4,
-        "staticElemsBefore": 2,
-      },
-    ],
-    undefined,
-    Array [
-      Object {
-        "instKey": 26,
-        "propIdx": 7,
-        "staticElemsBefore": 8,
-      },
-      Object {
-        "instKey": 27,
-        "propIdx": 8,
-        "staticElemsBefore": 2,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 22,
+          "propIdx": 3,
+          "staticElemsBefore": 8,
+        },
+        Object {
+          "instKey": 23,
+          "propIdx": 4,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 0,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 26,
+          "propIdx": 7,
+          "staticElemsBefore": 8,
+        },
+        Object {
+          "instKey": 27,
+          "propIdx": 8,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 2,
+    },
   ],
   "producer": [Function],
   "size": 2,
@@ -2784,23 +2832,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 4,
-        "propIdx": 1,
-        "staticElemsBefore": 2,
-      },
-      Object {
-        "instKey": 5,
-        "propIdx": 2,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 6,
-        "propIdx": 3,
-        "staticElemsBefore": 2,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 4,
+          "propIdx": 1,
+          "staticElemsBefore": 2,
+        },
+        Object {
+          "instKey": 5,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 6,
+          "propIdx": 3,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -2912,23 +2963,26 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 6,
-        "propIdx": 1,
-        "staticElemsBefore": 4,
-      },
-      Object {
-        "instKey": 7,
-        "propIdx": 2,
-        "staticElemsBefore": 0,
-      },
-      Object {
-        "instKey": 8,
-        "propIdx": 3,
-        "staticElemsBefore": 2,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 6,
+          "propIdx": 1,
+          "staticElemsBefore": 4,
+        },
+        Object {
+          "instKey": 7,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+        Object {
+          "instKey": 8,
+          "propIdx": 3,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -3025,13 +3079,16 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 1,
-        "propIdx": 1,
-        "staticElemsBefore": 6,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 1,
+          "staticElemsBefore": 6,
+        },
+      ],
+      "refIdx": 0,
+    },
   ],
   "producer": [Function],
   "size": 1,
@@ -3136,20 +3193,26 @@ Object {
     },
   ],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 2,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-    ],
-    Array [
-      Object {
-        "instKey": 3,
-        "propIdx": 4,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 2,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 3,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 1,
+    },
   ],
   "producer": [Function],
   "size": 2,
@@ -3260,21 +3323,26 @@ Object {
     },
   ],
   "insertionPoints": Array [
-    Array [
-      Object {
-        "instKey": 6,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    Array [
-      Object {
-        "instKey": 7,
-        "propIdx": 4,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 6,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 7,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 2,
+    },
   ],
   "producer": [Function],
   "size": 2,
@@ -3395,31 +3463,31 @@ Object {
   ],
   "events": Array [],
   "insertionPoints": Array [
-    undefined,
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 8,
-        "propIdx": 1,
-        "staticElemsBefore": 1,
-      },
-      Object {
-        "instKey": 9,
-        "propIdx": 2,
-        "staticElemsBefore": 1,
-      },
-    ],
-    undefined,
-    undefined,
-    undefined,
-    Array [
-      Object {
-        "instKey": 10,
-        "propIdx": 3,
-        "staticElemsBefore": 1,
-      },
-    ],
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 8,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+        Object {
+          "instKey": 9,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 3,
+    },
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 10,
+          "propIdx": 3,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 7,
+    },
   ],
   "producer": [Function],
   "size": 1,
