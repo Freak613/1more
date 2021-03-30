@@ -371,7 +371,7 @@ function compileTemplate(strings) {
     let commands = str.match(/<\/?|[\/-]>/g);
 
     let removeScheduled = false;
-    if (strLen > 0 && !attr && !insideTag && !str.match(/^(<\/?|\/?>)/)) {
+    if (strLen > 0 && !insideTag && !str.match(/^(<\/?|\/?>)/)) {
       removeScheduled = true;
     }
 
@@ -1438,17 +1438,13 @@ function getSiblingVNode(vnode) {
       // Template of Fragment
       const arg = vnode.a;
       const refs = parent.r;
-      // const dom = arg.afterNodeFn(refs);
-      // if (dom) {
-      //   result = dom;
-      //   break;
-      // }
-      // child = parent;
-      // parent = child.x;
-
-      // TODO: Handle template with dynamic roots
-      result = arg.afterNodeFn(refs);
-      break;
+      const dom = arg.afterNodeFn(refs);
+      if (dom) {
+        result = dom;
+        break;
+      }
+      child = parent;
+      parent = child.x;
     }
   }
   return result;

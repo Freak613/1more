@@ -369,6 +369,17 @@ describe("compiler", () => {
         `,
       );
     });
+
+    it("mixed 17", () => {
+      testTemplate(
+        html`
+          <div>
+            ${"Test"} After
+            <button onclick=${() => {}}>Fire</button>
+          </div>
+        `,
+      );
+    });
   });
 });
 

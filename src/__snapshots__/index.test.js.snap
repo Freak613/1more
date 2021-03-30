@@ -3349,7 +3349,6 @@ Object {
   "templateNode": <DocumentFragment>
     <div>
       First row: 
-      <!-- -->
        by me
     </div>
     <div>
@@ -3407,7 +3406,6 @@ exports[`compiler mixed content mixed 15 2`] = `
   <div>
     First row: 
     1
-    <!-- -->
      by me
   </div>
   <div>
@@ -3579,6 +3577,92 @@ exports[`compiler mixed content mixed 16 2`] = `
       The reversed message is: 
       message
     </div>
+  </div>
+</div>
+`;
+
+exports[`compiler mixed content mixed 17 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 1,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        0,
+      ],
+      "prevRef": 1,
+      "propIdx": 2,
+      "refKey": 3,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 2,
+          "propIdx": 1,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "size": 1,
+  "templateNode": <div>
+     After
+    <button>
+      Fire
+    </button>
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 2,
+      "propIdx": 1,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 17 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Test
+     After
+    <button>
+      Fire
+    </button>
   </div>
 </div>
 `;
