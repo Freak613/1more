@@ -259,12 +259,6 @@ function afterNodeInstance(refs) {
     if (next) {
       if (i === len) {
         result = next;
-      } else if ((next.t & 1) !== 0) {
-        result = next.n;
-      } else if ((next.t & 2) !== 0) {
-        if (next.n.length > 0) {
-          result = getDomNode(next.n[0]);
-        }
       } else {
         result = getDomNode(next);
       }
@@ -1074,7 +1068,8 @@ function getDomNode(vnode) {
   if ((t & 1) !== 0) {
     return vnode.n;
   } else if ((t & 2) !== 0) {
-    return getDomNode(vnode.n[0]);
+    const first = vnode.n[0];
+    if (first) return getDomNode(first);
   } else if ((t & 16) !== 0) {
     return getDomNode(vnode.q);
   } else if ((t & 8) !== 0) {
