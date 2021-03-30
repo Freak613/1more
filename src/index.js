@@ -1410,14 +1410,54 @@ let _flags = 0;
 const _resolvedPromise = Promise.resolve();
 const _pendingUpdates = box({});
 
+function getSiblingVNode(vnode) {
+  let child = vnode;
+  let parent = child.x;
+  let result;
+  while (parent) {
+    const { t } = parent;
+    if ((t & 2) !== 0) {
+      const nodes = parent.n;
+      let idx = nodes.indexOf(child);
+      let node = nodes[idx + 1];
+      while (node) {
+        const dom = getDomNode(node);
+        if (dom) {
+          result = dom;
+          break;
+        }
+        idx++;
+        node = nodes[idx];
+      }
+      child = parent;
+      parent = child.x;
+    } else if ((t & 16) !== 0) {
+      child = parent;
+      parent = child.x;
+    } else {
+      // Template of Fragment
+      const arg = vnode.a;
+      const refs = parent.r;
+      // const dom = arg.afterNodeFn(refs);
+      // if (dom) {
+      //   result = dom;
+      //   break;
+      // }
+      // child = parent;
+      // parent = child.x;
+
+      // TODO: Handle template with dynamic roots
+      result = arg.afterNodeFn(refs);
+      break;
+    }
+  }
+  return result;
+}
+
 function checkUpdates(vnode) {
   const currentDepth = vnode.d;
   _depth = currentDepth + 1;
-  vnode.q = updateValue(
-    vnode.v(vnode.c),
-    vnode.q,
-    // afterNode,
-  );
+  vnode.q = updateValue(vnode.v(vnode.c), vnode.q, getSiblingVNode(vnode));
   _depth = currentDepth;
 
   vnode.f = 0;
