@@ -631,7 +631,7 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
       vnode.x = parentVnode;
 
       vnode.n = props.map(function (props) {
-        return renderValue(props, parent, afterNode, notSingleNode, vnode);
+        return renderValue(props, parent, afterNode, 2, vnode);
       });
     } else if ((props.t & 16) !== 0) {
       vnode = createComponentVirtualNode();
@@ -783,7 +783,7 @@ function updateValue(b, vnode, parent, afterNode, notSingleNode, parentVnode) {
         }
       } else if (nodes.length === 0) {
         vnode.n = b.map(function (props) {
-          return renderValue(props, parent, afterNode, notSingleNode, vnode);
+          return renderValue(props, parent, afterNode, 2, vnode);
         });
       } else {
         vnode.n = updateArray(
@@ -1122,7 +1122,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
     a = nodes[a1];
     b = newArray[b1];
     while (a.k === b.k) {
-      a = updateValue(b, a, parent, afterNode, notSingleNode, vnode);
+      a = updateValue(b, a, parent, afterNode, 2, vnode);
       newNodes[b1] = a;
       a1++;
       b1++;
@@ -1135,7 +1135,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
     a = nodes[a2];
     b = newArray[b2];
     while (a.k === b.k) {
-      a = updateValue(b, a, parent, afterNode, notSingleNode, vnode);
+      a = updateValue(b, a, parent, afterNode, 2, vnode);
       newNodes[b2] = a;
       a2--;
       b2--;
@@ -1150,12 +1150,12 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
       loop = true;
       a = nodes[a2];
       b = newArray[b1];
-      let n = updateValue(b, a, parent, afterNode, notSingleNode, vnode);
+      let n = updateValue(b, a, parent, afterNode, 2, vnode);
       insertVNode(n, parent, getDomNode(nodes[a1]));
       newNodes[b1] = n;
       a = nodes[a1];
       b = newArray[b2];
-      n = updateValue(b, a, parent, afterNode, notSingleNode, vnode);
+      n = updateValue(b, a, parent, afterNode, 2, vnode);
       insertVNode(n, parent, afterNode);
       newNodes[b2] = n;
       a1++;
@@ -1172,13 +1172,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
     if (b1 <= b2) {
       newNodes.length = newArray.length;
       while (1) {
-        newNodes[b1] = renderValue(
-          newArray[b1],
-          parent,
-          afterNode,
-          notSingleNode,
-          vnode,
-        );
+        newNodes[b1] = renderValue(newArray[b1], parent, afterNode, 2, vnode);
         if (b1 === b2) break;
         b1++;
       }
@@ -1227,7 +1221,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
       }
 
       newNodes = newArray.map(function (props) {
-        return renderValue(props, parent, afterNode, notSingleNode, vnode);
+        return renderValue(props, parent, afterNode, 2, vnode);
       });
     } else {
       toRemove.forEach(removeVNode);
@@ -1240,7 +1234,7 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
           const c1 = P[lisIndices[lisIdx]];
           let n = nodes[c1];
           const b = newArray[i];
-          n = updateValue(b, n, parent, afterNode, notSingleNode, vnode);
+          n = updateValue(b, n, parent, afterNode, 2, vnode);
           afterNode = getDomNode(n);
           newNodes[i] = n;
 
@@ -1248,20 +1242,14 @@ function updateArray(newArray, nodes, parent, afterNode, notSingleNode, vnode) {
         } else {
           let n;
           if (P[i] === -1) {
-            n = renderValue(
-              newArray[i],
-              parent,
-              afterNode,
-              notSingleNode,
-              vnode,
-            );
+            n = renderValue(newArray[i], parent, afterNode, 2, vnode);
           } else {
             n = updateValue(
               newArray[i],
               nodes[P[i]],
               parent,
               afterNode,
-              notSingleNode,
+              2,
               vnode,
             );
             insertVNode(n, parent, afterNode);
