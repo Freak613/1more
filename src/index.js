@@ -766,10 +766,7 @@ function _removeVNode(vnode) {
   const { t } = vnode;
 
   if ((t & 1) !== 0) {
-    if (vnode.n) {
-      const parent = vnode.n.parent;
-      nodeRemoveChild.call(parent, vnode.n);
-    }
+    if (vnode.n) nodeRemoveChild.call(vnode.w, vnode.n);
   } else if ((t & 2) !== 0) {
     vnode.n.forEach(_removeVNode);
   } else if ((t & 16) !== 0) {
@@ -1147,7 +1144,18 @@ function updateArray(newArray, afterNode, vnode) {
     a = nodes[a1];
     b = newArray[b1];
     while (a.k === b.k) {
-      a = updateValue(b, a, afterNode);
+      let idx = a1 + 1;
+      let maybeAfterVNode = nodes[idx];
+      let maybeAfterNode;
+      while (maybeAfterVNode) {
+        maybeAfterNode = getDomNode(maybeAfterVNode);
+        if (maybeAfterNode) break;
+        if (idx === a2) break;
+        idx++;
+        maybeAfterVNode = nodes[idx];
+      }
+
+      a = updateValue(b, a, maybeAfterNode || afterNode);
       newNodes[b1] = a;
       a1++;
       b1++;
@@ -1164,7 +1172,10 @@ function updateArray(newArray, afterNode, vnode) {
       newNodes[b2] = a;
       a2--;
       b2--;
-      afterNode = getDomNode(a);
+
+      const maybeAfterNode = getDomNode(a);
+      afterNode = maybeAfterNode || afterNode;
+
       if (a2 < a1 || b2 < b1) break fixes;
       a = nodes[a2];
       b = newArray[b2];
@@ -1173,21 +1184,78 @@ function updateArray(newArray, afterNode, vnode) {
     // Fast path for symmetric swap or reverse
     while (nodes[a1].k === newArray[b2].k && nodes[a2].k === newArray[b1].k) {
       loop = true;
+
+      // Swap from end to start
       a = nodes[a2];
       b = newArray[b1];
+
+      // Before move, this node's afterNode is `afterNode`
+      // However it may result in unnecessary mount, before this
+      // node going to be moved in next step.
       let n = updateValue(b, a, afterNode);
-      insertVNode(n, parent, getDomNode(nodes[a1]));
+
+      let idx = a1;
+      let maybeAfterVNode = nodes[idx];
+      let maybeAfterNode;
+      let moveNode = true;
+      if (idx === a2) {
+        // If starting node is already node itself,
+        // prevent iteration and moving
+        moveNode = false;
+      } else {
+        while (maybeAfterVNode) {
+          maybeAfterNode = getDomNode(maybeAfterVNode);
+          if (maybeAfterNode) break;
+          idx++;
+          if (idx === a2) {
+            moveNode = false;
+            break;
+          }
+          maybeAfterVNode = nodes[idx];
+        }
+      }
+
+      // Move node only if there are other nodes before.
+      // If afterNode is node itself, keep it in place.
+      if (moveNode) {
+        insertVNode(n, parent, maybeAfterNode);
+      }
       newNodes[b1] = n;
-      a = nodes[a1];
-      b = newArray[b2];
-      n = updateValue(b, a, afterNode);
-      insertVNode(n, parent, afterNode);
-      newNodes[b2] = n;
+
+      // Swap from start to end
+
+      // Prevent updating and moving same node twice,
+      // in case it's the middle of the list,
+      // it was updated in previous updateValue step.
+      if (a1 !== a2) {
+        a = nodes[a1];
+        b = newArray[b2];
+
+        idx = a1 + 1;
+        maybeAfterVNode = nodes[idx];
+        while (maybeAfterVNode) {
+          maybeAfterNode = getDomNode(maybeAfterVNode);
+          if (maybeAfterNode) break;
+          if (idx === a2) break;
+          idx++;
+          maybeAfterVNode = nodes[idx];
+        }
+
+        // This one again may result in unnecessary mount before
+        // node is moved in next step.
+        n = updateValue(b, a, maybeAfterNode || afterNode);
+
+        insertVNode(n, parent, afterNode);
+        newNodes[b2] = n;
+      }
+
       a1++;
       b1++;
       a2--;
       b2--;
-      afterNode = getDomNode(n);
+
+      maybeAfterNode = getDomNode(n);
+      afterNode = maybeAfterNode || afterNode;
       if (a2 < a1 || b2 < b1) break fixes;
     }
   }
@@ -1260,7 +1328,8 @@ function updateArray(newArray, afterNode, vnode) {
           let n = nodes[c1];
           const b = newArray[i];
           n = updateValue(b, n, afterNode);
-          afterNode = getDomNode(n);
+          const maybeAfterNode = getDomNode(n);
+          afterNode = maybeAfterNode || afterNode;
           newNodes[i] = n;
 
           lisIdx--;
@@ -1274,7 +1343,8 @@ function updateArray(newArray, afterNode, vnode) {
           }
 
           newNodes[i] = n;
-          afterNode = getDomNode(n);
+          const maybeAfterNode = getDomNode(n);
+          afterNode = maybeAfterNode || afterNode;
         }
       }
 

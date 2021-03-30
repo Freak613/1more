@@ -4587,6 +4587,377 @@ exports[`reconcile reconcile 17 2`] = `
 </div>
 `;
 
+exports[`reconcile reconcile 18 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child1
+      Child3
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 18 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child2
+      Child3
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 19 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child1
+      Child4
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 19 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child2
+      Child4
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 20 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child1
+       After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 20 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child2
+       After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 21 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child1
+      Test-Child1
+      Child4
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 21 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      Test-Child2
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 22 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 22 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 23 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child2
+      Child4
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 23 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      Child2
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 24 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 24 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 25 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child3
+      Child4
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 25 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      Child3
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 26 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 26 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child4
+      Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 27 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Test-Child1
+      After
+    </div>
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 27 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <button
+      id="target"
+    >
+      Fire
+    </button>
+    <div>
+      Child2
+      After
+    </div>
+  </div>
+</div>
+`;
+
 exports[`update update 1 1`] = `
 <div
   id="app"

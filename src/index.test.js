@@ -8,6 +8,12 @@ import {
   invalidate,
 } from "./index";
 
+const wait = t => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), t);
+  });
+};
+
 describe("compiler", () => {
   beforeEach(() => {
     _resetTemplateCounter();
@@ -484,6 +490,457 @@ describe("reconcile", () => {
 
   it("reconcile 17", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [1, 2, 3, 6]);
+  });
+
+  it("reconcile 18", async () => {
+    const container = document.getElementById("app");
+
+    const Child1 = component(() => () => "Child1");
+
+    const Child2 = component(() => () => "Child2");
+
+    const Child3 = component(() => () => "Child3");
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[key(1, state ? Child2() : Child1()), key(2, Child3())]}
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 19", async () => {
+    const container = document.getElementById("app");
+
+    const Child1 = component(() => () => "Child1");
+
+    const Child2 = component(() => () => "Child2");
+
+    const Child3 = component(() => () => []);
+
+    const Child4 = component(() => () => "Child4");
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                key(1, state ? Child2() : Child1()),
+                key(2, Child3()),
+                key(3, Child4()),
+              ]}
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 20", async () => {
+    const container = document.getElementById("app");
+
+    const Child1 = component(() => () => "Child1");
+
+    const Child2 = component(() => () => "Child2");
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[key(1, state ? Child2() : Child1()), key(2, Child3())]} After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 21", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child1 = component(() => () => "Test-Child1");
+
+    const Child2 = component(() => () => "Test-Child2");
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child(4)) : key(1, Child(1)),
+                key(2, state ? Child2() : Child1()),
+                key(3, Child3()),
+                state ? key(1, Child(1)) : key(4, Child(4)),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 22", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[state ? key(4, Child(4)) : key(1, Child(1)), key(3, Child3())]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 23", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child(4)) : key(1, Child3()),
+                key(2, Child(2)),
+                state ? key(1, Child(1)) : key(4, Child(4)),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 24", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child(4)) : key(1, Child3()),
+                key(2, Child3()),
+                state ? key(1, Child(1)) : key(4, Child(4)),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 25", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child(4)) : key(1, Child3()),
+                key(2, Child3()),
+                key(3, Child(3)),
+                state ? key(1, Child(1)) : key(4, Child(4)),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 26", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child(4)) : key(1, Child3()),
+                key(2, Child3()),
+                state ? key(1, Child(1)) : key(4, Child3()),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 27", async () => {
+    const container = document.getElementById("app");
+
+    const Child = component(() => k => `Child${k}`);
+
+    const Child1 = component(() => () => "Test-Child1");
+
+    const Child3 = component(() => () => []);
+
+    const App = component(c => {
+      let state = false;
+
+      return () => {
+        return html`
+          <div>
+            <button
+              id="target"
+              onclick=${() => {
+                state = true;
+                invalidate(c);
+              }}
+            >
+              Fire
+            </button>
+            <div>
+              ${[
+                state ? key(4, Child3()) : key(1, Child3()),
+                state ? key(2, Child(2)) : key(2, Child1()),
+                state ? key(1, Child3()) : key(4, Child3()),
+              ]}
+              After
+            </div>
+          </div>
+        `;
+      };
+    });
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
   });
 });
 
@@ -1002,12 +1459,6 @@ describe("invalidate", () => {
 
     document.body.innerHTML = "<div id='app'></div>";
   });
-
-  const wait = t => {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(), t);
-    });
-  };
 
   it("invalidate 1", async () => {
     const container = document.getElementById("app");
