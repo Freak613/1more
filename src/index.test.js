@@ -1541,4 +1541,79 @@ describe("invalidate", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("invalidate 3", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : html`<span>False</span>`;
+      };
+    });
+
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 4", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : [];
+      };
+    });
+
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 5", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
 });

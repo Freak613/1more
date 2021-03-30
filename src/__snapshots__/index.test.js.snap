@@ -3721,6 +3721,60 @@ exports[`invalidate invalidate 2 2`] = `
 </div>
 `;
 
+exports[`invalidate invalidate 3 1`] = `
+<div
+  id="app"
+>
+  <span>
+    False
+  </span>
+</div>
+`;
+
+exports[`invalidate invalidate 3 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 4 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`invalidate invalidate 4 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 5 1`] = `
+<div
+  id="app"
+>
+  False
+</div>
+`;
+
+exports[`invalidate invalidate 5 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+</div>
+`;
+
 exports[`reconcile reconcile 1 1`] = `
 <div
   id="app"
