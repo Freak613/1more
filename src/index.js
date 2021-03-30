@@ -33,6 +33,8 @@ const characterDataSetData = getDescriptor(characterDataProto, "data").set;
 const indexOf = arrayProto.indexOf;
 
 let _depth = 0;
+let _arg;
+
 function _resetState() {
   _depth = 0;
 }
@@ -43,6 +45,8 @@ export function _resetTemplateCounter() {
 
 // Getters/setters
 function setContent(refs, v, vnode) {
+  const prevArg = _arg;
+  _arg = this;
   refs[this.instKey] = renderValue(
     v,
     refs[this.refKey],
@@ -50,14 +54,18 @@ function setContent(refs, v, vnode) {
     this.flag,
     vnode,
   );
+  _arg = prevArg;
 }
 
 function updateContent(refs, v) {
+  const prevArg = _arg;
+  _arg = this;
   refs[this.instKey] = updateValue(
     v,
     refs[this.instKey],
     this.afterNodeFn(refs),
   );
+  _arg = prevArg;
 }
 
 function setClassname(refs, v) {
@@ -584,6 +592,7 @@ const createTextVirtualNode = () => ({
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
 });
 
 const createArrayVirtualNode = () => ({
@@ -592,6 +601,7 @@ const createArrayVirtualNode = () => ({
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
 });
 
 const createTemplateVirtualNode = () => ({
@@ -602,6 +612,7 @@ const createTemplateVirtualNode = () => ({
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
 });
 
 const createFragmentVirtualNode = () => ({
@@ -613,6 +624,7 @@ const createFragmentVirtualNode = () => ({
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
 });
 
 const createComponentVirtualNode = () => ({
@@ -628,6 +640,7 @@ const createComponentVirtualNode = () => ({
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
 });
 
 function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
