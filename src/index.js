@@ -643,90 +643,114 @@ const createComponentVirtualNode = () => ({
   a: _arg, // closest template arg
 });
 
+const createVoidVirtualNode = () => ({
+  t: 32,
+  x: undefined, // parent vdom node
+  w: undefined, // parent dom node
+  g: undefined, // notSingleNode flag
+  a: _arg, // closest template arg
+});
+
 function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
   let vnode;
-  if (typeof props === "object") {
-    if (props instanceof Array) {
-      vnode = createArrayVirtualNode();
-      vnode.x = parentVnode;
-      vnode.w = parent;
-      vnode.g = notSingleNode;
 
-      vnode.n = props.map(function (props) {
-        return renderValue(props, parent, afterNode, 2, vnode);
-      });
-    } else if ((props.t & 16) !== 0) {
-      vnode = createComponentVirtualNode();
-      vnode.x = parentVnode;
-      vnode.w = parent;
-      vnode.g = notSingleNode;
+  const t = typeof props;
 
-      vnode.k = props.k;
-      vnode.c = props.p;
+  if (props !== null && props !== undefined && t !== "boolean") {
+    if (t === "object") {
+      if (props instanceof Array) {
+        vnode = createArrayVirtualNode();
+        vnode.x = parentVnode;
+        vnode.w = parent;
+        vnode.g = notSingleNode;
 
-      const init = props.n;
-      vnode.n = init;
+        vnode.n = props.map(function (props) {
+          return renderValue(props, parent, afterNode, 2, vnode);
+        });
+      } else if ((props.t & 16) !== 0) {
+        vnode = createComponentVirtualNode();
+        vnode.x = parentVnode;
+        vnode.w = parent;
+        vnode.g = notSingleNode;
 
-      const render = init(vnode);
-      vnode.v = render;
+        vnode.k = props.k;
+        vnode.c = props.p;
 
-      const view = render(props.p);
+        const init = props.n;
+        vnode.n = init;
 
-      const currentDepth = _depth;
-      _depth = currentDepth + 1;
-      vnode.q = renderValue(view, parent, afterNode, notSingleNode, vnode);
-      _depth = currentDepth;
-    } else if ((props.t & 4) !== 0) {
-      const templateInstance = props.p;
+        const render = init(vnode);
+        vnode.v = render;
 
-      const { type, templateNode, ways, argsWays, producer } = templateInstance;
+        const view = render(props.p);
 
-      const tNode = nodeCloneNode.call(templateNode, true);
+        const currentDepth = _depth;
+        _depth = currentDepth + 1;
+        vnode.q = renderValue(view, parent, afterNode, notSingleNode, vnode);
+        _depth = currentDepth;
+      } else if ((props.t & 4) !== 0) {
+        const templateInstance = props.p;
 
-      const refs = producer();
+        const {
+          type,
+          templateNode,
+          ways,
+          argsWays,
+          producer,
+        } = templateInstance;
 
-      if ((type & 16) !== 0) {
-        vnode = createFragmentVirtualNode();
+        const tNode = nodeCloneNode.call(templateNode, true);
 
-        const nodes = Array.from(nodeGetChildNodes.call(tNode));
-        vnode.z = nodes;
+        const refs = producer();
 
-        refs[0] = nodes[0];
-      } else {
-        vnode = createTemplateVirtualNode();
+        if ((type & 16) !== 0) {
+          vnode = createFragmentVirtualNode();
 
-        refs[0] = tNode;
+          const nodes = Array.from(nodeGetChildNodes.call(tNode));
+          vnode.z = nodes;
+
+          refs[0] = nodes[0];
+        } else {
+          vnode = createTemplateVirtualNode();
+
+          refs[0] = tNode;
+        }
+
+        vnode.x = parentVnode;
+        vnode.w = parent;
+        vnode.g = notSingleNode;
+        vnode.p = props;
+        vnode.r = refs;
+
+        for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
+        for (let a of argsWays) a.applyData(refs, props[a.propIdx], vnode);
+
+        if (afterNode) {
+          nodeInsertBefore.call(parent, tNode, afterNode);
+        } else {
+          nodeAppendChild.call(parent, tNode);
+        }
       }
-
+    } else {
+      vnode = createTextVirtualNode();
       vnode.x = parentVnode;
       vnode.w = parent;
       vnode.g = notSingleNode;
-      vnode.p = props;
-      vnode.r = refs;
 
-      for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
-      for (let a of argsWays) a.applyData(refs, props[a.propIdx], vnode);
-
-      if (afterNode) {
-        nodeInsertBefore.call(parent, tNode, afterNode);
+      if ((notSingleNode & 2) !== 0) {
+        const node = document.createTextNode(props);
+        vnode.n = node;
+        nodeInsertBefore.call(parent, node, afterNode);
       } else {
-        nodeAppendChild.call(parent, tNode);
+        nodeSetTextContent.call(parent, props);
+        vnode.n = nodeGetFirstChild.call(parent);
       }
     }
   } else {
-    vnode = createTextVirtualNode();
+    vnode = createVoidVirtualNode();
     vnode.x = parentVnode;
     vnode.w = parent;
     vnode.g = notSingleNode;
-
-    if ((notSingleNode & 2) !== 0) {
-      const node = document.createTextNode(props);
-      vnode.n = node;
-      nodeInsertBefore.call(parent, node, afterNode);
-    } else {
-      nodeSetTextContent.call(parent, props);
-      vnode.n = nodeGetFirstChild.call(parent);
-    }
   }
   return vnode;
 }
@@ -751,6 +775,7 @@ function unmountWalk(vnode) {
       }
     }
     vnode.f = 4;
+  } else if ((t & 32) !== 0) {
   } else {
     const refs = vnode.r;
     const template = vnode.p.p;
@@ -773,6 +798,7 @@ function _removeVNode(vnode) {
     _removeVNode(vnode.q);
   } else if ((t & 8) !== 0) {
     vnode.z.forEach(n => elementRemove.call(n));
+  } else if ((t & 32) !== 0) {
   } else {
     elementRemove.call(vnode.r[0]);
   }
@@ -789,7 +815,7 @@ function updateValue(b, vnode, afterNode) {
   const notSingleNode = vnode.g;
 
   if ((prevType & 1) !== 0) {
-    if (typeof b !== "object") {
+    if (typeof b !== "object" && typeof b !== "boolean" && b !== undefined) {
       characterDataSetData.call(vnode.n, b);
     } else {
       if (vnode.n) nodeRemoveChild.call(parent, vnode.n);
@@ -825,7 +851,12 @@ function updateValue(b, vnode, afterNode) {
       vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
     }
   } else if ((prevType & 16) !== 0) {
-    if (typeof b === "object" && (b.t & 16) !== 0 && b.n === vnode.n) {
+    if (
+      typeof b === "object" &&
+      b !== null &&
+      (b.t & 16) !== 0 &&
+      b.n === vnode.n
+    ) {
       if (b.p !== vnode.c) {
         vnode.c = b.p;
 
@@ -840,10 +871,15 @@ function updateValue(b, vnode, afterNode) {
       removeVNode(vnode);
       vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
     }
+  } else if ((prevType & 32) !== 0) {
+    if (b !== null && b !== undefined && typeof b !== "boolean") {
+      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+    }
   } else {
     // Template or Fragment
     if (
       typeof b === "object" &&
+      b !== null &&
       (b.t & 4) !== 0 &&
       b.p.type === vnode.p.p.type
     ) {
@@ -937,6 +973,7 @@ function findNodeInstance(insertions, nodeIndex, refs) {
       } else {
         shift += size;
       }
+    } else if ((t & 32) !== 0) {
     } else {
       if (nodeIndex === shift) {
         nodeInstance = inst;
@@ -965,6 +1002,8 @@ function getVNodeSize(vnode) {
     size = getVNodeSize(vnode.q);
   } else if ((t & 8) !== 0) {
     size = vnode.z.length;
+  } else if ((t & 32) !== 0) {
+    size = 0;
   } else {
     size = 1;
   }
@@ -996,6 +1035,7 @@ function findEventTarget(vnode, event, targets, parent) {
     }
   } else if ((t & 16) !== 0) {
     handled = findEventTarget(vnode.q, event, targets, parent);
+  } else if ((t & 32) !== 0) {
   } else {
     // Template or Fragment
     const { p: props, r: refs } = vnode;
@@ -1094,6 +1134,7 @@ function getDomNode(vnode) {
     return getDomNode(vnode.q);
   } else if ((t & 8) !== 0) {
     return vnode.z[0];
+  } else if ((t & 32) !== 0) {
   } else {
     return vnode.r[0];
   }
@@ -1117,6 +1158,7 @@ function insertVNode(vnode, parent, afterNode) {
     insertVNode(vnode.q, parent, afterNode);
   } else if ((t & 8) !== 0) {
     vnode.z.forEach(n => nativeInsert(n, parent, afterNode));
+  } else if ((t & 32) !== 0) {
   } else {
     nativeInsert(vnode.r[0], parent, afterNode);
   }
@@ -1502,6 +1544,9 @@ function getSiblingVNode(vnode) {
       child = parent;
       parent = child.x;
     } else if ((t & 16) !== 0) {
+      child = parent;
+      parent = child.x;
+    } else if ((t & 32) !== 0) {
       child = parent;
       parent = child.x;
     } else {
