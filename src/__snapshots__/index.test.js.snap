@@ -3739,6 +3739,30 @@ exports[`events events 16 1`] = `
 </div>
 `;
 
+exports[`events events 17 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events events 18 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`events events 19 1`] = `
+<div
+  id="app"
+/>
+`;
+
 exports[`invalidate invalidate 1 1`] = `
 <div
   id="app"
@@ -5279,6 +5303,58 @@ exports[`reconcile reconcile 28 2`] = `
 </div>
 `;
 
+exports[`reconcile reconcile 29 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`reconcile reconcile 29 2`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`reconcile reconcile 30 1`] = `
+<div
+  id="app"
+>
+  2
+  3
+  After
+</div>
+`;
+
+exports[`reconcile reconcile 30 2`] = `
+<div
+  id="app"
+>
+  2
+  3
+  After
+</div>
+`;
+
+exports[`reconcile reconcile 31 1`] = `
+<div
+  id="app"
+>
+  1
+  3
+  After
+</div>
+`;
+
+exports[`reconcile reconcile 31 2`] = `
+<div
+  id="app"
+>
+  3
+  1
+  After
+</div>
+`;
+
 exports[`update update 1 1`] = `
 <div
   id="app"
@@ -5901,4 +5977,28 @@ exports[`update update 28 2`] = `
     style="display: block; color: blue;"
   />
 </div>
+`;
+
+exports[`update update 29 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`update update 29 2`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`update update 30 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`update update 30 2`] = `
+<div
+  id="app"
+/>
 `;

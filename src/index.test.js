@@ -972,6 +972,42 @@ describe("reconcile", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 29", async () => {
+    const container = document.getElementById("app");
+
+    render([key(1, null), key(2, null)], container);
+
+    expect(container).toMatchSnapshot();
+
+    render([key(2, null), key(1, null)], container);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 30", async () => {
+    const container = document.getElementById("app");
+
+    render([key(1, null), key(2, "2"), key(3, "3"), "After"], container);
+
+    expect(container).toMatchSnapshot();
+
+    render([key(2, "2"), key(3, "3"), key(1, null), "After"], container);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 31", async () => {
+    const container = document.getElementById("app");
+
+    render([key(1, "1"), key(2, null), key(3, "3"), "After"], container);
+
+    expect(container).toMatchSnapshot();
+
+    render([key(3, "3"), key(1, "1"), key(2, null), "After"], container);
+
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("update", () => {
@@ -1253,6 +1289,30 @@ describe("update", () => {
     expect(container).toMatchSnapshot();
 
     render(App({ display: "block", color: "blue" }), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 29", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => () => null);
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    render(null, container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 30", () => {
+    const container = document.getElementById("app");
+
+    const App = component(() => () => "");
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    render(null, container);
     expect(container).toMatchSnapshot();
   });
 });
@@ -1602,6 +1662,53 @@ describe("events", () => {
     target.dispatchEvent(new Event("click"));
 
     expect(state).toBe(1);
+  });
+
+  it("events 17", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      html`
+        <div>
+          ${null} ${html`<div id="target" onclick=${() => (state = 1)}></div>`}
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 18", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(null, container);
+    expect(container).toMatchSnapshot();
+
+    container.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 19", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render([], container);
+    expect(container).toMatchSnapshot();
+
+    container.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
   });
 });
 

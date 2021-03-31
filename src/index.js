@@ -686,7 +686,7 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         _depth = currentDepth + 1;
         vnode.q = renderValue(view, parent, afterNode, notSingleNode, vnode);
         _depth = currentDepth;
-      } else if ((props.t & 4) !== 0) {
+      } else {
         const templateInstance = props.p;
 
         const {
