@@ -597,6 +597,7 @@ const createTextVirtualNode = () => ({
 
 const createArrayVirtualNode = () => ({
   t: 2,
+  v: undefined, // props
   n: undefined, // nodes
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
@@ -606,7 +607,6 @@ const createArrayVirtualNode = () => ({
 
 const createTemplateVirtualNode = () => ({
   t: 4,
-  k: undefined, // key
   p: undefined, // props
   r: undefined, // refs
   x: undefined, // parent vdom node
@@ -617,7 +617,6 @@ const createTemplateVirtualNode = () => ({
 
 const createFragmentVirtualNode = () => ({
   t: 8,
-  k: undefined, // key
   p: undefined, // props
   r: undefined, // refs
   z: undefined, // roots
@@ -629,7 +628,6 @@ const createFragmentVirtualNode = () => ({
 
 const createComponentVirtualNode = () => ({
   t: 16,
-  k: undefined, // key
   c: undefined, // props
   n: undefined, // init
   v: undefined, // render
@@ -663,9 +661,10 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.x = parentVnode;
         vnode.w = parent;
         vnode.g = notSingleNode;
+        vnode.v = props;
 
         vnode.n = props.map(function (props) {
-          return renderValue(props, parent, afterNode, 2, vnode);
+          return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
         });
       } else if ((props.t & 16) !== 0) {
         vnode = createComponentVirtualNode();
@@ -673,7 +672,6 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.w = parent;
         vnode.g = notSingleNode;
 
-        vnode.k = props.k;
         vnode.c = props.p;
 
         const init = props.n;
@@ -836,11 +834,12 @@ function updateValue(b, vnode, afterNode) {
         }
       } else if (nodes.length === 0) {
         vnode.n = b.map(function (props) {
-          return renderValue(props, parent, afterNode, 2, vnode);
+          return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
         });
       } else {
         vnode.n = updateArray(b, afterNode, vnode);
       }
+      vnode.v = b;
     } else {
       if ((notSingleNode & 2) !== 0) {
         nodes.forEach(removeVNode);
@@ -1165,14 +1164,26 @@ function insertVNode(vnode, parent, afterNode) {
 }
 
 function getKey(vnode, idx) {
-  const key = vnode && vnode.k;
-  return key ? key : `$$${idx}`;
+  if (vnode && (vnode.t & 2) !== 0) {
+    return vnode.k;
+  } else {
+    return `$$${idx}`;
+  }
+}
+
+function getKeyValue(vnode) {
+  if (vnode && (vnode.t & 2) !== 0) {
+    return vnode.v;
+  } else {
+    return vnode;
+  }
 }
 
 function updateArray(newArray, afterNode, vnode) {
   const nodes = vnode.n;
   const parent = vnode.w;
   const notSingleNode = vnode.g;
+  const prevArray = vnode.v;
 
   let newNodes = nodes.slice();
 
@@ -1190,7 +1201,7 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip prefix
     a = nodes[a1];
     b = newArray[b1];
-    while (getKey(a, a1) === getKey(b, b1)) {
+    while (getKey(prevArray[a1], a1) === getKey(b, b1)) {
       let idx = a1 + 1;
       let maybeAfterVNode = nodes[idx];
       let maybeAfterNode;
@@ -1202,7 +1213,7 @@ function updateArray(newArray, afterNode, vnode) {
         maybeAfterVNode = nodes[idx];
       }
 
-      a = updateValue(b, a, maybeAfterNode || afterNode);
+      a = updateValue(getKeyValue(b), a, maybeAfterNode || afterNode);
       newNodes[b1] = a;
       a1++;
       b1++;
@@ -1214,8 +1225,8 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip suffix
     a = nodes[a2];
     b = newArray[b2];
-    while (getKey(a, a2) === getKey(b, b2)) {
-      a = updateValue(b, a, afterNode);
+    while (getKey(prevArray[a2], a2) === getKey(b, b2)) {
+      a = updateValue(getKeyValue(b), a, afterNode);
       newNodes[b2] = a;
       a2--;
       b2--;
@@ -1230,8 +1241,8 @@ function updateArray(newArray, afterNode, vnode) {
 
     // Fast path for symmetric swap or reverse
     while (
-      getKey(nodes[a1], a1) === getKey(newArray[b2], b2) &&
-      getKey(nodes[a2], a2) === getKey(newArray[b1], b1)
+      getKey(prevArray[a1], a1) === getKey(newArray[b2], b2) &&
+      getKey(prevArray[a2], a2) === getKey(newArray[b1], b1)
     ) {
       loop = true;
 
@@ -1242,7 +1253,7 @@ function updateArray(newArray, afterNode, vnode) {
       // Before move, this node's afterNode is `afterNode`
       // However it may result in unnecessary mount, before this
       // node going to be moved in next step.
-      let n = updateValue(b, a, afterNode);
+      let n = updateValue(getKeyValue(b), a, afterNode);
 
       let idx = a1;
       let maybeAfterVNode = nodes[idx];
@@ -1293,7 +1304,7 @@ function updateArray(newArray, afterNode, vnode) {
 
         // This one again may result in unnecessary mount before
         // node is moved in next step.
-        n = updateValue(b, a, maybeAfterNode || afterNode);
+        n = updateValue(getKeyValue(b), a, maybeAfterNode || afterNode);
 
         insertVNode(n, parent, afterNode);
         newNodes[b2] = n;
@@ -1315,7 +1326,13 @@ function updateArray(newArray, afterNode, vnode) {
     if (b1 <= b2) {
       newNodes.length = newArray.length;
       while (1) {
-        newNodes[b1] = renderValue(newArray[b1], parent, afterNode, 2, vnode);
+        newNodes[b1] = renderValue(
+          getKeyValue(newArray[b1]),
+          parent,
+          afterNode,
+          2,
+          vnode,
+        );
         if (b1 === b2) break;
         b1++;
       }
@@ -1345,7 +1362,7 @@ function updateArray(newArray, afterNode, vnode) {
       toRemove = [];
     for (let i = a1; i <= a2; i++) {
       const n = nodes[i];
-      const key = getKey(n, i);
+      const key = getKey(prevArray[i], i);
       if (I[key] !== undefined) {
         P[I[key]] = i;
         reusingNodes++;
@@ -1364,7 +1381,7 @@ function updateArray(newArray, afterNode, vnode) {
       }
 
       newNodes = newArray.map(function (props) {
-        return renderValue(props, parent, afterNode, 2, vnode);
+        return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
       });
     } else {
       toRemove.forEach(removeVNode);
@@ -1377,7 +1394,7 @@ function updateArray(newArray, afterNode, vnode) {
           const c1 = P[lisIndices[lisIdx]];
           let n = nodes[c1];
           const b = newArray[i];
-          n = updateValue(b, n, afterNode);
+          n = updateValue(getKeyValue(b), n, afterNode);
           const maybeAfterNode = getDomNode(n);
           afterNode = maybeAfterNode || afterNode;
           newNodes[i] = n;
@@ -1386,9 +1403,15 @@ function updateArray(newArray, afterNode, vnode) {
         } else {
           let n;
           if (P[i] === -1) {
-            n = renderValue(newArray[i], parent, afterNode, 2, vnode);
+            n = renderValue(
+              getKeyValue(newArray[i]),
+              parent,
+              afterNode,
+              2,
+              vnode,
+            );
           } else {
-            n = updateValue(newArray[i], nodes[P[i]], afterNode);
+            n = updateValue(getKeyValue(newArray[i]), nodes[P[i]], afterNode);
             insertVNode(n, parent, afterNode);
           }
 
@@ -1495,17 +1518,17 @@ const createComponentNode = (p, n) => ({
   t: 16,
   p, // props
   n, // init
-  k: undefined, // key
 });
 
 export function component(init) {
   return props => createComponentNode(props, init);
 }
 
-export function key(key, cNode) {
-  cNode.k = key;
-  return cNode;
-}
+export const key = (k, v) => ({
+  t: 2,
+  k,
+  v,
+});
 
 function addHook(hooks, hook) {
   if (!hooks) {
