@@ -1164,6 +1164,11 @@ function insertVNode(vnode, parent, afterNode) {
   }
 }
 
+function getKey(vnode, idx) {
+  const key = vnode && vnode.k;
+  return key ? key : `$$${idx}`;
+}
+
 function updateArray(newArray, afterNode, vnode) {
   const nodes = vnode.n;
   const parent = vnode.w;
@@ -1185,7 +1190,7 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip prefix
     a = nodes[a1];
     b = newArray[b1];
-    while (a.k === b.k) {
+    while (getKey(a, a1) === getKey(b, b1)) {
       let idx = a1 + 1;
       let maybeAfterVNode = nodes[idx];
       let maybeAfterNode;
@@ -1209,7 +1214,7 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip suffix
     a = nodes[a2];
     b = newArray[b2];
-    while (a.k === b.k) {
+    while (getKey(a, a2) === getKey(b, b2)) {
       a = updateValue(b, a, afterNode);
       newNodes[b2] = a;
       a2--;
@@ -1224,7 +1229,10 @@ function updateArray(newArray, afterNode, vnode) {
     }
 
     // Fast path for symmetric swap or reverse
-    while (nodes[a1].k === newArray[b2].k && nodes[a2].k === newArray[b1].k) {
+    while (
+      getKey(nodes[a1], a1) === getKey(newArray[b2], b2) &&
+      getKey(nodes[a2], a2) === getKey(newArray[b1], b1)
+    ) {
       loop = true;
 
       // Swap from end to start
@@ -1328,7 +1336,7 @@ function updateArray(newArray, afterNode, vnode) {
 
     for (let i = b1; i <= b2; i++) {
       const item = newArray[i];
-      const key = item.k;
+      const key = getKey(item, i);
       I[key] = i;
       P[i] = -1;
     }
@@ -1337,7 +1345,7 @@ function updateArray(newArray, afterNode, vnode) {
       toRemove = [];
     for (let i = a1; i <= a2; i++) {
       const n = nodes[i];
-      const key = n.k;
+      const key = getKey(n, i);
       if (I[key] !== undefined) {
         P[I[key]] = i;
         reusingNodes++;
