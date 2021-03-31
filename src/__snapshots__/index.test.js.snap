@@ -3667,6 +3667,78 @@ exports[`compiler mixed content mixed 17 2`] = `
 </div>
 `;
 
+exports[`events events 11 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+    <div />
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events events 12 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events events 13 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events events 14 1`] = `
+<div
+  id="app"
+>
+  First
+  <div
+    id="target"
+  />
+</div>
+`;
+
+exports[`events events 15 1`] = `
+<div
+  id="app"
+>
+  First
+  <div
+    id="target"
+  />
+</div>
+`;
+
+exports[`events events 16 1`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  />
+</div>
+`;
+
 exports[`invalidate invalidate 1 1`] = `
 <div
   id="app"
@@ -3771,6 +3843,166 @@ exports[`invalidate invalidate 5 2`] = `
 >
   <div>
     True
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 6 1`] = `
+<div
+  id="app"
+>
+  <div>
+    False
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 6 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div>
+      True
+    </div>
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 7 1`] = `
+<div
+  id="app"
+>
+  False
+</div>
+`;
+
+exports[`invalidate invalidate 7 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 8 1`] = `
+<div
+  id="app"
+>
+  False
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 8 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 9 1`] = `
+<div
+  id="app"
+>
+  False
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 9 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 10 1`] = `
+<div
+  id="app"
+>
+  False
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 10 2`] = `
+<div
+  id="app"
+>
+  <div>
+    True
+  </div>
+  After
+</div>
+`;
+
+exports[`invalidate invalidate 11 1`] = `
+<div
+  id="app"
+>
+  <div>
+    False
+    After
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 11 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div>
+      True
+    </div>
+    After
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 12 1`] = `
+<div
+  id="app"
+>
+  <div
+    class="body"
+  >
+    <div
+      class="content"
+    >
+      False
+    </div>
+    After
+  </div>
+</div>
+`;
+
+exports[`invalidate invalidate 12 2`] = `
+<div
+  id="app"
+>
+  <div
+    class="body"
+  >
+    <div
+      class="content"
+    >
+      <div>
+        True
+      </div>
+    </div>
+    After
   </div>
 </div>
 `;
@@ -5009,6 +5241,41 @@ exports[`reconcile reconcile 27 2`] = `
       After
     </div>
   </div>
+</div>
+`;
+
+exports[`reconcile reconcile 27 3`] = `
+<div
+  id="app"
+>
+  Item
+</div>
+`;
+
+exports[`reconcile reconcile 27 4`] = `
+<div
+  id="app"
+>
+  Item
+  Text
+</div>
+`;
+
+exports[`reconcile reconcile 28 1`] = `
+<div
+  id="app"
+>
+  First
+  Second
+</div>
+`;
+
+exports[`reconcile reconcile 28 2`] = `
+<div
+  id="app"
+>
+  Second
+  First
 </div>
 `;
 

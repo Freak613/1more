@@ -942,6 +942,36 @@ describe("reconcile", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 27", async () => {
+    const container = document.getElementById("app");
+
+    render(
+      [null, undefined, true, false, key(1, "Item"), key(2, null)],
+      container,
+    );
+
+    expect(container).toMatchSnapshot();
+
+    render(
+      [null, undefined, true, false, key(1, "Item"), key(2, "Text")],
+      container,
+    );
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("reconcile 28", async () => {
+    const container = document.getElementById("app");
+
+    render([key(1, ["First"]), key(2, ["Second"])], container);
+
+    expect(container).toMatchSnapshot();
+
+    render([key(2, ["Second"]), key(1, ["First"])], container);
+
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("update", () => {
@@ -1451,6 +1481,128 @@ describe("events", () => {
 
     expect(state).toBe(0);
   });
+
+  it("events 11", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      html`
+        <div>
+          ${html`
+            <div></div>
+            <div></div>
+          `}
+          ${html`<div id="target" onclick=${() => (state = 1)}></div>`}
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 12", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      html`
+        <div>
+          ${html`
+            <div></div>
+            <div id="target" onclick=${() => (state = 1)}></div>
+          `}
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 13", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      html`
+        <div>
+          ${html`<div></div>`}
+          ${html`<div id="target" onclick=${() => (state = 1)}></div>`}
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 14", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      ["First", html`<div id="target" onclick=${() => (state = 1)}></div>`],
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 15", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      [["First"], html`<div id="target" onclick=${() => (state = 1)}></div>`],
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 16", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(
+      [null, html`<div id="target" onclick=${() => (state = 1)}></div>`],
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
 });
 
 describe("invalidate", () => {
@@ -1607,6 +1759,190 @@ describe("invalidate", () => {
     });
 
     render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 6", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render(html`<div>${App()}</div>`, container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 7", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render([App()], container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 8", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render([App(), "After"], container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 9", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render([App(), null, "After"], container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 10", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const Child = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    const App = component(() => () => Child());
+
+    render([App(), null, "After"], container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 11", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render(html` <div>${App()} ${"After"}</div> `, container);
+
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(appRef);
+    await wait(1);
+
+    expect(container).toMatchSnapshot();
+  });
+
+  it("invalidate 12", async () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let appRef;
+
+    const App = component(c => {
+      appRef = c;
+
+      return () => {
+        return state ? html`<div>True</div>` : "False";
+      };
+    });
+
+    render(
+      html`
+        <div class="body">
+          ${html`<div class="content">${App()}</div>`} ${"After"}
+        </div>
+      `,
+      container,
+    );
 
     expect(container).toMatchSnapshot();
 

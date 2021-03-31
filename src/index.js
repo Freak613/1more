@@ -1015,7 +1015,7 @@ function findEventTarget(vnode, event, targets, parent) {
   const { t } = vnode;
   if ((t & 1) !== 0) {
   } else if ((t & 2) !== 0) {
-    const nodeIdx = indexOf.call(nodeGetChildNodes.call(parent), targets[1]);
+    const nodeIdx = indexOf.call(nodeGetChildNodes.call(parent), targets[0]);
     const nodes = vnode.n;
     let shift = 0;
     let node;
@@ -1577,20 +1577,23 @@ function getSiblingVNode(vnode) {
     } else if ((t & 16) !== 0) {
       child = parent;
       parent = child.x;
-    } else if ((t & 32) !== 0) {
-      child = parent;
-      parent = child.x;
     } else {
       // Template of Fragment
-      const arg = vnode.a;
+      const arg = child.a;
       const refs = parent.r;
       const dom = arg.afterNodeFn(refs);
-      if (dom) {
-        result = dom;
-        break;
-      }
-      child = parent;
-      parent = child.x;
+      result = dom;
+      break;
+
+      // TODO: Handle templates with dynamic roots,
+      // allowing to search for sibling in higher node
+
+      // if (dom) {
+      //   result = dom;
+      //   break;
+      // }
+      // child = parent;
+      // parent = child.x;
     }
   }
   return result;
