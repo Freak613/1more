@@ -1282,52 +1282,38 @@ function updateArray(newArray, _afterNode, vnode) {
     ) {
       loop = true;
 
-      // Swap from end to start
       a = nodes[a2];
       b = newArray[b1];
-
-      // Before move, this node's afterNode is `afterNode`
-      // However it may result in unnecessary mount, before this
-      // node going to be moved in next step.
 
       _getAfterNode = lookupNewAfterNode;
 
       let n = updateValue(getKeyValue(b), a);
-
-      let idx = a1;
-      let maybeAfterVNode = nodes[idx];
-      let maybeAfterNode;
-      let moveNode = true;
-      if (idx === a2) {
-        // If starting node is already node itself,
-        // prevent iteration and moving
-        moveNode = false;
-      } else {
-        while (maybeAfterVNode) {
-          maybeAfterNode = getDomNode(maybeAfterVNode);
-          if (maybeAfterNode) break;
-          idx++;
-          if (idx === a2) {
-            moveNode = false;
-            break;
-          }
-          maybeAfterVNode = nodes[idx];
-        }
-      }
-
-      // Move node only if there are other nodes before.
-      // If afterNode is node itself, keep it in place.
-      if (moveNode) {
-        insertVNode(n, parent, maybeAfterNode);
-      }
       newNodes[b1] = n;
 
-      // Swap from start to end
-
-      // Prevent updating and moving same node twice,
-      // in case it's the middle of the list,
-      // it was updated in previous updateValue step.
       if (a1 !== a2) {
+        let moveNode = true;
+        let maybeAfterNode = getDomNode(nodes[a1]);
+
+        if (!maybeAfterNode) {
+          let idx = a1 + 1;
+          let maybeAfterVNode = newNodes[idx];
+          while (maybeAfterVNode) {
+            maybeAfterNode = getDomNode(maybeAfterVNode);
+            if (maybeAfterNode) break;
+            if (idx === bEnd) break;
+            idx++;
+            if (idx === a2) {
+              moveNode = false;
+              break;
+            }
+            maybeAfterVNode = newNodes[idx];
+          }
+        }
+
+        if (moveNode) {
+          insertVNode(n, parent, maybeAfterNode);
+        }
+
         a = nodes[a1];
         b = newArray[b2];
 
@@ -1335,8 +1321,6 @@ function updateArray(newArray, _afterNode, vnode) {
 
         _getAfterNode = () => afterNode;
 
-        // This one again may result in unnecessary mount before
-        // node is moved in next step.
         n = updateValue(getKeyValue(b), a);
 
         insertVNode(n, parent, afterNode);
