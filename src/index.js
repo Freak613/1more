@@ -34,9 +34,12 @@ const indexOf = arrayProto.indexOf;
 
 let _depth = 0;
 let _arg;
+let _getAfterNode;
 
 function _resetState() {
   _depth = 0;
+  _arg = null;
+  _getAfterNode = () => null;
 }
 
 export function _resetTemplateCounter() {
@@ -58,14 +61,16 @@ function setContent(refs, v, vnode) {
 }
 
 function updateContent(refs, v) {
+  const _prevState = _getAfterNode;
+  _getAfterNode = () => this.afterNodeFn(refs);
+
   const prevArg = _arg;
   _arg = this;
-  refs[this.instKey] = updateValue(
-    v,
-    refs[this.instKey],
-    this.afterNodeFn(refs),
-  );
+
+  refs[this.instKey] = updateValue(v, refs[this.instKey]);
+
   _arg = prevArg;
+  _getAfterNode = _prevState;
 }
 
 function setClassname(refs, v) {
@@ -807,7 +812,7 @@ function removeVNode(vnode) {
   _removeVNode(vnode);
 }
 
-function updateValue(b, vnode, afterNode) {
+function updateValue(b, vnode) {
   const prevType = vnode.t;
   const parent = vnode.w;
   const notSingleNode = vnode.g;
@@ -817,7 +822,7 @@ function updateValue(b, vnode, afterNode) {
       characterDataSetData.call(vnode.n, b);
     } else {
       if (vnode.n) nodeRemoveChild.call(parent, vnode.n);
-      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+      vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
     }
   } else if ((prevType & 2) !== 0) {
     const nodes = vnode.n;
@@ -833,11 +838,17 @@ function updateValue(b, vnode, afterNode) {
           vnode.n = [];
         }
       } else if (nodes.length === 0) {
+        const afterNode = _getAfterNode();
+
         vnode.n = b.map(function (props) {
           return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
         });
       } else {
-        vnode.n = updateArray(b, afterNode, vnode);
+        const prevState = _getAfterNode;
+
+        vnode.n = updateArray(b, _getAfterNode(), vnode);
+
+        _getAfterNode = prevState;
       }
       vnode.v = b;
     } else {
@@ -847,7 +858,7 @@ function updateValue(b, vnode, afterNode) {
         nodes.forEach(unmountWalk);
         nodeSetTextContent.call(parent, "");
       }
-      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+      vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
     }
   } else if ((prevType & 16) !== 0) {
     if (
@@ -861,18 +872,18 @@ function updateValue(b, vnode, afterNode) {
 
         const currentDepth = vnode.d;
         _depth = currentDepth + 1;
-        vnode.q = updateValue(vnode.v(b.p), vnode.q, afterNode);
+        vnode.q = updateValue(vnode.v(b.p), vnode.q);
         _depth = currentDepth;
 
         vnode.f = 0;
       }
     } else {
       removeVNode(vnode);
-      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+      vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
     }
   } else if ((prevType & 32) !== 0) {
     if (b !== null && b !== undefined && typeof b !== "boolean") {
-      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+      vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
     }
   } else {
     // Template or Fragment
@@ -892,7 +903,7 @@ function updateValue(b, vnode, afterNode) {
       vnode.p = b;
     } else {
       removeVNode(vnode);
-      vnode = renderValue(b, parent, afterNode, notSingleNode, vnode.x);
+      vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
     }
   }
 
@@ -904,7 +915,8 @@ export function render(component, container) {
 
   let inst = container.$INST;
   if (inst !== undefined) {
-    inst.c = updateValue(component, inst.c, null);
+    _getAfterNode = () => null;
+    inst.c = updateValue(component, inst.c);
   } else {
     nodeSetTextContent.call(container, "");
     const vnode = renderValue(component, container, null, 0, null);
@@ -1179,7 +1191,7 @@ function getKeyValue(vnode) {
   }
 }
 
-function updateArray(newArray, afterNode, vnode) {
+function updateArray(newArray, _afterNode, vnode) {
   const nodes = vnode.n;
   const parent = vnode.w;
   const notSingleNode = vnode.g;
@@ -1191,9 +1203,42 @@ function updateArray(newArray, afterNode, vnode) {
     b1 = 0,
     a2 = nodes.length - 1,
     b2 = newArray.length - 1,
+    bEnd = b2,
     loop = true,
     a,
     b;
+
+  const lookupOldAfterNode = () => {
+    if (a1 >= bEnd) return _afterNode;
+
+    let idx = a1 + 1;
+    let maybeAfterVNode = newNodes[idx];
+    let maybeAfterNode;
+    while (maybeAfterVNode) {
+      maybeAfterNode = getDomNode(maybeAfterVNode);
+      if (maybeAfterNode) break;
+      if (idx === bEnd) break;
+      idx++;
+      maybeAfterVNode = newNodes[idx];
+    }
+    return maybeAfterNode || _afterNode;
+  };
+
+  const lookupNewAfterNode = () => {
+    if (b2 >= bEnd) return _afterNode;
+
+    let idx = b2 + 1;
+    let maybeAfterVNode = newNodes[idx];
+    let maybeAfterNode;
+    while (maybeAfterVNode) {
+      maybeAfterNode = getDomNode(maybeAfterVNode);
+      if (maybeAfterNode) break;
+      if (idx === bEnd) break;
+      idx++;
+      maybeAfterVNode = newNodes[idx];
+    }
+    return maybeAfterNode || _afterNode;
+  };
 
   fixes: while (loop) {
     loop = false;
@@ -1201,19 +1246,11 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip prefix
     a = nodes[a1];
     b = newArray[b1];
-    while (getKey(prevArray[a1], a1) === getKey(b, b1)) {
-      let idx = a1 + 1;
-      let maybeAfterVNode = nodes[idx];
-      let maybeAfterNode;
-      while (maybeAfterVNode) {
-        maybeAfterNode = getDomNode(maybeAfterVNode);
-        if (maybeAfterNode) break;
-        if (idx === a2) break;
-        idx++;
-        maybeAfterVNode = nodes[idx];
-      }
 
-      a = updateValue(getKeyValue(b), a, maybeAfterNode || afterNode);
+    _getAfterNode = lookupOldAfterNode;
+
+    while (getKey(prevArray[a1], a1) === getKey(b, b1)) {
+      a = updateValue(getKeyValue(b), a);
       newNodes[b1] = a;
       a1++;
       b1++;
@@ -1225,15 +1262,14 @@ function updateArray(newArray, afterNode, vnode) {
     // Skip suffix
     a = nodes[a2];
     b = newArray[b2];
+
+    _getAfterNode = lookupNewAfterNode;
+
     while (getKey(prevArray[a2], a2) === getKey(b, b2)) {
-      a = updateValue(getKeyValue(b), a, afterNode);
+      a = updateValue(getKeyValue(b), a);
       newNodes[b2] = a;
       a2--;
       b2--;
-
-      const maybeAfterNode = getDomNode(a);
-      afterNode = maybeAfterNode || afterNode;
-
       if (a2 < a1 || b2 < b1) break fixes;
       a = nodes[a2];
       b = newArray[b2];
@@ -1253,7 +1289,10 @@ function updateArray(newArray, afterNode, vnode) {
       // Before move, this node's afterNode is `afterNode`
       // However it may result in unnecessary mount, before this
       // node going to be moved in next step.
-      let n = updateValue(getKeyValue(b), a, afterNode);
+
+      _getAfterNode = lookupNewAfterNode;
+
+      let n = updateValue(getKeyValue(b), a);
 
       let idx = a1;
       let maybeAfterVNode = nodes[idx];
@@ -1292,19 +1331,13 @@ function updateArray(newArray, afterNode, vnode) {
         a = nodes[a1];
         b = newArray[b2];
 
-        idx = a1 + 1;
-        maybeAfterVNode = nodes[idx];
-        while (maybeAfterVNode) {
-          maybeAfterNode = getDomNode(maybeAfterVNode);
-          if (maybeAfterNode) break;
-          if (idx === a2) break;
-          idx++;
-          maybeAfterVNode = nodes[idx];
-        }
+        const afterNode = lookupNewAfterNode();
+
+        _getAfterNode = () => afterNode;
 
         // This one again may result in unnecessary mount before
         // node is moved in next step.
-        n = updateValue(getKeyValue(b), a, maybeAfterNode || afterNode);
+        n = updateValue(getKeyValue(b), a);
 
         insertVNode(n, parent, afterNode);
         newNodes[b2] = n;
@@ -1315,8 +1348,6 @@ function updateArray(newArray, afterNode, vnode) {
       a2--;
       b2--;
 
-      maybeAfterNode = getDomNode(n);
-      afterNode = maybeAfterNode || afterNode;
       if (a2 < a1 || b2 < b1) break fixes;
     }
   }
@@ -1325,6 +1356,7 @@ function updateArray(newArray, afterNode, vnode) {
     // Grow
     if (b1 <= b2) {
       newNodes.length = newArray.length;
+      const afterNode = lookupNewAfterNode();
       while (1) {
         newNodes[b1] = renderValue(
           getKeyValue(newArray[b1]),
@@ -1380,6 +1412,8 @@ function updateArray(newArray, afterNode, vnode) {
         nodeSetTextContent.call(parent, "");
       }
 
+      const afterNode = lookupNewAfterNode();
+
       newNodes = newArray.map(function (props) {
         return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
       });
@@ -1389,36 +1423,42 @@ function updateArray(newArray, afterNode, vnode) {
       const lisIndices = longestPositiveIncreasingSubsequence(P, b1);
 
       let lisIdx = lisIndices.length - 1;
-      for (let i = b2; i >= b1; i--) {
-        if (lisIndices[lisIdx] === i) {
+      while (b2 >= b1) {
+        if (lisIndices[lisIdx] === b2) {
           const c1 = P[lisIndices[lisIdx]];
           let n = nodes[c1];
-          const b = newArray[i];
-          n = updateValue(getKeyValue(b), n, afterNode);
-          const maybeAfterNode = getDomNode(n);
-          afterNode = maybeAfterNode || afterNode;
-          newNodes[i] = n;
+          const b = newArray[b2];
+
+          _getAfterNode = lookupNewAfterNode;
+
+          n = updateValue(getKeyValue(b), n);
+
+          newNodes[b2] = n;
 
           lisIdx--;
         } else {
           let n;
-          if (P[i] === -1) {
+          const afterNode = lookupNewAfterNode();
+          if (P[b2] === -1) {
             n = renderValue(
-              getKeyValue(newArray[i]),
+              getKeyValue(newArray[b2]),
               parent,
               afterNode,
               2,
               vnode,
             );
           } else {
-            n = updateValue(getKeyValue(newArray[i]), nodes[P[i]], afterNode);
+            _getAfterNode = () => afterNode;
+
+            n = updateValue(getKeyValue(newArray[b2]), nodes[P[b2]]);
+
             insertVNode(n, parent, afterNode);
           }
 
-          newNodes[i] = n;
-          const maybeAfterNode = getDomNode(n);
-          afterNode = maybeAfterNode || afterNode;
+          newNodes[b2] = n;
         }
+
+        b2--;
       }
 
       newNodes.length = newArray.length;
@@ -1602,7 +1642,11 @@ function getSiblingVNode(vnode) {
 function checkUpdates(vnode) {
   const currentDepth = vnode.d;
   _depth = currentDepth + 1;
-  vnode.q = updateValue(vnode.v(vnode.c), vnode.q, getSiblingVNode(vnode));
+
+  _getAfterNode = () => getSiblingVNode(vnode);
+
+  vnode.q = updateValue(vnode.v(vnode.c), vnode.q);
+
   _depth = currentDepth;
 
   vnode.f = 0;
