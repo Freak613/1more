@@ -626,6 +626,8 @@ function updateArrayNode(b, vnode) {
 
   const nodes = vnode.n;
   if (b instanceof Array) {
+    b = b.map(normalizeArrayItem);
+
     if (b.length === 0) {
       if (nodes.length > 0) {
         if ((notSingleNode & 2) !== 0) {
@@ -640,7 +642,7 @@ function updateArrayNode(b, vnode) {
       const afterNode = _getAfterNode();
 
       vnode.n = b.map(function (props) {
-        return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
+        return renderValue(props.v, parent, afterNode, 2, vnode);
       });
     } else {
       const prevState = _getAfterNode;
@@ -822,10 +824,12 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.x = parentVnode;
         vnode.w = parent;
         vnode.g = notSingleNode;
+
+        props = props.map(normalizeArrayItem);
         vnode.v = props;
 
         vnode.n = props.map(function (props) {
-          return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
+          return renderValue(props.v, parent, afterNode, 2, vnode);
         });
       } else if ((props.t & 16) !== 0) {
         vnode = createComponentVirtualNode();
@@ -1235,19 +1239,11 @@ function insertVNode(vnode, parent, afterNode) {
   }
 }
 
-function getKey(vnode, idx) {
-  if (vnode && (vnode.t & 2) !== 0) {
-    return vnode.k;
+function normalizeArrayItem(value, idx) {
+  if (value && (value.t & 2) !== 0) {
+    return value;
   } else {
-    return `$$${idx}`;
-  }
-}
-
-function getKeyValue(vnode) {
-  if (vnode && (vnode.t & 2) !== 0) {
-    return vnode.v;
-  } else {
-    return vnode;
+    return key(`$$${idx}`, value);
   }
 }
 
@@ -1309,8 +1305,8 @@ function updateArray(newArray, _afterNode, vnode) {
 
     _getAfterNode = lookupOldAfterNode;
 
-    while (getKey(prevArray[a1], a1) === getKey(b, b1)) {
-      a = a.i.u(getKeyValue(b), a);
+    while (prevArray[a1].k === b.k) {
+      a = a.i.u(b.v, a);
 
       newNodes[b1] = a;
       a1++;
@@ -1326,8 +1322,8 @@ function updateArray(newArray, _afterNode, vnode) {
 
     _getAfterNode = lookupNewAfterNode;
 
-    while (getKey(prevArray[a2], a2) === getKey(b, b2)) {
-      a = a.i.u(getKeyValue(b), a);
+    while (prevArray[a2].k === b.k) {
+      a = a.i.u(b.v, a);
 
       newNodes[b2] = a;
       a2--;
@@ -1339,8 +1335,8 @@ function updateArray(newArray, _afterNode, vnode) {
 
     // Fast path for symmetric swap or reverse
     while (
-      getKey(prevArray[a1], a1) === getKey(newArray[b2], b2) &&
-      getKey(prevArray[a2], a2) === getKey(newArray[b1], b1)
+      prevArray[a1].k === newArray[b2].k &&
+      prevArray[a2].k === newArray[b1].k
     ) {
       loop = true;
 
@@ -1349,7 +1345,7 @@ function updateArray(newArray, _afterNode, vnode) {
 
       _getAfterNode = lookupNewAfterNode;
 
-      let n = a.i.u(getKeyValue(b), a);
+      let n = a.i.u(b.v, a);
 
       newNodes[b1] = n;
 
@@ -1384,7 +1380,7 @@ function updateArray(newArray, _afterNode, vnode) {
 
         _getAfterNode = () => afterNode;
 
-        n = a.i.u(getKeyValue(b), a);
+        n = a.i.u(b.v, a);
 
         insertVNode(n, parent, afterNode);
         newNodes[b2] = n;
@@ -1405,13 +1401,7 @@ function updateArray(newArray, _afterNode, vnode) {
       newNodes.length = newArray.length;
       const afterNode = lookupNewAfterNode();
       while (1) {
-        newNodes[b1] = renderValue(
-          getKeyValue(newArray[b1]),
-          parent,
-          afterNode,
-          2,
-          vnode,
-        );
+        newNodes[b1] = renderValue(newArray[b1].v, parent, afterNode, 2, vnode);
         if (b1 === b2) break;
         b1++;
       }
@@ -1432,7 +1422,7 @@ function updateArray(newArray, _afterNode, vnode) {
 
     for (let i = b1; i <= b2; i++) {
       const item = newArray[i];
-      const key = getKey(item, i);
+      const key = item.k;
       I[key] = i;
       P[i] = -1;
     }
@@ -1441,7 +1431,7 @@ function updateArray(newArray, _afterNode, vnode) {
       toRemove = [];
     for (let i = a1; i <= a2; i++) {
       const n = nodes[i];
-      const key = getKey(prevArray[i], i);
+      const key = prevArray[i].k;
       if (I[key] !== undefined) {
         P[I[key]] = i;
         reusingNodes++;
@@ -1462,7 +1452,7 @@ function updateArray(newArray, _afterNode, vnode) {
       const afterNode = lookupNewAfterNode();
 
       newNodes = newArray.map(function (props) {
-        return renderValue(getKeyValue(props), parent, afterNode, 2, vnode);
+        return renderValue(props.v, parent, afterNode, 2, vnode);
       });
     } else {
       toRemove.forEach(removeVNode);
@@ -1478,7 +1468,7 @@ function updateArray(newArray, _afterNode, vnode) {
 
           _getAfterNode = lookupNewAfterNode;
 
-          n = n.i.u(getKeyValue(b), n);
+          n = n.i.u(b.v, n);
 
           newNodes[b2] = n;
 
@@ -1487,18 +1477,12 @@ function updateArray(newArray, _afterNode, vnode) {
           let n;
           const afterNode = lookupNewAfterNode();
           if (P[b2] === -1) {
-            n = renderValue(
-              getKeyValue(newArray[b2]),
-              parent,
-              afterNode,
-              2,
-              vnode,
-            );
+            n = renderValue(newArray[b2].v, parent, afterNode, 2, vnode);
           } else {
             _getAfterNode = () => afterNode;
 
             n = nodes[P[b2]];
-            n = n.i.u(getKeyValue(newArray[b2]), n);
+            n = n.i.u(newArray[b2].v, n);
 
             insertVNode(n, parent, afterNode);
           }
