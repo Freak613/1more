@@ -8,11 +8,9 @@ Works completely in-browser, doesn't require compiler.
 ## Hello world
 
 ```js
-import { component, html, render } from "1more";
+import { html, render } from "1more";
 
-const Hello = component(() => name => {
-  return html`<div>Hello ${name}</div>`;
-});
+const Hello = name => html`<div>Hello ${name}</div>`;
 
 render(Hello("World"), document.getElementById("app"));
 ```
@@ -30,14 +28,16 @@ import { html } from "1more";
 
 const world = "World";
 
-html`<div>Hello ${world}</div>`;
+const element = html`<div>Hello ${world}</div>`;
+
+render(element, document.body);
 ```
 
 Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase. Fragments are supported (template with multiple root nodes).
 
 ##### Attributes
 
-It's possible to control element attributes and assign event handlers:
+It's possible to control element attributes and use event handlers with nodes:
 
 ```js
 import { html } from "1more";
@@ -52,11 +52,13 @@ html`
 `;
 ```
 
-Partial attributes are not supported. Most attributes are assigned directly to DOM node. Event handlers are stored as part of rendered instance and are called via synthetic events subsystem.
+Note: Event handlers are stored as part of rendered instance and are called via synthetic events subsystem.
 
 ##### Children
 
-Valid childrens are: strings, numbers, ComponentNode, array of ComponentNodes.
+Valid childrens are: string, number, null, undefined, boolean, TemplateNode, ComponentNode and arrays of any of these types (including nested arrays).
+
+Note: null, undefined, true, false are converted to nothing, just like in React.
 
 ```js
 import { html, key } from "1more";
@@ -66,8 +68,10 @@ html`
   <div>
     ${1}
     ${"Lorem ipsum"}
+    ${null}
+    ${false && html`<div></div>`}
     ${SomeComponent(value)} 
-    ${items.map(i => key(i.id, Item(i)))}
+    ${items.map(i => html`<div>${item.label}</div>`)}
   </div>
 `;
 ```
@@ -86,13 +90,13 @@ const App = component(c => {
 render(App({ text: "Hello" }), document.body);
 ```
 
-Creates component that returns ComponentNode when called.
+Creates component factory, that returns ComponentNode when called. Components are needed to use hooks, local state and shouldComponentUpdate optimizations.
 
-Its only argument is rendering callback, that accepts component reference object and returns rendering function. Rendering function accepts provided props and returns TemplateNode.
+Its only argument is rendering callback, that accepts component reference object and returns rendering function. Rendering function accepts provided props and returns any valid children type, including switching return types based on different conditions.
 
 When calling created component function, rendering callback is not invoked immediately. Instead, it's invoked during rendering phase. Outer function going to be executed only once during first render, after that only returned render function will be invoked.
 
-Note: Trying to render component with props object, that referentially equal to the one that was used in previous render, will result in no-op.
+Note: Trying to render component with props object, that referentially equal to the one that was used in previous render, will result in no update. This is shouldComponentUpdate optimization.
 
 #### render
 
@@ -102,9 +106,7 @@ import { render } from "1more";
 render(App(), document.getElementById("app"));
 ```
 
-When called first time, `render` going to mount HTML document created from component to provided container. After that, on each `render` call, it will perform diffing new component structure with previous one and apply updates as necessary. This behavior is similar to React and other virtual dom libraries.
-
-Note: `render` accepts only ComponentNodes.
+When called first time, `render` going to mount HTML document created from component to provided container. After that, on each `render` call, it will perform diffing new component structure with previous one and apply updates as necessary. This behavior is similar to React and other virtual dom libraries. Render accepts any valid children types.
 
 #### key
 
@@ -119,7 +121,25 @@ html`
 `;
 ```
 
-Assign given key to ComponentNode. This key is used in nodes reconciliation algorithm, to differentiate nodes from each other and perform proper updates.
+Creates key container with given value inside. These keys are used in nodes reconciliation algorithm, to differentiate nodes from each other and perform proper updates. Valid keys are strings and numbers.
+
+Note: Because it is a container, it is possible to use keys with primitive types if needed. Also, arrays are not limited to only keyed nodes, it is possible to mix them if necessary. Nodes without keys are going to be updated (or replaced) in place.
+
+```js
+import { render } from "1more";
+
+render(
+  [
+    null,
+    undefined,
+    key(0, true),
+    false,
+    key(1, Component()),
+    html`<div></div>`,
+  ],
+  document.body,
+);
+```
 
 #### invalidate
 
