@@ -5268,7 +5268,7 @@ exports[`reconcile reconcile 27 2`] = `
 </div>
 `;
 
-exports[`reconcile reconcile 27 3`] = `
+exports[`reconcile reconcile 28 1`] = `
 <div
   id="app"
 >
@@ -5276,7 +5276,7 @@ exports[`reconcile reconcile 27 3`] = `
 </div>
 `;
 
-exports[`reconcile reconcile 27 4`] = `
+exports[`reconcile reconcile 28 2`] = `
 <div
   id="app"
 >
@@ -5285,47 +5285,37 @@ exports[`reconcile reconcile 27 4`] = `
 </div>
 `;
 
-exports[`reconcile reconcile 28 1`] = `
-<div
-  id="app"
->
-  First
-  Second
-</div>
-`;
-
-exports[`reconcile reconcile 28 2`] = `
-<div
-  id="app"
->
-  Second
-  First
-</div>
-`;
-
 exports[`reconcile reconcile 29 1`] = `
 <div
   id="app"
-/>
+>
+  First
+  Second
+</div>
 `;
 
 exports[`reconcile reconcile 29 2`] = `
 <div
   id="app"
-/>
+>
+  Second
+  First
+</div>
 `;
 
 exports[`reconcile reconcile 30 1`] = `
 <div
   id="app"
->
-  2
-  3
-  After
-</div>
+/>
 `;
 
 exports[`reconcile reconcile 30 2`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`reconcile reconcile 31 1`] = `
 <div
   id="app"
 >
@@ -5335,7 +5325,17 @@ exports[`reconcile reconcile 30 2`] = `
 </div>
 `;
 
-exports[`reconcile reconcile 31 1`] = `
+exports[`reconcile reconcile 31 2`] = `
+<div
+  id="app"
+>
+  2
+  3
+  After
+</div>
+`;
+
+exports[`reconcile reconcile 32 1`] = `
 <div
   id="app"
 >
@@ -5345,7 +5345,7 @@ exports[`reconcile reconcile 31 1`] = `
 </div>
 `;
 
-exports[`reconcile reconcile 31 2`] = `
+exports[`reconcile reconcile 32 2`] = `
 <div
   id="app"
 >

@@ -943,7 +943,7 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("reconcile 27", async () => {
+  it("reconcile 28", async () => {
     const container = document.getElementById("app");
 
     render(
@@ -961,7 +961,7 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("reconcile 28", async () => {
+  it("reconcile 29", async () => {
     const container = document.getElementById("app");
 
     render([key(1, ["First"]), key(2, ["Second"])], container);
@@ -973,7 +973,7 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("reconcile 29", async () => {
+  it("reconcile 30", async () => {
     const container = document.getElementById("app");
 
     render([key(1, null), key(2, null)], container);
@@ -985,7 +985,7 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("reconcile 30", async () => {
+  it("reconcile 31", async () => {
     const container = document.getElementById("app");
 
     render([key(1, null), key(2, "2"), key(3, "3"), "After"], container);
@@ -997,7 +997,7 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("reconcile 31", async () => {
+  it("reconcile 32", async () => {
     const container = document.getElementById("app");
 
     render([key(1, "1"), key(2, null), key(3, "3"), "After"], container);
