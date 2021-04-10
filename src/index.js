@@ -1505,7 +1505,13 @@ function updateArray(newArray, _afterNode, vnode) {
       }
     }
 
-    if (reusingNodes === 0) {
+    if (
+      reusingNodes === 0 &&
+      a1 === 0 &&
+      b1 === 0 &&
+      b2 === bEnd &&
+      a2 === nodes.length - 1
+    ) {
       // Full replace
       if ((notSingleNode & 2) !== 0) {
         nodes.forEach(removeVNode);

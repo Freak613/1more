@@ -5361,6 +5361,7 @@ exports[`reconcile reconcile 33 1`] = `
 >
   Before
   2
+  After
 </div>
 `;
 
@@ -5369,6 +5370,7 @@ exports[`reconcile reconcile 33 2`] = `
   id="app"
 >
   Before
+  After
 </div>
 `;
 
