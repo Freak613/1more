@@ -277,7 +277,7 @@ function afterNodeInstance(refs) {
       if (i === len) {
         result = next;
       } else {
-        result = getDomNode(next);
+        result = next.i.d(next);
       }
     }
     if (result) break;
@@ -616,11 +616,16 @@ function textNodeSize(vnode) {
   return 1;
 }
 
+function getTextDomNode(vnode) {
+  return vnode.n;
+}
+
 const textNodeImpl = {
   u: updateTextNode,
   z: unmountTextNode,
   r: removeTextNode,
   s: textNodeSize,
+  d: getTextDomNode,
 };
 
 const createTextVirtualNode = () => ({
@@ -696,11 +701,17 @@ function arrayNodeSize(vnode) {
   return size;
 }
 
+function getArrayDomNode(vnode) {
+  const first = vnode.n[0];
+  if (first) return first.i.d(first);
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
   r: removeArrayNode,
   s: arrayNodeSize,
+  d: getArrayDomNode,
 };
 
 const createArrayVirtualNode = () => ({
@@ -759,11 +770,16 @@ function templateNodeSize(vnode) {
   return 1;
 }
 
+function getTemplateDomNode(vnode) {
+  return vnode.r[0];
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeTemplateNode,
   s: templateNodeSize,
+  d: getTemplateDomNode,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -785,11 +801,16 @@ function fragmentNodeSize(vnode) {
   return vnode.z.length;
 }
 
+function getFragmentDomNode(vnode) {
+  return vnode.z[0];
+}
+
 const fragmentNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeFragmentNode,
   s: fragmentNodeSize,
+  d: getFragmentDomNode,
 };
 
 const createFragmentVirtualNode = () => ({
@@ -863,11 +884,17 @@ function componentNodeSize(vnode) {
   return child.i.s(child);
 }
 
+function getComponentDomNode(vnode) {
+  const child = vnode.q;
+  return child.i.d(child);
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
   r: removeComponentNode,
   s: componentNodeSize,
+  d: getComponentDomNode,
 };
 
 const createComponentVirtualNode = () => ({
@@ -905,11 +932,14 @@ function voidNodeSize(vnode) {
   return 0;
 }
 
+function getVoidDomNode(vnode) {}
+
 const voidNodeImpl = {
   u: updateVoidNode,
   z: unmountVoidNode,
   r: removeVoidNode,
   s: voidNodeSize,
+  d: getVoidDomNode,
 };
 
 const createVoidVirtualNode = () => ({
@@ -1235,23 +1265,6 @@ function setupGlobalHandler(name) {
   GLOBAL_HANDLERS[name] = 1;
 }
 
-function getDomNode(vnode) {
-  const { t } = vnode;
-  if ((t & 1) !== 0) {
-    return vnode.n;
-  } else if ((t & 2) !== 0) {
-    const first = vnode.n[0];
-    if (first) return getDomNode(first);
-  } else if ((t & 16) !== 0) {
-    return getDomNode(vnode.q);
-  } else if ((t & 8) !== 0) {
-    return vnode.z[0];
-  } else if ((t & 32) !== 0) {
-  } else {
-    return vnode.r[0];
-  }
-}
-
 function nativeInsert(node, parent, afterNode) {
   if (afterNode) {
     nodeInsertBefore.call(parent, node, afterNode);
@@ -1308,7 +1321,7 @@ function updateArray(newArray, _afterNode, vnode) {
     let maybeAfterVNode = newNodes[idx];
     let maybeAfterNode;
     while (maybeAfterVNode) {
-      maybeAfterNode = getDomNode(maybeAfterVNode);
+      maybeAfterNode = maybeAfterVNode.i.d(maybeAfterVNode);
       if (maybeAfterNode) break;
       if (idx === bEnd) break;
       idx++;
@@ -1324,7 +1337,7 @@ function updateArray(newArray, _afterNode, vnode) {
     let maybeAfterVNode = newNodes[idx];
     let maybeAfterNode;
     while (maybeAfterVNode) {
-      maybeAfterNode = getDomNode(maybeAfterVNode);
+      maybeAfterNode = maybeAfterVNode.i.d(maybeAfterVNode);
       if (maybeAfterNode) break;
       if (idx === bEnd) break;
       idx++;
@@ -1388,13 +1401,15 @@ function updateArray(newArray, _afterNode, vnode) {
 
       if (a1 !== a2) {
         let moveNode = true;
-        let maybeAfterNode = getDomNode(nodes[a1]);
+
+        const firstPrevNode = nodes[a1];
+        let maybeAfterNode = firstPrevNode.i.d(firstPrevNode);
 
         if (!maybeAfterNode) {
           let idx = a1 + 1;
           let maybeAfterVNode = newNodes[idx];
           while (maybeAfterVNode) {
-            maybeAfterNode = getDomNode(maybeAfterVNode);
+            maybeAfterNode = maybeAfterVNode.i.d(maybeAfterVNode);
             if (maybeAfterNode) break;
             if (idx === bEnd) break;
             idx++;
@@ -1673,7 +1688,7 @@ function getSiblingVNode(vnode) {
       let idx = nodes.indexOf(child);
       let node = nodes[idx + 1];
       while (node) {
-        const dom = getDomNode(node);
+        const dom = node.i.d(node);
         if (dom) {
           result = dom;
           break;
