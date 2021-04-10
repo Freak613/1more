@@ -1008,6 +1008,24 @@ describe("reconcile", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 33", async () => {
+    const container = document.getElementById("app");
+
+    render(
+      [key(1, "Before"), key(2, "2"), key(3, null), key(4, null)],
+      container,
+    );
+
+    expect(container).toMatchSnapshot();
+
+    render(
+      [key(6, "Before"), key(2, null), key(3, null), key(4, null)],
+      container,
+    );
+
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("update", () => {
