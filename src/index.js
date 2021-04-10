@@ -620,12 +620,17 @@ function getTextDomNode(vnode) {
   return vnode.n;
 }
 
+function insertTextNode(vnode, parent, afterNode) {
+  nativeInsert(vnode.n, parent, afterNode);
+}
+
 const textNodeImpl = {
   u: updateTextNode,
   z: unmountTextNode,
   r: removeTextNode,
   s: textNodeSize,
   d: getTextDomNode,
+  i: insertTextNode,
 };
 
 const createTextVirtualNode = () => ({
@@ -706,12 +711,17 @@ function getArrayDomNode(vnode) {
   if (first) return first.i.d(first);
 }
 
+function insertArrayNode(vnode, parent, afterNode) {
+  vnode.n.forEach(n => n.i.i(n, parent, afterNode));
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
   r: removeArrayNode,
   s: arrayNodeSize,
   d: getArrayDomNode,
+  i: insertArrayNode,
 };
 
 const createArrayVirtualNode = () => ({
@@ -774,12 +784,17 @@ function getTemplateDomNode(vnode) {
   return vnode.r[0];
 }
 
+function insertTemplateNode(vnode, parent, afterNode) {
+  nativeInsert(vnode.r[0], parent, afterNode);
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeTemplateNode,
   s: templateNodeSize,
   d: getTemplateDomNode,
+  i: insertTemplateNode,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -805,12 +820,17 @@ function getFragmentDomNode(vnode) {
   return vnode.z[0];
 }
 
+function insertFragmentNode(vnode, parent, afterNode) {
+  vnode.z.forEach(n => nativeInsert(n, parent, afterNode));
+}
+
 const fragmentNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeFragmentNode,
   s: fragmentNodeSize,
   d: getFragmentDomNode,
+  i: insertFragmentNode,
 };
 
 const createFragmentVirtualNode = () => ({
@@ -889,12 +909,18 @@ function getComponentDomNode(vnode) {
   return child.i.d(child);
 }
 
+function insertComponentNode(vnode, parent, afterNode) {
+  const child = vnode.q;
+  child.i.i(child, parent, afterNode);
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
   r: removeComponentNode,
   s: componentNodeSize,
   d: getComponentDomNode,
+  i: insertComponentNode,
 };
 
 const createComponentVirtualNode = () => ({
@@ -934,12 +960,15 @@ function voidNodeSize(vnode) {
 
 function getVoidDomNode(vnode) {}
 
+function insertVoidNode(vnode, parent, afterNode) {}
+
 const voidNodeImpl = {
   u: updateVoidNode,
   z: unmountVoidNode,
   r: removeVoidNode,
   s: voidNodeSize,
   d: getVoidDomNode,
+  i: insertVoidNode,
 };
 
 const createVoidVirtualNode = () => ({
@@ -1273,22 +1302,6 @@ function nativeInsert(node, parent, afterNode) {
   }
 }
 
-function insertVNode(vnode, parent, afterNode) {
-  const { t } = vnode;
-  if ((t & 1) !== 0) {
-    nativeInsert(vnode.n, parent, afterNode);
-  } else if ((t & 2) !== 0) {
-    vnode.n.forEach(n => insertVNode(n, parent, afterNode));
-  } else if ((t & 16) !== 0) {
-    insertVNode(vnode.q, parent, afterNode);
-  } else if ((t & 8) !== 0) {
-    vnode.z.forEach(n => nativeInsert(n, parent, afterNode));
-  } else if ((t & 32) !== 0) {
-  } else {
-    nativeInsert(vnode.r[0], parent, afterNode);
-  }
-}
-
 function normalizeArrayItem(value, idx) {
   if (value && (value.t & 2) !== 0) {
     return value;
@@ -1422,7 +1435,7 @@ function updateArray(newArray, _afterNode, vnode) {
         }
 
         if (moveNode) {
-          insertVNode(n, parent, maybeAfterNode);
+          n.i.i(n, parent, maybeAfterNode);
         }
 
         a = nodes[a1];
@@ -1434,7 +1447,7 @@ function updateArray(newArray, _afterNode, vnode) {
 
         n = a.i.u(b.v, a);
 
-        insertVNode(n, parent, afterNode);
+        n.i.i(n, parent, afterNode);
         newNodes[b2] = n;
       }
 
@@ -1536,7 +1549,7 @@ function updateArray(newArray, _afterNode, vnode) {
             n = nodes[P[b2]];
             n = n.i.u(newArray[b2].v, n);
 
-            insertVNode(n, parent, afterNode);
+            n.i.i(n, parent, afterNode);
           }
 
           newNodes[b2] = n;
