@@ -5374,6 +5374,28 @@ exports[`reconcile reconcile 33 2`] = `
 </div>
 `;
 
+exports[`reconcile reconcile 34 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Text
+    After
+  </div>
+</div>
+`;
+
+exports[`reconcile reconcile 34 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+    After
+  </div>
+</div>
+`;
+
 exports[`update update 1 1`] = `
 <div
   id="app"

@@ -707,8 +707,16 @@ function arrayNodeSize(vnode) {
 }
 
 function getArrayDomNode(vnode) {
-  const first = vnode.n[0];
-  if (first) return first.i.d(first);
+  const nodes = vnode.n;
+
+  let node;
+  let maybeDomNode;
+  for (node of nodes) {
+    maybeDomNode = node.i.d(node);
+    if (maybeDomNode) break;
+  }
+
+  return maybeDomNode;
 }
 
 function insertArrayNode(vnode, parent, afterNode) {

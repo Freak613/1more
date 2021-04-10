@@ -1026,6 +1026,26 @@ describe("reconcile", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 34", async () => {
+    const container = document.getElementById("app");
+
+    const App = state => {
+      return html`
+        <div>
+          ${state ? "Text" : html`<div></div>`} ${[null, null, "After"]}
+        </div>
+      `;
+    };
+
+    render(App(true), container);
+
+    expect(container).toMatchSnapshot();
+
+    render(App(false), container);
+
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("update", () => {
