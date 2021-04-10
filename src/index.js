@@ -606,8 +606,11 @@ function updateTextNode(b, vnode) {
   return vnode;
 }
 
+function unmountTextNode(vnode) {}
+
 const textNodeImpl = {
   u: updateTextNode,
+  z: unmountTextNode,
 };
 
 const createTextVirtualNode = () => ({
@@ -633,7 +636,7 @@ function updateArrayNode(b, vnode) {
         if ((notSingleNode & 2) !== 0) {
           nodes.forEach(removeVNode);
         } else {
-          nodes.forEach(unmountWalk);
+          nodes.forEach(n => n.i.z(n));
           nodeSetTextContent.call(parent, "");
         }
         vnode.n = [];
@@ -656,7 +659,7 @@ function updateArrayNode(b, vnode) {
     if ((notSingleNode & 2) !== 0) {
       nodes.forEach(removeVNode);
     } else {
-      nodes.forEach(unmountWalk);
+      nodes.forEach(n => n.i.z(n));
       nodeSetTextContent.call(parent, "");
     }
     vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
@@ -665,8 +668,13 @@ function updateArrayNode(b, vnode) {
   return vnode;
 }
 
+function unmountArrayNode(vnode) {
+  vnode.n.forEach(n => n.i.z(n));
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
+  z: unmountArrayNode,
 };
 
 const createArrayVirtualNode = () => ({
@@ -706,8 +714,20 @@ function updateTemplateNode(b, vnode) {
   return vnode;
 }
 
+function unmountTemplateNode(vnode) {
+  const refs = vnode.r;
+  const template = vnode.p.p;
+
+  const { unmountPoints } = template;
+  for (const point of unmountPoints) {
+    const n = refs[point.instKey];
+    n.i.z(n);
+  }
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
+  z: unmountTemplateNode,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -723,6 +743,7 @@ const createTemplateVirtualNode = () => ({
 
 const fragmentNodeImpl = {
   u: updateTemplateNode,
+  z: unmountTemplateNode,
 };
 
 const createFragmentVirtualNode = () => ({
@@ -768,8 +789,27 @@ function updateComponentNode(b, vnode) {
   return vnode;
 }
 
+function unmountComponentNode(vnode) {
+  const child = vnode.q;
+  child.i.z(child);
+
+  if (vnode.u !== undefined) {
+    const unmount = vnode.u;
+    if (typeof unmount === "function") {
+      unmount();
+    } else {
+      for (const hook of unmount) {
+        hook();
+      }
+    }
+  }
+
+  vnode.f = 4;
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
+  z: unmountComponentNode,
 };
 
 const createComponentVirtualNode = () => ({
@@ -799,8 +839,11 @@ function updateVoidNode(b, vnode) {
   return vnode;
 }
 
+function unmountVoidNode(vnode) {}
+
 const voidNodeImpl = {
   u: updateVoidNode,
+  z: unmountVoidNode,
 };
 
 const createVoidVirtualNode = () => ({
@@ -918,38 +961,6 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
   return vnode;
 }
 
-function unmountWalk(vnode) {
-  const { t } = vnode;
-
-  if ((t & 1) !== 0) {
-  } else if ((t & 2) !== 0) {
-    vnode.n.forEach(unmountWalk);
-  } else if ((t & 16) !== 0) {
-    unmountWalk(vnode.q);
-
-    if (vnode.u !== undefined) {
-      const unmount = vnode.u;
-      if (typeof unmount === "function") {
-        unmount();
-      } else {
-        for (const hook of unmount) {
-          hook();
-        }
-      }
-    }
-    vnode.f = 4;
-  } else if ((t & 32) !== 0) {
-  } else {
-    const refs = vnode.r;
-    const template = vnode.p.p;
-
-    const { unmountPoints } = template;
-    for (const point of unmountPoints) {
-      unmountWalk(refs[point.instKey]);
-    }
-  }
-}
-
 function _removeVNode(vnode) {
   const { t } = vnode;
 
@@ -968,7 +979,7 @@ function _removeVNode(vnode) {
 }
 
 function removeVNode(vnode) {
-  unmountWalk(vnode);
+  vnode.i.z(vnode);
   _removeVNode(vnode);
 }
 
@@ -1445,7 +1456,7 @@ function updateArray(newArray, _afterNode, vnode) {
       if ((notSingleNode & 2) !== 0) {
         nodes.forEach(removeVNode);
       } else {
-        nodes.forEach(unmountWalk);
+        nodes.forEach(n => n.i.z(n));
         nodeSetTextContent.call(parent, "");
       }
 
