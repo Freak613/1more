@@ -24,7 +24,7 @@ You can try it [on Codesandbox](https://codesandbox.io/s/1more-bfoni)
 #### html
 
 ```js
-import { html } from "1more";
+import { html, render } from "1more";
 
 const world = "World";
 
@@ -58,10 +58,16 @@ Note: Event handlers are stored as part of rendered instance and are called via 
 
 Valid childrens are: string, number, null, undefined, boolean, TemplateNode, ComponentNode and arrays of any of these types (including nested arrays).
 
-Note: null, undefined, true, false are converted to nothing, just like in React.
+Note: null, undefined, true, false values render nothing, just like in React.
 
 ```js
-import { html, key } from "1more";
+import { html, component } from "1more";
+
+const SomeComponent = component(() => {
+  return value => {
+    return html`<div>${value}</div>`;
+  };
+});
 
 // prettier-ignore
 html`
@@ -70,7 +76,7 @@ html`
     ${"Lorem ipsum"}
     ${null}
     ${false && html`<div></div>`}
-    ${SomeComponent(value)} 
+    ${SomeComponent("Content")} 
     ${items.map(i => html`<div>${item.label}</div>`)}
   </div>
 `;
@@ -121,12 +127,12 @@ html`
 `;
 ```
 
-Creates key container with given value inside. These keys are used in nodes reconciliation algorithm, to differentiate nodes from each other and perform proper updates. Valid keys are strings and numbers.
+Creates KeyNode with given value inside. These keys are used in nodes reconciliation algorithm, to differentiate nodes from each other and perform proper updates. Valid keys are strings and numbers.
 
-Note: Because it is a container, it is possible to use keys with primitive types if needed. Also, arrays are not limited to only keyed nodes, it is possible to mix them if necessary. Nodes without keys are going to be updated (or replaced) in place.
+Note: It is possible to use keys with primitive or nullable types if needed. Arrays are not limited to only keyed nodes, it is possible to mix them if necessary. Nodes without keys are going to be updated (or replaced) in place.
 
 ```js
-import { render } from "1more";
+import { render, key, html } from "1more";
 
 render(
   [
@@ -134,8 +140,8 @@ render(
     undefined,
     key(0, true),
     false,
-    key(1, Component()),
-    html`<div></div>`,
+    key(1, html`<div>First node</div>`),
+    html`<div>After</div>`,
   ],
   document.body,
 );
