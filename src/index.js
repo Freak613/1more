@@ -608,9 +608,14 @@ function updateTextNode(b, vnode) {
 
 function unmountTextNode(vnode) {}
 
+function removeTextNode(vnode) {
+  if (vnode.n) nodeRemoveChild.call(vnode.w, vnode.n);
+}
+
 const textNodeImpl = {
   u: updateTextNode,
   z: unmountTextNode,
+  r: removeTextNode,
 };
 
 const createTextVirtualNode = () => ({
@@ -672,9 +677,14 @@ function unmountArrayNode(vnode) {
   vnode.n.forEach(n => n.i.z(n));
 }
 
+function removeArrayNode(vnode) {
+  vnode.n.forEach(n => n.i.r(n));
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
+  r: removeArrayNode,
 };
 
 const createArrayVirtualNode = () => ({
@@ -725,9 +735,14 @@ function unmountTemplateNode(vnode) {
   }
 }
 
+function removeTemplateNode(vnode) {
+  elementRemove.call(vnode.r[0]);
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
+  r: removeTemplateNode,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -741,9 +756,14 @@ const createTemplateVirtualNode = () => ({
   i: templateNodeImpl,
 });
 
+function removeFragmentNode(vnode) {
+  vnode.z.forEach(n => elementRemove.call(n));
+}
+
 const fragmentNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
+  r: removeFragmentNode,
 };
 
 const createFragmentVirtualNode = () => ({
@@ -807,9 +827,15 @@ function unmountComponentNode(vnode) {
   vnode.f = 4;
 }
 
+function removeComponentNode(vnode) {
+  const child = vnode.q;
+  child.i.r(child);
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
+  r: removeComponentNode,
 };
 
 const createComponentVirtualNode = () => ({
@@ -841,9 +867,12 @@ function updateVoidNode(b, vnode) {
 
 function unmountVoidNode(vnode) {}
 
+function removeVoidNode(vnode) {}
+
 const voidNodeImpl = {
   u: updateVoidNode,
   z: unmountVoidNode,
+  r: removeVoidNode,
 };
 
 const createVoidVirtualNode = () => ({
@@ -961,26 +990,9 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
   return vnode;
 }
 
-function _removeVNode(vnode) {
-  const { t } = vnode;
-
-  if ((t & 1) !== 0) {
-    if (vnode.n) nodeRemoveChild.call(vnode.w, vnode.n);
-  } else if ((t & 2) !== 0) {
-    vnode.n.forEach(_removeVNode);
-  } else if ((t & 16) !== 0) {
-    _removeVNode(vnode.q);
-  } else if ((t & 8) !== 0) {
-    vnode.z.forEach(n => elementRemove.call(n));
-  } else if ((t & 32) !== 0) {
-  } else {
-    elementRemove.call(vnode.r[0]);
-  }
-}
-
 function removeVNode(vnode) {
   vnode.i.z(vnode);
-  _removeVNode(vnode);
+  vnode.i.r(vnode);
 }
 
 export function render(component, container) {
