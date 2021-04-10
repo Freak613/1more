@@ -612,10 +612,15 @@ function removeTextNode(vnode) {
   if (vnode.n) nodeRemoveChild.call(vnode.w, vnode.n);
 }
 
+function textNodeSize(vnode) {
+  return 1;
+}
+
 const textNodeImpl = {
   u: updateTextNode,
   z: unmountTextNode,
   r: removeTextNode,
+  s: textNodeSize,
 };
 
 const createTextVirtualNode = () => ({
@@ -681,10 +686,21 @@ function removeArrayNode(vnode) {
   vnode.n.forEach(n => n.i.r(n));
 }
 
+function arrayNodeSize(vnode) {
+  const nodes = vnode.n;
+  let size = 0;
+  let node;
+  for (node of nodes) {
+    size += node.i.s(node);
+  }
+  return size;
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
   r: removeArrayNode,
+  s: arrayNodeSize,
 };
 
 const createArrayVirtualNode = () => ({
@@ -739,10 +755,15 @@ function removeTemplateNode(vnode) {
   elementRemove.call(vnode.r[0]);
 }
 
+function templateNodeSize(vnode) {
+  return 1;
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeTemplateNode,
+  s: templateNodeSize,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -760,10 +781,15 @@ function removeFragmentNode(vnode) {
   vnode.z.forEach(n => elementRemove.call(n));
 }
 
+function fragmentNodeSize(vnode) {
+  return vnode.z.length;
+}
+
 const fragmentNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
   r: removeFragmentNode,
+  s: fragmentNodeSize,
 };
 
 const createFragmentVirtualNode = () => ({
@@ -832,10 +858,16 @@ function removeComponentNode(vnode) {
   child.i.r(child);
 }
 
+function componentNodeSize(vnode) {
+  const child = vnode.q;
+  return child.i.s(child);
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
   r: removeComponentNode,
+  s: componentNodeSize,
 };
 
 const createComponentVirtualNode = () => ({
@@ -869,10 +901,15 @@ function unmountVoidNode(vnode) {}
 
 function removeVoidNode(vnode) {}
 
+function voidNodeSize(vnode) {
+  return 0;
+}
+
 const voidNodeImpl = {
   u: updateVoidNode,
   z: unmountVoidNode,
   r: removeVoidNode,
+  s: voidNodeSize,
 };
 
 const createVoidVirtualNode = () => ({
@@ -1047,7 +1084,7 @@ function findNodeInstance(insertions, nodeIndex, refs) {
       const nodes = inst.n;
       let node;
       for (node of nodes) {
-        const size = getVNodeSize(node);
+        const size = node.i.s(node);
         if (nodeIndex <= size - 1 + shift) {
           nodeInstance = node;
           break outer;
@@ -1056,7 +1093,7 @@ function findNodeInstance(insertions, nodeIndex, refs) {
         }
       }
     } else if ((t & 16) !== 0) {
-      const size = getVNodeSize(inst);
+      const size = inst.i.s(inst);
       if (nodeIndex <= size - 1 + shift) {
         nodeInstance = inst;
         break;
@@ -1085,29 +1122,6 @@ function findNodeInstance(insertions, nodeIndex, refs) {
   return nodeInstance;
 }
 
-function getVNodeSize(vnode) {
-  let size = 0;
-  const { t } = vnode;
-  if ((t & 1) !== 0) {
-    size = 1;
-  } else if ((t & 2) !== 0) {
-    const nodes = vnode.n;
-    let node;
-    for (node of nodes) {
-      size += getVNodeSize(node);
-    }
-  } else if ((t & 16) !== 0) {
-    size = getVNodeSize(vnode.q);
-  } else if ((t & 8) !== 0) {
-    size = vnode.z.length;
-  } else if ((t & 32) !== 0) {
-    size = 0;
-  } else {
-    size = 1;
-  }
-  return size;
-}
-
 function findEventTarget(vnode, event, targets, parent) {
   let handled = false;
 
@@ -1120,7 +1134,7 @@ function findEventTarget(vnode, event, targets, parent) {
     let node;
     let nodeInstance;
     for (node of nodes) {
-      const size = getVNodeSize(node);
+      const size = node.i.s(node);
       if (nodeIdx <= size - 1 + shift) {
         nodeInstance = node;
         break;
