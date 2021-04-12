@@ -18,6 +18,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -97,6 +98,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -157,6 +159,7 @@ exports[`compiler basic basic 1 1`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div />,
@@ -252,6 +255,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -371,6 +375,7 @@ exports[`compiler basic basic 3 1`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div>
@@ -402,6 +407,7 @@ exports[`compiler basic basic 4 1`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div>
@@ -447,6 +453,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <button
@@ -493,6 +500,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <button
@@ -539,6 +547,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <input
@@ -607,6 +616,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <input />,
@@ -671,6 +681,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <input />,
@@ -709,6 +720,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div>
@@ -750,6 +762,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -806,6 +819,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div />,
@@ -977,6 +991,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -1060,6 +1075,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -1276,6 +1292,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -1746,6 +1763,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -1891,6 +1909,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2016,6 +2035,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2134,6 +2154,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2304,6 +2325,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2836,6 +2858,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2966,6 +2989,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3081,6 +3105,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3474,6 +3499,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3628,6 +3654,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [

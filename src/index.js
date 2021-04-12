@@ -660,18 +660,10 @@ function cloneArguments() {
   return arguments;
 }
 
-function createFragmentArrayGenerator(roots) {
-  return function (args) {
-    return roots.map(template => {
-      return createTemplateNode(cloneArguments(...args), template);
-    });
-  };
-}
-
-function createTemplateNodeGenerator(template) {
-  return function (args) {
-    return createTemplateNode(args, template);
-  };
+function createFragmentArray(args, template) {
+  return template.roots.map(template => {
+    return createTemplateNode(cloneArguments(...args), template);
+  });
 }
 
 function compileTemplate(strings) {
@@ -686,10 +678,16 @@ function compileTemplate(strings) {
   });
 
   if (roots.length === 1) {
-    return createTemplateNodeGenerator(roots[0]);
+    return {
+      ...roots[0],
+      gen: createTemplateNode,
+    };
   }
 
-  return createFragmentArrayGenerator(roots);
+  return {
+    roots,
+    gen: createFragmentArray,
+  };
 }
 
 function getTemplate(strings) {
@@ -700,9 +698,14 @@ function getTemplate(strings) {
   );
 }
 
+// export function html() {
+//   const gen = getTemplate(arguments[0]);
+//   return gen(arguments);
+// }
+
 export function html() {
-  const gen = getTemplate(arguments[0]);
-  return gen(arguments);
+  const template = getTemplate(arguments[0]);
+  return template.gen(arguments, template);
 }
 
 // export function html() {
