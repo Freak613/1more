@@ -289,11 +289,16 @@ function afterNodeNoop() {
   return null;
 }
 
-function compileTemplate(strings) {
-  let instanceIdx = 0;
+function createTemplateNode(args, template) {
+  args.t = 4;
+  args.p = template;
+  return args;
+}
 
+const buildHTMLString = strings => {
   let insideTag = false;
-  const html = strings
+
+  return strings
     .map(s => {
       const result = s.replace(/[\w-]+=$/, "");
       const trimmed = result.trim();
@@ -319,34 +324,9 @@ function compileTemplate(strings) {
     .replace(/(\w+"?)\s+(\w+=)/g, "$1 $2")
     .replace(/(\w+"?)\s+(\/?>)/g, "$1$2")
     .trim();
-  COMPILER_TEMPLATE.innerHTML = html;
+};
 
-  let ways = [];
-  const argsWays = [];
-  const events = [];
-  const stack = [];
-  const lastIdx = strings.length - 1;
-  const activeWayNodes = {};
-  const insertionPoints = [];
-
-  const getStackInfo = (ref, prev) => ({
-    staticsBefore: 0,
-    parentRef: ref,
-    lastRef: ref,
-    lastDataRef: prev.lastDataRef,
-    eventsPath: prev.eventsPath,
-    fullPath: prev.fullPath,
-  });
-
-  let goBack = false,
-    nextContentKey = null,
-    stackInfo = getStackInfo(null, {
-      lastDataRef: null,
-      eventsPath: "",
-      fullPath: "",
-    }),
-    nextNode = null;
-
+const wrapTextNodes = strings => {
   // Append <p /> to non DOM nodes,
   // to help compiler detect such content
   const process = str => {
@@ -365,11 +345,35 @@ function compileTemplate(strings) {
       .join("");
   };
 
-  insideTag = false;
+  return strings.map(process);
+};
 
-  strings.forEach((str, idx) => {
-    str = process(str);
+const getTemplateRepresentation = strings => {
+  const getStaticNode = () => ({
+    type: "static",
+    props: [],
+    children: [],
+    remove: false,
+  });
 
+  const getInsertionNode = propIdx => ({
+    type: "insertion",
+    propIdx,
+  });
+
+  const getAttributeNode = (name, propIdx) => ({
+    type: "attribute",
+    name,
+    propIdx,
+  });
+
+  const lastIdx = strings.length - 1;
+  const stack = [];
+
+  let insideTag = false;
+  let parent = getStaticNode();
+
+  wrapTextNodes(strings).forEach((str, idx) => {
     const strLen = str.length;
 
     const attr = str.match(/(\S+)=$/);
@@ -387,151 +391,40 @@ function compileTemplate(strings) {
       for (let cmd of commands) {
         if (cmd.length === 2) {
           // Close tag
-          stackInfo = stack.shift();
-          goBack = true;
+          parent = stack.shift();
         } else {
           // Open tag
-          nextNode = getWalkNode();
-          nextNode.refKey = instanceIdx++;
-          nextNode.getRef =
-            goBack === true ? nodeGetNextSibling : nodeGetFirstChild;
-          nextNode.prevKey = stackInfo.lastRef;
-
-          if (ways.length > 0) {
-            const next = goBack === true ? "0" : "1";
-            stackInfo.eventsPath += next;
-            stackInfo.fullPath += next;
-          }
+          const node = getStaticNode();
+          parent.children.push(node);
+          stack.unshift(parent);
+          parent = node;
 
           if (removeScheduled) {
-            const toRemovePath = stackInfo.fullPath.split("").map(Number);
-            const commentNode = tracebackReference(
-              toRemovePath,
-              COMPILER_TEMPLATE.content.firstChild,
-            );
-            const parent = commentNode.parentNode;
-            parent.removeChild(commentNode);
+            node.remove = true;
             removeScheduled = false;
+
+            // const toRemovePath = stackInfo.fullPath.split("").map(Number);
+            // const commentNode = tracebackReference(
+            //   toRemovePath,
+            //   COMPILER_TEMPLATE.content.firstChild,
+            // );
+            // const parent = commentNode.parentNode;
+            // parent.removeChild(commentNode);
+            // removeScheduled = false;
+            // TODO: Remove comment node
           }
-
-          if (nextNode.refKey === nextContentKey) {
-            activeWayNodes[nextNode.refKey] = 1;
-
-            stackInfo.lastDataRef = nextNode.refKey;
-            stackInfo.eventsPath = "";
-
-            nextContentKey = null;
-          }
-
-          if (ways.length === 0) {
-            stackInfo.lastDataRef = nextNode.refKey;
-          }
-          ways.push(nextNode);
-
-          stackInfo.staticsBefore++;
-          stackInfo.lastRef = nextNode.refKey;
-
-          stack.unshift(stackInfo);
-          stackInfo = getStackInfo(nextNode.refKey, stackInfo);
-
-          goBack = false;
         }
       }
     }
 
     if (idx !== lastIdx) {
-      const nextArgNode = getArgNode();
-      nextArgNode.propIdx = idx + 1;
-      nextArgNode.refKey = stackInfo.lastRef;
-
-      let skipArg = false;
       if (attr !== null) {
         const attrName = attr[1];
-        if (attrName[0] === "o" && attrName[1] === "n") {
-          skipArg = true;
-          nextArgNode.type = attrName.slice(2);
-
-          nextArgNode.prevRef = stackInfo.lastDataRef;
-          nextArgNode.path = stackInfo.eventsPath.split("").map(Number);
-
-          events.push(nextArgNode);
-
-          setupGlobalHandler(nextArgNode.type);
-        } else {
-          activeWayNodes[nextNode.refKey] = 1;
-          stackInfo.lastDataRef = stackInfo.lastRef;
-          stackInfo.eventsPath = "";
-
-          const prevStack = stack[0];
-          prevStack.lastDataRef = stackInfo.lastDataRef;
-          prevStack.eventsPath = stackInfo.eventsPath;
-          switch (attrName) {
-            case "class":
-              nextArgNode.applyData = setClassname;
-              nextArgNode.updateData = updateClassname;
-              break;
-            case "style":
-              nextArgNode.applyData = setStyle;
-              nextArgNode.updateData = updateStyle;
-              break;
-            default:
-              nextArgNode.applyData = createAttributeSetter(attrName);
-              nextArgNode.updateData = createAttributeUpdater(attrName);
-              break;
-          }
-        }
+        parent.props.push(getAttributeNode(attrName, idx + 1));
       } else {
-        const { parentRef } = stackInfo;
-        nextArgNode.refKey = parentRef;
-        nextArgNode.instKey = instanceIdx++;
-        nextArgNode.applyData = setContent;
-        nextArgNode.updateData = updateContent;
-
-        insertionPoints[parentRef] = insertionPoints[parentRef] || [];
-
-        insertionPoints[parentRef].push({
-          staticElemsBefore: stackInfo.staticsBefore,
-          instKey: nextArgNode.instKey,
-          propIdx: nextArgNode.propIdx,
-        });
-
-        stackInfo.staticsBefore = 0;
-
-        // Look for afterKey
-        const nextIdx = idx + 1;
-        const nextStr = strings[nextIdx].trim();
-        const hasNextStaticSibling =
-          nextStr.match(/^<\w/g) !== null ||
-          (nextStr.length > 0 && nextStr[0] !== "<");
-        const hasNextDynamicSibling = nextIdx !== lastIdx && nextStr === "";
-        const hasNextSibling = hasNextStaticSibling || hasNextDynamicSibling;
-
-        if (hasNextSibling) {
-          nextArgNode.flag |= 2;
-          nextContentKey = nextArgNode.afterKey = instanceIdx;
-          nextArgNode.afterNodeFn = hasNextStaticSibling
-            ? afterNodeDefault
-            : afterNodeInstance;
-        } else {
-          nextArgNode.afterNodeFn = afterNodeNoop;
-        }
-
-        const hasPrevStaticSibling = goBack === true;
-        const hasPrevDynamicSibling = str === "" && idx > 0;
-        const hasPrevSibling = hasPrevStaticSibling || hasPrevDynamicSibling;
-        if (hasPrevSibling) nextArgNode.flag |= 2;
-
-        activeWayNodes[parentRef] = 1;
-
-        stackInfo.lastDataRef = parentRef;
-        stackInfo.eventsPath = "";
-
-        const prevStack = stack[0];
-        prevStack.lastDataRef = stackInfo.lastDataRef;
-        prevStack.eventsPath = stackInfo.eventsPath;
+        const node = getInsertionNode(idx + 1);
+        parent.children.push(node);
       }
-
-      if (!skipArg) argsWays.push(nextArgNode);
     }
 
     const openTags = str.match(/</g);
@@ -540,6 +433,229 @@ function compileTemplate(strings) {
       (openTags ? openTags.length : 0) !== (closedTags ? closedTags.length : 0);
     if (flip) insideTag = !insideTag;
   });
+
+  return stack[stack.length - 1] || parent;
+};
+
+function compileTemplate(strings) {
+  COMPILER_TEMPLATE.innerHTML = buildHTMLString(strings);
+
+  const vdom = getTemplateRepresentation(strings);
+  // console.log({ vdom });
+
+  //
+
+  const getWalkNode = () => ({
+    getRef: null,
+    refKey: null,
+    prevKey: null,
+  });
+
+  const getArgNode = () => ({
+    flag: 0,
+    refKey: null,
+    afterKey: null,
+    instKey: null,
+    propIdx: null,
+    applyData: null,
+    updateData: null,
+    afterNodeFn: null,
+    prevRef: null,
+    type: null,
+    path: null,
+  });
+
+  let ways = [];
+  const argsWays = [];
+  const events = [];
+  const activeWayNodes = {};
+  const insertionPoints = [];
+  let instanceIdx = 0;
+
+  const compileNode = (
+    vdom,
+    idx,
+    parentRefIdx,
+    lastChildRefIdx,
+    fullPath,
+    staticsBefore,
+    parent,
+    lastDataRefIdx,
+    eventsPath,
+    domPath,
+  ) => {
+    if (vdom.type === "insertion") {
+      const nextArgNode = getArgNode();
+      nextArgNode.propIdx = vdom.propIdx;
+      nextArgNode.refKey = parentRefIdx;
+      nextArgNode.instKey = instanceIdx++;
+      nextArgNode.applyData = setContent;
+      nextArgNode.updateData = updateContent;
+
+      insertionPoints[parentRefIdx] = insertionPoints[parentRefIdx] || [];
+
+      insertionPoints[parentRefIdx].push({
+        staticElemsBefore: staticsBefore,
+        instKey: nextArgNode.instKey,
+        propIdx: nextArgNode.propIdx,
+      });
+
+      const nextSibling = parent.children[idx + 1];
+      if (nextSibling) {
+        const hasNextStaticSibling = nextSibling.type === "static";
+        const hasNextDynamicSibling = nextSibling.type === "insertion";
+        const hasNextSibling = hasNextStaticSibling || hasNextDynamicSibling;
+
+        if (hasNextSibling) {
+          nextArgNode.flag |= 2;
+          nextArgNode.afterKey = instanceIdx;
+          nextArgNode.afterNodeFn = hasNextStaticSibling
+            ? afterNodeDefault
+            : afterNodeInstance;
+        } else {
+          nextArgNode.afterNodeFn = afterNodeNoop;
+        }
+      } else {
+        nextArgNode.afterNodeFn = afterNodeNoop;
+      }
+
+      const prevSibling = parent.children[idx - 1];
+      if (prevSibling) {
+        const hasPrevStaticSibling = prevSibling.type === "static";
+        const hasPrevDynamicSibling = prevSibling.type === "insertion";
+        const hasPrevSibling = hasPrevStaticSibling || hasPrevDynamicSibling;
+        if (hasPrevSibling) nextArgNode.flag |= 2;
+      }
+
+      activeWayNodes[parentRefIdx] = 1;
+
+      argsWays.push(nextArgNode);
+
+      return [lastChildRefIdx, true];
+    }
+
+    if (vdom.remove) {
+      const commentNode = tracebackReference(
+        domPath,
+        COMPILER_TEMPLATE.content.firstChild,
+      );
+      const parent = commentNode.parentNode;
+      parent.removeChild(commentNode);
+      // return [lastChildRefIdx, false];
+    }
+
+    const nextNode = getWalkNode();
+    nextNode.refKey = instanceIdx++;
+
+    // if (idx === 0) {
+    //   nextNode.getRef = nodeGetFirstChild;
+    //   nextNode.prevKey = parentRefIdx;
+    // } else {
+    //   nextNode.getRef = nodeGetNextSibling;
+    //   nextNode.prevKey = lastChildRefIdx;
+    // }
+    if (lastChildRefIdx) {
+      nextNode.getRef = nodeGetNextSibling;
+      nextNode.prevKey = lastChildRefIdx;
+    } else {
+      nextNode.getRef = nodeGetFirstChild;
+      nextNode.prevKey = parentRefIdx;
+    }
+
+    ways.push(nextNode);
+
+    vdom.props.forEach(prop => {
+      const attrName = prop.name;
+      if (attrName[0] === "o" && attrName[1] === "n") {
+        const nextArgNode = getArgNode();
+        nextArgNode.propIdx = prop.propIdx;
+        nextArgNode.refKey = nextNode.refKey;
+        nextArgNode.type = attrName.slice(2);
+
+        nextArgNode.prevRef = lastDataRefIdx;
+        nextArgNode.path = eventsPath;
+
+        events.push(nextArgNode);
+        setupGlobalHandler(nextArgNode.type);
+      } else {
+        const nextArgNode = getArgNode();
+        nextArgNode.propIdx = prop.propIdx;
+        nextArgNode.refKey = nextNode.refKey;
+
+        activeWayNodes[nextNode.refKey] = 1;
+
+        switch (attrName) {
+          case "class":
+            nextArgNode.applyData = setClassname;
+            nextArgNode.updateData = updateClassname;
+            break;
+          case "style":
+            nextArgNode.applyData = setStyle;
+            nextArgNode.updateData = updateStyle;
+            break;
+          default:
+            nextArgNode.applyData = createAttributeSetter(attrName);
+            nextArgNode.updateData = createAttributeUpdater(attrName);
+            break;
+        }
+
+        argsWays.push(nextArgNode);
+      }
+    });
+
+    lastChildRefIdx = null;
+    staticsBefore = 0;
+
+    let hasNestedData = false;
+
+    vdom.children.forEach((child, idx) => {
+      fullPath = [...fullPath, idx === 0 ? 1 : 0];
+      eventsPath = [...eventsPath, idx === 0 ? 1 : 0];
+      domPath = [...domPath, lastChildRefIdx ? 0 : 1];
+
+      const [nextChildRefIdx, childHasNestedData] = compileNode(
+        child,
+        idx,
+        nextNode.refKey,
+        lastChildRefIdx,
+        fullPath,
+        staticsBefore,
+        vdom,
+        lastDataRefIdx,
+        eventsPath,
+        domPath,
+      );
+
+      if (childHasNestedData) {
+        lastDataRefIdx = nextChildRefIdx;
+        eventsPath = [];
+      }
+
+      if (nextChildRefIdx === lastChildRefIdx) {
+        staticsBefore = 0;
+        hasNestedData = true;
+        domPath = domPath.slice(0, -1);
+      } else {
+        staticsBefore++;
+        lastChildRefIdx = nextChildRefIdx;
+      }
+    });
+
+    if (parent) {
+      const prevSibling = parent.children[idx - 1];
+      if (prevSibling && prevSibling.type === "insertion") {
+        activeWayNodes[nextNode.refKey] = 1;
+        hasNestedData = true;
+      }
+    }
+
+    return [nextNode.refKey, hasNestedData];
+  };
+  compileNode(vdom.children[0], 0, null, null, [], 0, null, 0, [], []);
+
+  //
+
+  // ways, activeWayNodes, argsWays, events, insertionPoints
 
   ways = foldStaticTrees(ways.slice(1), activeWayNodes);
 
@@ -563,7 +679,8 @@ function compileTemplate(strings) {
     templateNode = COMPILER_TEMPLATE.content.firstChild;
   }
 
-  return {
+  const result = {
+    // gen: createTemplateNode,
     ways,
     events,
     argsWays,
@@ -574,6 +691,9 @@ function compileTemplate(strings) {
     unmountPoints,
     type,
   };
+  // console.log("New", { result });
+
+  return result;
 }
 
 function getTemplate(strings) {
@@ -583,6 +703,11 @@ function getTemplate(strings) {
       TEMPLATE_CACHE.get(strings))
   );
 }
+
+// export function html() {
+//   const template = getTemplate(arguments[0]);
+//   return template.gen(arguments, template);
+// }
 
 export function html() {
   arguments.t = 4;
