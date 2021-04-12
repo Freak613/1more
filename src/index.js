@@ -402,16 +402,6 @@ const getTemplateRepresentation = strings => {
           if (removeScheduled) {
             node.remove = true;
             removeScheduled = false;
-
-            // const toRemovePath = stackInfo.fullPath.split("").map(Number);
-            // const commentNode = tracebackReference(
-            //   toRemovePath,
-            //   COMPILER_TEMPLATE.content.firstChild,
-            // );
-            // const parent = commentNode.parentNode;
-            // parent.removeChild(commentNode);
-            // removeScheduled = false;
-            // TODO: Remove comment node
           }
         }
       }
@@ -437,14 +427,7 @@ const getTemplateRepresentation = strings => {
   return stack[stack.length - 1] || parent;
 };
 
-function compileTemplate(strings) {
-  COMPILER_TEMPLATE.innerHTML = buildHTMLString(strings);
-
-  const vdom = getTemplateRepresentation(strings);
-  // console.log({ vdom });
-
-  //
-
+const compileRoot = (vdom, domNode) => {
   const getWalkNode = () => ({
     getRef: null,
     refKey: null,
@@ -535,25 +518,14 @@ function compileTemplate(strings) {
     }
 
     if (vdom.remove) {
-      const commentNode = tracebackReference(
-        domPath,
-        COMPILER_TEMPLATE.content.firstChild,
-      );
+      const commentNode = tracebackReference(domPath, domNode);
       const parent = commentNode.parentNode;
       parent.removeChild(commentNode);
-      // return [lastChildRefIdx, false];
     }
 
     const nextNode = getWalkNode();
     nextNode.refKey = instanceIdx++;
 
-    // if (idx === 0) {
-    //   nextNode.getRef = nodeGetFirstChild;
-    //   nextNode.prevKey = parentRefIdx;
-    // } else {
-    //   nextNode.getRef = nodeGetNextSibling;
-    //   nextNode.prevKey = lastChildRefIdx;
-    // }
     if (lastChildRefIdx) {
       nextNode.getRef = nodeGetNextSibling;
       nextNode.prevKey = lastChildRefIdx;
@@ -651,16 +623,17 @@ function compileTemplate(strings) {
 
     return [nextNode.refKey, hasNestedData];
   };
-  compileNode(vdom.children[0], 0, null, null, [], 0, null, 0, [], []);
 
-  //
+  compileNode(vdom, 0, null, null, [], 0, null, 0, [], []);
 
-  // ways, activeWayNodes, argsWays, events, insertionPoints
+  const foldedWays = foldStaticTrees(ways.slice(1), activeWayNodes);
 
-  ways = foldStaticTrees(ways.slice(1), activeWayNodes);
-
-  const size = COMPILER_TEMPLATE.content.childNodes.length;
-  const refsSize = correctIndices(ways, argsWays, events, insertionPoints);
+  const refsSize = correctIndices(
+    foldedWays,
+    argsWays,
+    events,
+    insertionPoints,
+  );
   const producer = getProducer(refsSize);
 
   const unmountPoints = insertionPoints.reduce(
@@ -671,27 +644,34 @@ function compileTemplate(strings) {
   // Used in type detection to differ templates from each other
   let type = 8 | (TEMPLATE_COUNTER++ << 6);
 
-  let templateNode;
-  if (size !== 1) {
-    templateNode = nodeCloneNode.call(COMPILER_TEMPLATE.content, true);
-    type |= 16;
-  } else {
-    templateNode = COMPILER_TEMPLATE.content.firstChild;
-  }
+  return {
+    type,
+    ways: foldedWays,
+    argsWays,
+    events,
+    insertionPoints,
+    producer,
+    unmountPoints,
+    templateNode: domNode,
+  };
+};
+
+function compileTemplate(strings) {
+  COMPILER_TEMPLATE.innerHTML = buildHTMLString(strings);
+
+  const vdom = getTemplateRepresentation(strings);
+
+  const childNodes = COMPILER_TEMPLATE.content.childNodes;
+
+  const roots = vdom.children.map((child, idx) => {
+    return compileRoot(child, childNodes[idx]);
+  });
 
   const result = {
     // gen: createTemplateNode,
-    ways,
-    events,
-    argsWays,
-    producer,
-    templateNode,
-    size,
-    insertionPoints,
-    unmountPoints,
-    type,
+    ...roots[0],
+    size: 1,
   };
-  // console.log("New", { result });
 
   return result;
 }
