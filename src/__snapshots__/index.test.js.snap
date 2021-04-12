@@ -31,7 +31,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <div />
   </div>,
@@ -116,7 +115,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <div />
   </div>,
@@ -161,7 +159,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div />,
   "type": 8,
   "unmountPoints": Array [],
@@ -278,7 +275,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <tr>
     <td
       class="col-md-1"
@@ -377,7 +373,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <span>
       Space should be preserved when on single line 
@@ -409,7 +404,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <span>
       Spacing should be removed when on separate line
@@ -455,7 +449,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <button
     disabled=""
     id="test1"
@@ -502,7 +495,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <button
     disabled=""
     id="test1"
@@ -549,7 +541,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <input
     disabled=""
     id="test1"
@@ -618,7 +609,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <input />,
   "type": 8,
   "unmountPoints": Array [],
@@ -683,7 +673,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <input />,
   "type": 8,
   "unmountPoints": Array [],
@@ -722,7 +711,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Test
   </div>,
@@ -775,7 +763,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div />,
   "type": 8,
   "unmountPoints": Array [
@@ -821,7 +808,6 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div />,
   "type": 8,
   "unmountPoints": Array [],
@@ -843,18 +829,27 @@ Object {
   "events": Array [],
   "insertionPoints": Array [],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
-    <div />
-    <div />
-  </DocumentFragment>,
-  "type": 24,
+  "templateNode": <div />,
+  "type": 8,
   "unmountPoints": Array [],
   "ways": Array [],
 }
 `;
 
 exports[`compiler fragments fragments 1 2`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <div />,
+  "type": 72,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler fragments fragments 1 3`] = `
 <div
   id="app"
 >
@@ -871,24 +866,11 @@ Object {
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 0,
-      "instKey": 2,
+      "instKey": 1,
       "path": null,
       "prevRef": null,
       "propIdx": 1,
       "refKey": 0,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 0,
-      "instKey": 3,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 2,
-      "refKey": 1,
       "type": null,
       "updateData": [Function],
     },
@@ -898,54 +880,73 @@ Object {
     Object {
       "points": Array [
         Object {
-          "instKey": 2,
+          "instKey": 1,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
       ],
       "refIdx": 0,
     },
-    Object {
-      "points": Array [
-        Object {
-          "instKey": 3,
-          "propIdx": 2,
-          "staticElemsBefore": 0,
-        },
-      ],
-      "refIdx": 1,
-    },
   ],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
-    <div />
-    <div />
-  </DocumentFragment>,
-  "type": 24,
+  "templateNode": <div />,
+  "type": 8,
   "unmountPoints": Array [
     Object {
-      "instKey": 2,
+      "instKey": 1,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
-    Object {
-      "instKey": 3,
-      "propIdx": 2,
-      "staticElemsBefore": 0,
-    },
   ],
-  "ways": Array [
-    Object {
-      "getRef": [Function],
-      "prevKey": 0,
-      "refKey": 1,
-    },
-  ],
+  "ways": Array [],
 }
 `;
 
 exports[`compiler fragments fragments 2 2`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 2,
+          "staticElemsBefore": 0,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "templateNode": <div />,
+  "type": 72,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 2,
+      "staticElemsBefore": 0,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler fragments fragments 2 3`] = `
 <div
   id="app"
 >
@@ -989,7 +990,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Hello 
   </div>,
@@ -1083,7 +1083,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
     <input />
@@ -1350,7 +1349,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <div>
       Zero 
@@ -1538,7 +1536,33 @@ exports[`compiler mixed content mixed 3 2`] = `
 
 exports[`compiler mixed content mixed 4 1`] = `
 Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <div />,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler mixed content mixed 4 2`] = `
+Object {
   "argsWays": Array [
+    Object {
+      "afterKey": 4,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 2,
+      "type": null,
+      "updateData": [Function],
+    },
     Object {
       "afterKey": 5,
       "afterNodeFn": [Function],
@@ -1547,21 +1571,8 @@ Object {
       "instKey": 7,
       "path": null,
       "prevRef": null,
-      "propIdx": 1,
-      "refKey": 3,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": 6,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 2,
-      "instKey": 8,
-      "path": null,
-      "prevRef": null,
       "propIdx": 2,
-      "refKey": 3,
+      "refKey": 2,
       "type": null,
       "updateData": [Function],
     },
@@ -1570,11 +1581,11 @@ Object {
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 2,
-      "instKey": 9,
+      "instKey": 8,
       "path": null,
       "prevRef": null,
       "propIdx": 3,
-      "refKey": 3,
+      "refKey": 2,
       "type": null,
       "updateData": [Function],
     },
@@ -1584,51 +1595,47 @@ Object {
     Object {
       "points": Array [
         Object {
-          "instKey": 7,
+          "instKey": 6,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
-          "instKey": 8,
+          "instKey": 7,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
-          "instKey": 9,
+          "instKey": 8,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
       ],
-      "refIdx": 3,
+      "refIdx": 2,
     },
   ],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
+  "templateNode": <div>
     <div />
     <div>
-      <div />
-      <div>
-        Zero 
-         Second 
-         Fourth 
-      </div>
+      Zero 
+       Second 
+       Fourth 
     </div>
-  </DocumentFragment>,
-  "type": 24,
+  </div>,
+  "type": 72,
   "unmountPoints": Array [
     Object {
-      "instKey": 7,
+      "instKey": 6,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
-      "instKey": 8,
+      "instKey": 7,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
-      "instKey": 9,
+      "instKey": 8,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -1659,16 +1666,11 @@ Object {
       "prevKey": 4,
       "refKey": 5,
     },
-    Object {
-      "getRef": [Function],
-      "prevKey": 5,
-      "refKey": 6,
-    },
   ],
 }
 `;
 
-exports[`compiler mixed content mixed 4 2`] = `
+exports[`compiler mixed content mixed 4 3`] = `
 <div
   id="app"
 >
@@ -1777,7 +1779,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
     <div>
@@ -1913,7 +1914,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
      Second 
@@ -2039,7 +2039,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
      Second 
      Fourth 
@@ -2158,7 +2157,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <div />
     <div>
@@ -2324,7 +2322,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <input />
     Zero
@@ -2441,7 +2438,7 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 20,
+      "instKey": 10,
       "path": null,
       "prevRef": null,
       "propIdx": 1,
@@ -2454,20 +2451,20 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 21,
+      "instKey": 11,
       "path": null,
       "prevRef": null,
       "propIdx": 2,
-      "refKey": 8,
+      "refKey": 7,
       "type": null,
       "updateData": [Function],
     },
     Object {
-      "afterKey": 10,
+      "afterKey": 9,
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 2,
-      "instKey": 22,
+      "instKey": 12,
       "path": null,
       "prevRef": null,
       "propIdx": 3,
@@ -2480,63 +2477,11 @@ Object {
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 2,
-      "instKey": 23,
+      "instKey": 13,
       "path": null,
       "prevRef": null,
       "propIdx": 4,
       "refKey": 0,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": null,
-      "applyData": [Function],
-      "flag": 0,
-      "instKey": 24,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 5,
-      "refKey": 11,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": null,
-      "applyData": [Function],
-      "flag": 0,
-      "instKey": 25,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 6,
-      "refKey": 17,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": 19,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 2,
-      "instKey": 26,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 7,
-      "refKey": 2,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 2,
-      "instKey": 27,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 8,
-      "refKey": 2,
       "type": null,
       "updateData": [Function],
     },
@@ -2546,90 +2491,46 @@ Object {
     Object {
       "points": Array [
         Object {
-          "instKey": 22,
+          "instKey": 12,
           "propIdx": 3,
           "staticElemsBefore": 8,
         },
         Object {
-          "instKey": 23,
+          "instKey": 13,
           "propIdx": 4,
           "staticElemsBefore": 2,
         },
       ],
       "refIdx": 0,
     },
-    Object {
-      "points": Array [
-        Object {
-          "instKey": 26,
-          "propIdx": 7,
-          "staticElemsBefore": 8,
-        },
-        Object {
-          "instKey": 27,
-          "propIdx": 8,
-          "staticElemsBefore": 2,
-        },
-      ],
-      "refIdx": 2,
-    },
   ],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
+  "templateNode": <div>
+    <input />
+    Zero
     <div>
-      <input />
-      Zero
-      <div>
-        First
-      </div>
-      Second
-      <div>
-        Third
-      </div>
-      Fourth
-      <input />
-      Fifth  
-      <input />
-       Seventh 
+      First
     </div>
+    Second
     <div>
-      <input />
-      Zero
-      <div>
-        First
-      </div>
-      Second
-      <div>
-        Third
-      </div>
-      Fourth
-      <input />
-      Fifth  
-      <input />
-       Seventh 
+      Third
     </div>
-  </DocumentFragment>,
-  "type": 24,
+    Fourth
+    <input />
+    Fifth  
+    <input />
+     Seventh 
+  </div>,
+  "type": 8,
   "unmountPoints": Array [
     Object {
-      "instKey": 22,
+      "instKey": 12,
       "propIdx": 3,
       "staticElemsBefore": 8,
     },
     Object {
-      "instKey": 23,
+      "instKey": 13,
       "propIdx": 4,
-      "staticElemsBefore": 2,
-    },
-    Object {
-      "instKey": 26,
-      "propIdx": 7,
-      "staticElemsBefore": 8,
-    },
-    Object {
-      "instKey": 27,
-      "propIdx": 8,
       "staticElemsBefore": 2,
     },
   ],
@@ -2641,12 +2542,12 @@ Object {
     },
     Object {
       "getRef": [Function],
-      "prevKey": 0,
+      "prevKey": 1,
       "refKey": 2,
     },
     Object {
       "getRef": [Function],
-      "prevKey": 1,
+      "prevKey": 2,
       "refKey": 3,
     },
     Object {
@@ -2679,61 +2580,165 @@ Object {
       "prevKey": 8,
       "refKey": 9,
     },
-    Object {
-      "getRef": [Function],
-      "prevKey": 9,
-      "refKey": 10,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 2,
-      "refKey": 11,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 11,
-      "refKey": 12,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 12,
-      "refKey": 13,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 13,
-      "refKey": 14,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 14,
-      "refKey": 15,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 15,
-      "refKey": 16,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 16,
-      "refKey": 17,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 17,
-      "refKey": 18,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 18,
-      "refKey": 19,
-    },
   ],
 }
 `;
 
 exports[`compiler mixed content mixed 10 2`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 10,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 5,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 11,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 6,
+      "refKey": 7,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": 9,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 12,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 7,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 13,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 8,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 12,
+          "propIdx": 7,
+          "staticElemsBefore": 8,
+        },
+        Object {
+          "instKey": 13,
+          "propIdx": 8,
+          "staticElemsBefore": 2,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    <input />
+    Zero
+    <div>
+      First
+    </div>
+    Second
+    <div>
+      Third
+    </div>
+    Fourth
+    <input />
+    Fifth  
+    <input />
+     Seventh 
+  </div>,
+  "type": 72,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 12,
+      "propIdx": 7,
+      "staticElemsBefore": 8,
+    },
+    Object {
+      "instKey": 13,
+      "propIdx": 8,
+      "staticElemsBefore": 2,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 5,
+      "refKey": 6,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 6,
+      "refKey": 7,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 7,
+      "refKey": 8,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 8,
+      "refKey": 9,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 10 3`] = `
 <div
   id="app"
 >
@@ -2854,7 +2859,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
     <input />
@@ -2985,7 +2989,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
     <input />
@@ -3091,7 +3094,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     Zero 
     <input />
@@ -3140,24 +3142,11 @@ Object {
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 2,
-      "instKey": 2,
+      "instKey": 1,
       "path": null,
       "prevRef": null,
       "propIdx": 2,
       "refKey": 0,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 2,
-      "instKey": 3,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 4,
-      "refKey": 1,
       "type": null,
       "updateData": [Function],
     },
@@ -3172,22 +3161,7 @@ Object {
       "path": Array [],
       "prevRef": 0,
       "propIdx": 1,
-      "refKey": 4,
-      "type": "click",
-      "updateData": null,
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": null,
-      "applyData": null,
-      "flag": 0,
-      "instKey": null,
-      "path": Array [
-        0,
-      ],
-      "prevRef": 0,
-      "propIdx": 3,
-      "refKey": 5,
+      "refKey": 2,
       "type": "click",
       "updateData": null,
     },
@@ -3196,58 +3170,91 @@ Object {
     Object {
       "points": Array [
         Object {
-          "instKey": 2,
+          "instKey": 1,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
       ],
       "refIdx": 0,
     },
-    Object {
-      "points": Array [
-        Object {
-          "instKey": 3,
-          "propIdx": 4,
-          "staticElemsBefore": 1,
-        },
-      ],
-      "refIdx": 1,
-    },
   ],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
-    <div>
-      First row: 
-    </div>
-    <div>
-      Second row: 
-    </div>
-  </DocumentFragment>,
-  "type": 24,
+  "templateNode": <div>
+    First row: 
+  </div>,
+  "type": 8,
   "unmountPoints": Array [
     Object {
-      "instKey": 2,
+      "instKey": 1,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
-    Object {
-      "instKey": 3,
-      "propIdx": 4,
-      "staticElemsBefore": 1,
-    },
   ],
-  "ways": Array [
-    Object {
-      "getRef": [Function],
-      "prevKey": 0,
-      "refKey": 1,
-    },
-  ],
+  "ways": Array [],
 }
 `;
 
 exports[`compiler mixed content mixed 14 2`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 3,
+      "refKey": 2,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    Second row: 
+  </div>,
+  "type": 72,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler mixed content mixed 14 3`] = `
 <div
   id="app"
 >
@@ -3266,28 +3273,15 @@ exports[`compiler mixed content mixed 15 1`] = `
 Object {
   "argsWays": Array [
     Object {
-      "afterKey": 3,
+      "afterKey": 2,
       "afterNodeFn": [Function],
       "applyData": [Function],
       "flag": 2,
-      "instKey": 6,
+      "instKey": 3,
       "path": null,
       "prevRef": null,
       "propIdx": 2,
       "refKey": 0,
-      "type": null,
-      "updateData": [Function],
-    },
-    Object {
-      "afterKey": 5,
-      "afterNodeFn": [Function],
-      "applyData": [Function],
-      "flag": 2,
-      "instKey": 7,
-      "path": null,
-      "prevRef": null,
-      "propIdx": 4,
-      "refKey": 2,
       "type": null,
       "updateData": [Function],
     },
@@ -3302,22 +3296,7 @@ Object {
       "path": Array [],
       "prevRef": 0,
       "propIdx": 1,
-      "refKey": 8,
-      "type": "click",
-      "updateData": null,
-    },
-    Object {
-      "afterKey": null,
-      "afterNodeFn": null,
-      "applyData": null,
-      "flag": 0,
-      "instKey": null,
-      "path": Array [
-        0,
-      ],
-      "prevRef": 0,
-      "propIdx": 3,
-      "refKey": 9,
+      "refKey": 4,
       "type": "click",
       "updateData": null,
     },
@@ -3326,45 +3305,95 @@ Object {
     Object {
       "points": Array [
         Object {
-          "instKey": 6,
+          "instKey": 3,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
       ],
       "refIdx": 0,
     },
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    First row: 
+     by me
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 3,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+  ],
+}
+`;
+
+exports[`compiler mixed content mixed 15 2`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": 2,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 3,
+      "refKey": 4,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "insertionPoints": Array [
     Object {
       "points": Array [
         Object {
-          "instKey": 7,
+          "instKey": 3,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
       ],
-      "refIdx": 2,
+      "refIdx": 0,
     },
   ],
   "producer": [Function],
-  "size": 2,
-  "templateNode": <DocumentFragment>
-    <div>
-      First row: 
-       by me
-    </div>
-    <div>
-      Second row: 
-       by me
-    </div>
-  </DocumentFragment>,
-  "type": 24,
+  "templateNode": <div>
+    Second row: 
+     by me
+  </div>,
+  "type": 72,
   "unmountPoints": Array [
     Object {
-      "instKey": 6,
-      "propIdx": 2,
-      "staticElemsBefore": 1,
-    },
-    Object {
-      "instKey": 7,
+      "instKey": 3,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
@@ -3377,29 +3406,14 @@ Object {
     },
     Object {
       "getRef": [Function],
-      "prevKey": 0,
-      "refKey": 2,
-    },
-    Object {
-      "getRef": [Function],
       "prevKey": 1,
-      "refKey": 3,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 2,
-      "refKey": 4,
-    },
-    Object {
-      "getRef": [Function],
-      "prevKey": 4,
-      "refKey": 5,
+      "refKey": 2,
     },
   ],
 }
 `;
 
-exports[`compiler mixed content mixed 15 2`] = `
+exports[`compiler mixed content mixed 15 3`] = `
 <div
   id="app"
 >
@@ -3488,7 +3502,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
     <!--Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. -->
     <!-- Render a string or number directly -->
@@ -3628,7 +3641,6 @@ Object {
     },
   ],
   "producer": [Function],
-  "size": 1,
   "templateNode": <div>
      After
     <button>
@@ -3868,14 +3880,6 @@ exports[`invalidate invalidate 5 2`] = `
   <div>
     True
   </div>
-</div>
-`;
-
-exports[`invalidate invalidate 5 3`] = `
-<div
-  id="app"
->
-  False
 </div>
 `;
 

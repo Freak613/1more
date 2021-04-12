@@ -33,6 +33,20 @@ describe("compiler", () => {
     return container;
   };
 
+  const testFragment = template => {
+    template.forEach(template => {
+      expect(template.p).toMatchSnapshot();
+    });
+
+    const container = document.getElementById("app");
+    const App = component(() => () => template);
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    return container;
+  };
+
   describe("basic", () => {
     it("basic 1", () => {
       testTemplate(html`<div></div>`);
@@ -162,7 +176,7 @@ describe("compiler", () => {
 
   describe("fragments", () => {
     it("fragments 1", () => {
-      testTemplate(
+      testFragment(
         html`
           <div></div>
           <div></div>
@@ -171,7 +185,7 @@ describe("compiler", () => {
     });
 
     it("fragments 2", () => {
-      testTemplate(
+      testFragment(
         html`
           <div>${1}</div>
           <div>${2}</div>
@@ -211,7 +225,7 @@ describe("compiler", () => {
     });
 
     it("mixed 4", () => {
-      testTemplate(
+      testFragment(
         html`
           <div></div>
           <div>
@@ -278,7 +292,7 @@ describe("compiler", () => {
     });
 
     it("mixed 10", () => {
-      testTemplate(
+      testFragment(
         html`
           <div>
             <input class=${1} />
@@ -338,7 +352,7 @@ describe("compiler", () => {
     });
 
     it("mixed 14", () => {
-      testTemplate(
+      testFragment(
         html`
           <div onclick=${() => {}}>First row: ${1}</div>
           <div onclick=${() => {}}>Second row: ${2}</div>
@@ -347,7 +361,7 @@ describe("compiler", () => {
     });
 
     it("mixed 15", () => {
-      testTemplate(
+      testFragment(
         html`
           <div onclick=${() => {}}>First row: ${1} by me</div>
           <div onclick=${() => {}}>Second row: ${2} by me</div>

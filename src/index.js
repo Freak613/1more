@@ -386,7 +386,7 @@ const getTemplateRepresentation = strings => {
     }
 
     if (commands !== null) {
-      if (idx === lastIdx) commands = [commands[0]];
+      // if (idx === lastIdx) commands = [commands[0]];
 
       for (let cmd of commands) {
         if (cmd.length === 2) {
@@ -656,6 +656,24 @@ const compileRoot = (vdom, domNode) => {
   };
 };
 
+function cloneArguments() {
+  return arguments;
+}
+
+function createFragmentArrayGenerator(roots) {
+  return function (args) {
+    return roots.map(template => {
+      return createTemplateNode(cloneArguments(...args), template);
+    });
+  };
+}
+
+function createTemplateNodeGenerator(template) {
+  return function (args) {
+    return createTemplateNode(args, template);
+  };
+}
+
 function compileTemplate(strings) {
   COMPILER_TEMPLATE.innerHTML = buildHTMLString(strings);
 
@@ -667,13 +685,11 @@ function compileTemplate(strings) {
     return compileRoot(child, childNodes[idx]);
   });
 
-  const result = {
-    // gen: createTemplateNode,
-    ...roots[0],
-    size: 1,
-  };
+  if (roots.length === 1) {
+    return createTemplateNodeGenerator(roots[0]);
+  }
 
-  return result;
+  return createFragmentArrayGenerator(roots);
 }
 
 function getTemplate(strings) {
@@ -684,16 +700,16 @@ function getTemplate(strings) {
   );
 }
 
-// export function html() {
-//   const template = getTemplate(arguments[0]);
-//   return template.gen(arguments, template);
-// }
-
 export function html() {
-  arguments.t = 4;
-  arguments.p = getTemplate(arguments[0]);
-  return arguments;
+  const gen = getTemplate(arguments[0]);
+  return gen(arguments);
 }
+
+// export function html() {
+//   arguments.t = 4;
+//   arguments.p = getTemplate(arguments[0]);
+//   return arguments;
+// }
 
 // Virtual Nodes
 
@@ -1291,10 +1307,10 @@ function findNodeInstance(insertions, nodeIndex, refs) {
     }
   }
 
-  return nodeInstance;
+  return [nodeInstance, shift];
 }
 
-function findEventTarget(vnode, event, targets, parent) {
+function findEventTarget(vnode, event, targets, parent, outerShift) {
   let handled = false;
 
   const { t } = vnode;
@@ -1302,7 +1318,7 @@ function findEventTarget(vnode, event, targets, parent) {
   } else if ((t & 2) !== 0) {
     const nodeIdx = indexOf.call(nodeGetChildNodes.call(parent), targets[0]);
     const nodes = vnode.n;
-    let shift = 0;
+    let shift = outerShift;
     let node;
     let nodeInstance;
     for (node of nodes) {
@@ -1315,10 +1331,10 @@ function findEventTarget(vnode, event, targets, parent) {
       }
     }
     if (nodeInstance) {
-      handled = findEventTarget(nodeInstance, event, targets, parent);
+      handled = findEventTarget(nodeInstance, event, targets, parent, shift);
     }
   } else if ((t & 16) !== 0) {
-    handled = findEventTarget(vnode.q, event, targets, parent);
+    handled = findEventTarget(vnode.q, event, targets, parent, outerShift);
   } else if ((t & 32) !== 0) {
   } else {
     // Template or Fragment
@@ -1361,7 +1377,7 @@ function findEventTarget(vnode, event, targets, parent) {
             targets[idx + 1],
           );
 
-          const inst = findNodeInstance(
+          const [inst, shift] = findNodeInstance(
             insertionPoints[i2].points,
             nodeIdx,
             refs,
@@ -1370,8 +1386,9 @@ function findEventTarget(vnode, event, targets, parent) {
             handled = findEventTarget(
               inst,
               event,
-              targets.slice(idx),
+              targets.slice(idx + 1),
               insertionRefs[i2],
+              shift,
             );
           }
         }
@@ -1392,7 +1409,7 @@ function globalEventHandler(event) {
     const nodeInstance = node.$INST;
 
     if (nodeInstance !== undefined) {
-      findEventTarget(nodeInstance.c, event, targets.reverse(), node);
+      findEventTarget(nodeInstance.c, event, targets.reverse(), node, 0);
       targets = [];
     }
     if (node.parentNode === null) break;
