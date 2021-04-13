@@ -1414,6 +1414,23 @@ describe("update", () => {
     render(null, container);
     expect(container).toMatchSnapshot();
   });
+
+  it("update 31", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+
+    const App = () => {
+      return html`<div>${state ? "Some" : ["First"]}</div>`;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("events", () => {

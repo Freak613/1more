@@ -6408,3 +6408,23 @@ exports[`update update 30 2`] = `
   id="app"
 />
 `;
+
+exports[`update update 31 1`] = `
+<div
+  id="app"
+>
+  <div>
+    First
+  </div>
+</div>
+`;
+
+exports[`update update 31 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Some
+  </div>
+</div>
+`;

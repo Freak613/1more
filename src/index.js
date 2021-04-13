@@ -462,29 +462,18 @@ const compileRoot = (vdom, domNode) => {
       const nextSibling = parent.children[idx + 1];
       if (nextSibling) {
         const hasNextStaticSibling = nextSibling.type === "static";
-        const hasNextDynamicSibling = nextSibling.type === "insertion";
-        const hasNextSibling = hasNextStaticSibling || hasNextDynamicSibling;
 
-        if (hasNextSibling) {
-          nextArgNode.flag |= 2;
-          nextArgNode.afterKey = instanceIdx;
-          nextArgNode.afterNodeFn = hasNextStaticSibling
-            ? afterNodeDefault
-            : afterNodeInstance;
-        } else {
-          nextArgNode.afterNodeFn = afterNodeNoop;
-        }
+        nextArgNode.flag |= 2;
+        nextArgNode.afterKey = instanceIdx;
+        nextArgNode.afterNodeFn = hasNextStaticSibling
+          ? afterNodeDefault
+          : afterNodeInstance;
       } else {
         nextArgNode.afterNodeFn = afterNodeNoop;
       }
 
       const prevSibling = parent.children[idx - 1];
-      if (prevSibling) {
-        const hasPrevStaticSibling = prevSibling.type === "static";
-        const hasPrevDynamicSibling = prevSibling.type === "insertion";
-        const hasPrevSibling = hasPrevStaticSibling || hasPrevDynamicSibling;
-        if (hasPrevSibling) nextArgNode.flag |= 2;
-      }
+      if (prevSibling) nextArgNode.flag |= 2;
 
       activeWayNodes[parentRefIdx] = 1;
 
