@@ -837,6 +837,320 @@ exports[`compiler basic basic 12 2`] = `
 </div>
 `;
 
+exports[`compiler dynamic roots dynamic 1 1`] = `"Content"`;
+
+exports[`compiler dynamic roots dynamic 1 2`] = `
+<div
+  id="app"
+>
+  Content
+</div>
+`;
+
+exports[`compiler dynamic roots dynamic 2 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    Header 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 2 2`] = `"Content"`;
+
+exports[`compiler dynamic roots dynamic 2 3`] = `"After"`;
+
+exports[`compiler dynamic roots dynamic 2 4`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 4,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    Footer 
+  </div>,
+  "type": 72,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 4,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 2 5`] = `
+<div
+  id="app"
+>
+  <div>
+    Header 
+    left
+  </div>
+  Content
+  After
+  <div>
+    Footer 
+    right
+  </div>
+</div>
+`;
+
+exports[`compiler dynamic roots dynamic 3 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": Header ,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 3 2`] = `"Content"`;
+
+exports[`compiler dynamic roots dynamic 3 3`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode":  After,
+  "type": 72,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 3 4`] = `
+<div
+  id="app"
+>
+  Header 
+  Content
+   After
+</div>
+`;
+
+exports[`compiler dynamic roots dynamic 4 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": Count: ,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 4 2`] = `0`;
+
+exports[`compiler dynamic roots dynamic 4 3`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 2,
+      "refKey": 1,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <button>
+    Reset
+  </button>,
+  "type": 72,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 4 4`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 3,
+      "refKey": 1,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <button>
+    +
+  </button>,
+  "type": 136,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 4 5`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 4,
+      "refKey": 1,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <button>
+    -
+  </button>,
+  "type": 200,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 4 6`] = `
+<div
+  id="app"
+>
+  Count: 
+  0
+  <button>
+    Reset
+  </button>
+  <button>
+    +
+  </button>
+  <button>
+    -
+  </button>
+</div>
+`;
+
+exports[`compiler dynamic roots dynamic 5 1`] = `
+Object {
+  "argsWays": Array [],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": Hello,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler dynamic roots dynamic 5 2`] = `"World"`;
+
+exports[`compiler dynamic roots dynamic 5 3`] = `
+<div
+  id="app"
+>
+  Hello
+  World
+</div>
+`;
+
 exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],

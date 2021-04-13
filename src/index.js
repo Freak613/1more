@@ -1780,22 +1780,12 @@ function getSiblingVNode(vnode) {
       child = parent;
       parent = child.x;
     } else {
-      // Template of Fragment
+      // Template
       const arg = child.a;
       const refs = parent.r;
       const dom = arg.afterNodeFn(refs);
       result = dom;
       break;
-
-      // TODO: Handle templates with dynamic roots,
-      // allowing to search for sibling in higher node
-
-      // if (dom) {
-      //   result = dom;
-      //   break;
-      // }
-      // child = parent;
-      // parent = child.x;
     }
   }
   return result;

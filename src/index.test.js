@@ -33,9 +33,25 @@ describe("compiler", () => {
     return container;
   };
 
+  const testRawInsertion = template => {
+    expect(template).toMatchSnapshot();
+
+    const container = document.getElementById("app");
+    const App = component(() => () => template);
+    render(App(), container);
+
+    expect(container).toMatchSnapshot();
+
+    return container;
+  };
+
   const testFragment = template => {
     template.forEach(template => {
-      expect(template.p).toMatchSnapshot();
+      if (typeof template === "object") {
+        expect(template.p).toMatchSnapshot();
+      } else {
+        expect(template).toMatchSnapshot();
+      }
     });
 
     const container = document.getElementById("app");
@@ -191,6 +207,37 @@ describe("compiler", () => {
           <div>${2}</div>
         `,
       );
+    });
+  });
+
+  describe("dynamic roots", () => {
+    it("dynamic 1", () => {
+      testRawInsertion(html`${"Content"}`);
+    });
+
+    it("dynamic 2", () => {
+      testFragment(html`
+        <div>Header ${"left"}</div>
+        ${"Content"} ${"After"}
+        <div>Footer ${"right"}</div>
+      `);
+    });
+
+    it("dynamic 3", () => {
+      testFragment(html`Header ${"Content"} After`);
+    });
+
+    it("dynamic 4", () => {
+      testFragment(html`
+        Count: ${0}
+        <button onclick=${() => {}}>Reset</button>
+        <button onclick=${() => {}}>+</button>
+        <button onclick=${() => {}}>-</button>
+      `);
+    });
+
+    it("dynamic 5", () => {
+      testFragment(html`Hello ${"World"}`);
     });
   });
 
