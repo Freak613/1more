@@ -841,6 +841,7 @@ exports[`compiler fragments fragments 1 1`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div />,
@@ -854,6 +855,7 @@ exports[`compiler fragments fragments 1 2`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div />,
@@ -890,6 +892,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -934,6 +937,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -1555,6 +1559,7 @@ exports[`compiler mixed content mixed 4 1`] = `
 Object {
   "argsWays": Array [],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div />,
@@ -1608,6 +1613,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2509,6 +2515,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -2663,6 +2670,7 @@ Object {
     },
   ],
   "events": Array [],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3191,6 +3199,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3251,6 +3260,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3326,6 +3336,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [
@@ -3398,6 +3409,7 @@ Object {
       "updateData": null,
     },
   ],
+  "gen": [Function],
   "insertionPoints": Array [
     Object {
       "points": Array [

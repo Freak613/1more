@@ -494,7 +494,13 @@ const compileRoot = (vdom, domNode) => {
     }
 
     if (vdom.remove) {
-      const commentNode = tracebackReference(domPath, domNode);
+      let commentNode;
+      if (domPath.length === 0) {
+        commentNode = domNode;
+        domNode = commentNode.nextSibling;
+      } else {
+        commentNode = tracebackReference(domPath, domNode);
+      }
       const parent = commentNode.parentNode;
       parent.removeChild(commentNode);
     }
@@ -636,9 +642,17 @@ function cloneArguments() {
   return arguments;
 }
 
+function createFragmentNode(args, template) {
+  return createTemplateNode(cloneArguments(...args), template);
+}
+
+function createRootInsertion(args, template) {
+  return args[template.propIdx];
+}
+
 function createFragmentArray(args, template) {
   return template.roots.map(template => {
-    return createTemplateNode(cloneArguments(...args), template);
+    return template.gen(args, template);
   });
 }
 
@@ -649,15 +663,26 @@ function compileTemplate(strings) {
 
   const childNodes = COMPILER_TEMPLATE.content.childNodes;
 
-  const roots = vdom.children.map((child, idx) => {
-    return compileRoot(child, childNodes[idx]);
+  const gen =
+    vdom.children.length > 1 ? createFragmentNode : createTemplateNode;
+
+  let idx = 0;
+  const roots = vdom.children.map(child => {
+    if (child.type === "insertion") {
+      return {
+        propIdx: child.propIdx,
+        gen: createRootInsertion,
+      };
+    }
+
+    return {
+      ...compileRoot(child, childNodes[idx++]),
+      gen,
+    };
   });
 
   if (roots.length === 1) {
-    return {
-      ...roots[0],
-      gen: createTemplateNode,
-    };
+    return roots[0];
   }
 
   return {
