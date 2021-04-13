@@ -150,30 +150,6 @@ function createAttributeUpdater(key) {
 }
 
 // Compiler
-function getWalkNode() {
-  return {
-    getRef: null,
-    refKey: null,
-    prevKey: null,
-  };
-}
-
-function getArgNode() {
-  return {
-    flag: 0,
-    refKey: null,
-    afterKey: null,
-    instKey: null,
-    propIdx: null,
-    applyData: null,
-    updateData: null,
-    afterNodeFn: null,
-    prevRef: null,
-    type: null,
-    path: null,
-  };
-}
-
 function foldStaticTrees(ways, activeIdx) {
   let result = [];
 
@@ -698,21 +674,10 @@ function getTemplate(strings) {
   );
 }
 
-// export function html() {
-//   const gen = getTemplate(arguments[0]);
-//   return gen(arguments);
-// }
-
 export function html() {
   const template = getTemplate(arguments[0]);
   return template.gen(arguments, template);
 }
-
-// export function html() {
-//   arguments.t = 4;
-//   arguments.p = getTemplate(arguments[0]);
-//   return arguments;
-// }
 
 // Virtual Nodes
 
@@ -940,43 +905,6 @@ const createTemplateVirtualNode = () => ({
   i: templateNodeImpl,
 });
 
-function removeFragmentNode(vnode) {
-  vnode.z.forEach(n => elementRemove.call(n));
-}
-
-function fragmentNodeSize(vnode) {
-  return vnode.z.length;
-}
-
-function getFragmentDomNode(vnode) {
-  return vnode.z[0];
-}
-
-function insertFragmentNode(vnode, parent, afterNode) {
-  vnode.z.forEach(n => nativeInsert(n, parent, afterNode));
-}
-
-const fragmentNodeImpl = {
-  u: updateTemplateNode,
-  z: unmountTemplateNode,
-  r: removeFragmentNode,
-  s: fragmentNodeSize,
-  d: getFragmentDomNode,
-  i: insertFragmentNode,
-};
-
-const createFragmentVirtualNode = () => ({
-  t: 8,
-  p: undefined, // props
-  r: undefined, // refs
-  z: undefined, // roots
-  x: undefined, // parent vdom node
-  w: undefined, // parent dom node
-  g: undefined, // notSingleNode flag
-  a: _arg, // closest template arg
-  i: fragmentNodeImpl,
-});
-
 function updateComponentNode(b, vnode) {
   if (
     typeof b === "object" &&
@@ -1152,37 +1080,18 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.q = renderValue(view, parent, afterNode, notSingleNode, vnode);
         _depth = currentDepth;
       } else {
-        const templateInstance = props.p;
-
-        const {
-          type,
-          templateNode,
-          ways,
-          argsWays,
-          producer,
-        } = templateInstance;
-
-        const tNode = nodeCloneNode.call(templateNode, true);
-
-        const refs = producer();
-
-        if ((type & 16) !== 0) {
-          vnode = createFragmentVirtualNode();
-
-          const nodes = Array.from(nodeGetChildNodes.call(tNode));
-          vnode.z = nodes;
-
-          refs[0] = nodes[0];
-        } else {
-          vnode = createTemplateVirtualNode();
-
-          refs[0] = tNode;
-        }
-
+        vnode = createTemplateVirtualNode();
         vnode.x = parentVnode;
         vnode.w = parent;
         vnode.g = notSingleNode;
         vnode.p = props;
+
+        const { templateNode, ways, argsWays, producer } = props.p;
+
+        const tNode = nodeCloneNode.call(templateNode, true);
+
+        const refs = producer();
+        refs[0] = tNode;
         vnode.r = refs;
 
         for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
@@ -1285,14 +1194,6 @@ function findNodeInstance(insertions, nodeIndex, refs) {
       }
     } else if ((t & 16) !== 0) {
       const size = inst.i.s(inst);
-      if (nodeIndex <= size - 1 + shift) {
-        nodeInstance = inst;
-        break;
-      } else {
-        shift += size;
-      }
-    } else if ((t & 8) !== 0) {
-      const size = inst.z.length;
       if (nodeIndex <= size - 1 + shift) {
         nodeInstance = inst;
         break;
