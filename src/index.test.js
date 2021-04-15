@@ -166,6 +166,18 @@ describe("compiler", () => {
     it("basic 12", () => {
       testTemplate(html`<div class=${""} />`);
     });
+
+    it("basic 13", () => {
+      testTemplate(html`
+        <div>
+          <div class=${""}></div>
+          <div class=${"   "}></div>
+          <div class=${null}></div>
+          <div class=${undefined}></div>
+          <div class=${"   test   "}></div>
+        </div>
+      `);
+    });
   });
 
   describe("afterNode", () => {
@@ -325,13 +337,13 @@ describe("compiler", () => {
       testTemplate(
         html`
           <div>
-            <input class=${1} />
+            <input class=${"some"} />
             Zero
             <div>First</div>
             Second
             <div>Third</div>
             Fourth
-            <input class=${1} />
+            <input class=${"some"} />
             Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
           </div>
         `,
@@ -342,23 +354,23 @@ describe("compiler", () => {
       testFragment(
         html`
           <div>
-            <input class=${1} />
+            <input class=${"some"} />
             Zero
             <div>First</div>
             Second
             <div>Third</div>
             Fourth
-            <input class=${1} />
+            <input class=${"some"} />
             Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
           </div>
           <div>
-            <input class=${1} />
+            <input class=${"some"} />
             Zero
             <div>First</div>
             Second
             <div>Third</div>
             Fourth
-            <input class=${1} />
+            <input class=${"some"} />
             Fifth ${"Sixth"} <input /> Seventh ${"Eighth"}
           </div>
         `,
@@ -1422,6 +1434,31 @@ describe("update", () => {
 
     const App = () => {
       return html`<div>${state ? "Some" : ["First"]}</div>`;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 32", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+
+    const App = () => {
+      return html`
+        <div>
+          <div class=${state ? "" : "cool"}></div>
+          <div class=${state ? "    " : "cool"}></div>
+          <div class=${state ? null : "cool"}></div>
+          <div class=${state ? undefined : "cool"}></div>
+          <div class=${state ? "    cool    " : "cool"}></div>
+        </div>
+      `;
     };
 
     render(App(), container);

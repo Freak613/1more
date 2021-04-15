@@ -833,7 +833,141 @@ exports[`compiler basic basic 12 2`] = `
 <div
   id="app"
 >
-  <div />
+  <div
+    class=""
+  />
+</div>
+`;
+
+exports[`compiler basic basic 13 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 6,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 7,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 2,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 8,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 3,
+      "refKey": 3,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 9,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 4,
+      "refKey": 4,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 10,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 5,
+      "refKey": 5,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <div>
+    <div />
+    <div />
+    <div />
+    <div />
+    <div />
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 2,
+      "refKey": 3,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 3,
+      "refKey": 4,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 4,
+      "refKey": 5,
+    },
+  ],
+}
+`;
+
+exports[`compiler basic basic 13 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      class=""
+    />
+    <div
+      class="   "
+    />
+    <div />
+    <div />
+    <div
+      class="   test   "
+    />
+  </div>
 </div>
 `;
 
@@ -2749,7 +2883,7 @@ exports[`compiler mixed content mixed 9 2`] = `
 >
   <div>
     <input
-      class="1"
+      class="some"
     />
     Zero
     <div>
@@ -2761,7 +2895,7 @@ exports[`compiler mixed content mixed 9 2`] = `
     </div>
     Fourth
     <input
-      class="1"
+      class="some"
     />
     Fifth  
     Sixth
@@ -3088,7 +3222,7 @@ exports[`compiler mixed content mixed 10 3`] = `
 >
   <div>
     <input
-      class="1"
+      class="some"
     />
     Zero
     <div>
@@ -3100,7 +3234,7 @@ exports[`compiler mixed content mixed 10 3`] = `
     </div>
     Fourth
     <input
-      class="1"
+      class="some"
     />
     Fifth  
     Sixth
@@ -3110,7 +3244,7 @@ exports[`compiler mixed content mixed 10 3`] = `
   </div>
   <div>
     <input
-      class="1"
+      class="some"
     />
     Zero
     <div>
@@ -3122,7 +3256,7 @@ exports[`compiler mixed content mixed 10 3`] = `
     </div>
     Fourth
     <input
-      class="1"
+      class="some"
     />
     Fifth  
     Sixth
@@ -6425,6 +6559,50 @@ exports[`update update 31 2`] = `
 >
   <div>
     Some
+  </div>
+</div>
+`;
+
+exports[`update update 32 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      class="cool"
+    />
+    <div
+      class="cool"
+    />
+    <div
+      class="cool"
+    />
+    <div
+      class="cool"
+    />
+    <div
+      class="cool"
+    />
+  </div>
+</div>
+`;
+
+exports[`update update 32 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      class=""
+    />
+    <div
+      class="    "
+    />
+    <div />
+    <div />
+    <div
+      class="    cool    "
+    />
   </div>
 </div>
 `;

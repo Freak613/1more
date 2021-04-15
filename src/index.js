@@ -75,11 +75,16 @@ function updateContent(refs, v) {
 }
 
 function setClassname(refs, v) {
-  if (v) elementSetClassName.call(refs[this.refKey], v);
+  if (typeof v === "string") elementSetClassName.call(refs[this.refKey], v);
 }
 
 function updateClassname(refs, v) {
-  elementSetClassName.call(refs[this.refKey], v);
+  const node = refs[this.refKey];
+  if (typeof v === "string") {
+    elementSetClassName.call(node, v);
+  } else {
+    elementRemoveAttribute.call(node, "class");
+  }
 }
 
 function setStyle(refs, v) {
