@@ -6387,7 +6387,9 @@ exports[`update update 16 2`] = `
 <div
   id="app"
 >
-  <div />
+  <div
+    data-testid="false"
+  />
 </div>
 `;
 

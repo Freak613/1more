@@ -139,27 +139,30 @@ function updateStyle(refs, b) {
   refs[this.instKey] = b;
 }
 
-// function createPropertySetter(key) {
-//   return function (refs, v) {
-//     refs[this.refKey][key] = v;
-//   }
-// }
+function createPropertySetter(key) {
+  return function (refs, v) {
+    if (v !== null && v !== undefined) {
+      refs[this.refKey][key] = v;
+    }
+  };
+}
 
-// function createPropertyUpdater(key) {
-//   return function (refs, v) {
-//     refs[this.refKey][key] = v;
-//   }
-// }
+function createPropertyUpdater(key) {
+  return function (refs, v) {
+    const node = refs[this.refKey];
+    if (v !== null && v !== undefined) {
+      node[key] = v;
+    } else {
+      // Remove property via removeAttribute
+      throw new Error("Remove property");
+    }
+  };
+}
 
 function createAttributeSetter(key) {
   return function (refs, v) {
-    if (!v) return;
-
-    const node = refs[this.refKey];
-    if (key in node) {
-      node[key] = v;
-    } else {
-      elementSetAttribute.call(node, key, v);
+    if (v !== null && v !== undefined) {
+      elementSetAttribute.call(refs[this.refKey], key, v);
     }
   };
 }
@@ -167,17 +170,15 @@ function createAttributeSetter(key) {
 function createAttributeUpdater(key) {
   return function (refs, v) {
     const node = refs[this.refKey];
-    if (key in node) {
-      node[key] = v;
-    } else if (v === false) {
-      elementRemoveAttribute.call(node, key);
-    } else {
+    if (v !== null && v !== undefined) {
       elementSetAttribute.call(node, key, v);
+    } else {
+      elementRemoveAttribute.call(node, key);
     }
   };
 }
 
-// const TAG_KNOWLEDGE_BASE = {};
+const TAG_KNOWLEDGE_BASE = {};
 
 // Compiler
 function foldStaticTrees(ways, activeIdx) {
@@ -567,8 +568,49 @@ const compileRoot = (vdom, domNode) => {
             nextArgNode.updateData = updateStyle;
             break;
           default: {
-            nextArgNode.applyData = createAttributeSetter(attrName);
-            nextArgNode.updateData = createAttributeUpdater(attrName);
+            const { tag } = vdom;
+            let knownTag = TAG_KNOWLEDGE_BASE[tag];
+            if (knownTag) {
+              const known = knownTag[attrName];
+              if (known) {
+                if (known.type === "property") {
+                  nextArgNode.applyData = createPropertySetter(attrName);
+                  nextArgNode.updateData = createPropertyUpdater(attrName);
+                } else {
+                  nextArgNode.applyData = createAttributeSetter(attrName);
+                  nextArgNode.updateData = createAttributeUpdater(attrName);
+                }
+              } else {
+                const node = tracebackReference(domPath, domNode);
+                const isProperty = attrName in node;
+                knownTag[attrName] = {
+                  type: isProperty ? "property" : "attribute",
+                };
+                if (isProperty) {
+                  nextArgNode.applyData = createPropertySetter(attrName);
+                  nextArgNode.updateData = createPropertyUpdater(attrName);
+                } else {
+                  nextArgNode.applyData = createAttributeSetter(attrName);
+                  nextArgNode.updateData = createAttributeUpdater(attrName);
+                }
+              }
+            } else {
+              knownTag = TAG_KNOWLEDGE_BASE[tag] = {};
+
+              const node = tracebackReference(domPath, domNode);
+              const isProperty = attrName in node;
+              knownTag[attrName] = {
+                type: isProperty ? "property" : "attribute",
+              };
+              if (isProperty) {
+                nextArgNode.applyData = createPropertySetter(attrName);
+                nextArgNode.updateData = createPropertyUpdater(attrName);
+              } else {
+                nextArgNode.applyData = createAttributeSetter(attrName);
+                nextArgNode.updateData = createAttributeUpdater(attrName);
+              }
+            }
+
             break;
           }
         }
