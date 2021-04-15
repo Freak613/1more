@@ -175,6 +175,7 @@ describe("compiler", () => {
           <div class=${null}></div>
           <div class=${undefined}></div>
           <div class=${"   test   "}></div>
+          <div className=${"test"}></div>
         </div>
       `);
     });

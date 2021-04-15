@@ -139,6 +139,18 @@ function updateStyle(refs, b) {
   refs[this.instKey] = b;
 }
 
+// function createPropertySetter(key) {
+//   return function (refs, v) {
+//     refs[this.refKey][key] = v;
+//   }
+// }
+
+// function createPropertyUpdater(key) {
+//   return function (refs, v) {
+//     refs[this.refKey][key] = v;
+//   }
+// }
+
 function createAttributeSetter(key) {
   return function (refs, v) {
     if (!v) return;
@@ -164,6 +176,8 @@ function createAttributeUpdater(key) {
     }
   };
 }
+
+// const TAG_KNOWLEDGE_BASE = {};
 
 // Compiler
 function foldStaticTrees(ways, activeIdx) {
@@ -341,7 +355,8 @@ const wrapTextNodes = strings => {
 };
 
 const getTemplateRepresentation = strings => {
-  const getStaticNode = () => ({
+  const getStaticNode = tag => ({
+    tag,
     type: "static",
     props: [],
     children: [],
@@ -370,7 +385,7 @@ const getTemplateRepresentation = strings => {
 
     const attr = str.match(/(\S+)=$/);
 
-    let commands = str.match(/<\/?|[\/-]>/g);
+    const commands = str.match(/(<[\w-]+|<\/|<!--|->|\/>)/g);
 
     let removeScheduled = false;
     if (strLen > 0 && !insideTag && !str.match(/^(<\/?|\/?>)/)) {
@@ -378,15 +393,13 @@ const getTemplateRepresentation = strings => {
     }
 
     if (commands !== null) {
-      // if (idx === lastIdx) commands = [commands[0]];
-
       for (let cmd of commands) {
-        if (cmd.length === 2) {
+        if (cmd[1] === ">" || cmd[1] === "/") {
           // Close tag
           parent = stack.shift();
         } else {
           // Open tag
-          const node = getStaticNode();
+          const node = getStaticNode(cmd.slice(1));
           parent.children.push(node);
           stack.unshift(parent);
           parent = node;
@@ -545,6 +558,7 @@ const compileRoot = (vdom, domNode) => {
 
         switch (attrName) {
           case "class":
+          case "className":
             nextArgNode.applyData = setClassname;
             nextArgNode.updateData = updateClassname;
             break;
@@ -552,10 +566,11 @@ const compileRoot = (vdom, domNode) => {
             nextArgNode.applyData = setStyle;
             nextArgNode.updateData = updateStyle;
             break;
-          default:
+          default: {
             nextArgNode.applyData = createAttributeSetter(attrName);
             nextArgNode.updateData = createAttributeUpdater(attrName);
             break;
+          }
         }
 
         argsWays.push(nextArgNode);

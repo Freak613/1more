@@ -847,7 +847,7 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 6,
+      "instKey": 7,
       "path": null,
       "prevRef": null,
       "propIdx": 1,
@@ -860,7 +860,7 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 7,
+      "instKey": 8,
       "path": null,
       "prevRef": null,
       "propIdx": 2,
@@ -873,7 +873,7 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 8,
+      "instKey": 9,
       "path": null,
       "prevRef": null,
       "propIdx": 3,
@@ -886,7 +886,7 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 9,
+      "instKey": 10,
       "path": null,
       "prevRef": null,
       "propIdx": 4,
@@ -899,11 +899,24 @@ Object {
       "afterNodeFn": null,
       "applyData": [Function],
       "flag": 0,
-      "instKey": 10,
+      "instKey": 11,
       "path": null,
       "prevRef": null,
       "propIdx": 5,
       "refKey": 5,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 12,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 6,
+      "refKey": 6,
       "type": null,
       "updateData": [Function],
     },
@@ -913,6 +926,7 @@ Object {
   "insertionPoints": Array [],
   "producer": [Function],
   "templateNode": <div>
+    <div />
     <div />
     <div />
     <div />
@@ -947,6 +961,11 @@ Object {
       "prevKey": 4,
       "refKey": 5,
     },
+    Object {
+      "getRef": [Function],
+      "prevKey": 5,
+      "refKey": 6,
+    },
   ],
 }
 `;
@@ -966,6 +985,9 @@ exports[`compiler basic basic 13 2`] = `
     <div />
     <div
       class="   test   "
+    />
+    <div
+      class="test"
     />
   </div>
 </div>
