@@ -97,7 +97,14 @@ function setStyle(refs, v) {
 }
 
 function updateStyle(refs, b) {
-  const style = htmlElementGetStyle.call(refs[this.refKey]);
+  const node = refs[this.refKey];
+  if (!b) {
+    elementRemoveAttribute.call(node, "style");
+    refs[this.instKey] = b;
+    return;
+  }
+
+  const style = htmlElementGetStyle.call(node);
   const a = refs[this.instKey];
   let key;
   let bValue;
@@ -108,9 +115,13 @@ function updateStyle(refs, b) {
     bValue =
       objectHasOwnProperty.call(b, key) === true
         ? (matchCount++, b[key])
-        : void 0;
+        : undefined;
     if (aValue !== bValue) {
-      if (bValue !== void 0) {
+      // Setting style property to `null`
+      // will result in automatic removal
+      // of this property. (Chrome 89)
+      // The only required check is for `undefined`
+      if (bValue !== undefined) {
         style.setProperty(key, bValue);
       } else {
         style.removeProperty(key);

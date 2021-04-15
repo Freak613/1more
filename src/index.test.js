@@ -178,6 +178,18 @@ describe("compiler", () => {
         </div>
       `);
     });
+
+    it("basic 14", () => {
+      testTemplate(html`
+        <div>
+          <div style=${{}}></div>
+          <div style=${null}></div>
+          <div style=${undefined}></div>
+          <div style=${{ display: undefined }}></div>
+          <div style=${{ display: null }}></div>
+        </div>
+      `);
+    });
   });
 
   describe("afterNode", () => {
@@ -1457,6 +1469,33 @@ describe("update", () => {
           <div class=${state ? null : "cool"}></div>
           <div class=${state ? undefined : "cool"}></div>
           <div class=${state ? "    cool    " : "cool"}></div>
+        </div>
+      `;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 33", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+
+    const App = () => {
+      return html`
+        <div>
+          <div style=${state ? {} : { display: "none" }}></div>
+          <div style=${state ? null : { display: "none" }}></div>
+          <div style=${state ? undefined : { display: "none" }}></div>
+          <div style=${state ? { display: null } : { display: "none" }}></div>
+          <div
+            style=${state ? { display: undefined } : { display: "none" }}
+          ></div>
         </div>
       `;
     };
