@@ -1902,6 +1902,34 @@ describe("events", () => {
 
     expect(state).toBe(0);
   });
+
+  it("events 20", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(html`<div id="target" onclick=${null}></div>`, container);
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 21", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    render(html`<div id="target" onclick=${undefined}></div>`, container);
+    expect(container).toMatchSnapshot();
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
 });
 
 describe("invalidate", () => {

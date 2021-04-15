@@ -1295,7 +1295,8 @@ function findEventTarget(vnode, event, targets, parent, outerShift) {
           if (r === target) {
             const ev = events[i];
             if (ev.type === eventName) {
-              props[ev.propIdx](event);
+              const handler = props[ev.propIdx];
+              if (handler) handler(event);
               handled = true;
             }
           }

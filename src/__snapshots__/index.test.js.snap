@@ -4388,6 +4388,26 @@ exports[`events events 19 1`] = `
 />
 `;
 
+exports[`events events 20 1`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  />
+</div>
+`;
+
+exports[`events events 21 1`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  />
+</div>
+`;
+
 exports[`invalidate invalidate 1 1`] = `
 <div
   id="app"
