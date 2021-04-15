@@ -147,14 +147,26 @@ function createPropertySetter(key) {
   };
 }
 
+const PropertyToAttributeExceptions = {
+  acceptCharset: "accept-charset",
+  htmlFor: "for",
+  httpEquiv: "http-equiv",
+};
+
+export function propertyToAttribute(name) {
+  if (name.startsWith("aria")) {
+    return `aria-${name.slice(4).toLowerCase()}`;
+  }
+  return PropertyToAttributeExceptions[name] || name.toLowerCase();
+}
+
 function createPropertyUpdater(key) {
   return function (refs, v) {
     const node = refs[this.refKey];
     if (v !== null && v !== undefined) {
       node[key] = v;
     } else {
-      // Remove property via removeAttribute
-      throw new Error("Remove property");
+      elementRemoveAttribute.call(node, propertyToAttribute(key));
     }
   };
 }
