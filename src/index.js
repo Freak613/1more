@@ -139,6 +139,10 @@ function updateStyle(refs, b) {
   refs[this.instKey] = b;
 }
 
+function setInnerHTML() {}
+
+function updateInnerHTML() {}
+
 function createPropertySetter(key) {
   return function (refs, v) {
     if (v !== null && v !== undefined) {
@@ -578,6 +582,10 @@ const compileRoot = (vdom, domNode) => {
           case "style":
             nextArgNode.applyData = setStyle;
             nextArgNode.updateData = updateStyle;
+            break;
+          case "innerHTML":
+            nextArgNode.applyData = setInnerHTML;
+            nextArgNode.updateData = updateInnerHTML;
             break;
           default: {
             const { tag } = vdom;
