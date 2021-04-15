@@ -32,6 +32,8 @@ const characterDataSetData = getDescriptor(characterDataProto, "data").set;
 
 const indexOf = arrayProto.indexOf;
 
+const noOp = () => {};
+
 let _depth = 0;
 let _arg;
 let _getAfterNode;
@@ -586,6 +588,14 @@ const compileRoot = (vdom, domNode) => {
           case "innerHTML":
             nextArgNode.applyData = setInnerHTML;
             nextArgNode.updateData = updateInnerHTML;
+            break;
+          case "defaultChecked":
+            nextArgNode.applyData = createPropertySetter("checked");
+            nextArgNode.updateData = noOp;
+            break;
+          case "defaultValue":
+            nextArgNode.applyData = createPropertySetter("value");
+            nextArgNode.updateData = noOp;
             break;
           default: {
             const { tag } = vdom;
