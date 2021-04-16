@@ -35,9 +35,9 @@ render(element, document.body);
 
 Returns TemplateNode, containing given props and compiled HTML template. It does not create real DOM node, it's primary use is for diffing and applying updates during rendering phase. Fragments are supported (template with multiple root nodes).
 
-##### Attributes
+##### Properties and Attributes
 
-It's possible to control element attributes and use event handlers with nodes:
+It's possible to control element properties and attributes, and use event handlers with nodes:
 
 ```js
 import { html } from "1more";
@@ -52,7 +52,26 @@ html`
 `;
 ```
 
-Note: Event handlers are stored as part of rendered instance and are called via synthetic events subsystem.
+- Static attributes (that does not have dynamic bindings):
+  - Should be in the same form as in plain HTML code. Library does not perform processing or normalization of static content. For example `tabindex` instead of `tabIndex` or string representation of `style` attribute.
+- Dynamic attributes (that have dynamic bindings):
+  - Should not have quotes around them;
+  - Only one binding per attribute can be used, partial attributes are not supported;
+  - Supports both property and HTML attribute names. For example: `tabIndex` / `tabindex`.
+  - No name conversion performed. Names are going to be used exactly as specified in the template.
+  - If property and its corresponding HTML attribute has same name, values will be assigned to property. For example for `id` attribute will be used node `id` property. So it's property-first approach, with fallback to attributes when property not found in node instance.
+  - Assigning `null` or `undefined` to any property or attribute will result in removal of this attribute. For properties on native elements, library converts property name into corresponding attribute name to perform removal.
+  - There is no behavior around `disabled` or similar boolean attributes to force remove them on getting `false` value. Sometimes using direct property has same effect, for example assigning `node.disabled = false` will remove the attribute. CSS selectors seemed to use node's actual property values over HTML definition. For all other cases it's better to use `null` or `undefined` to perform removal.
+- Special dynamic attributes:
+  - `class` / `className` - accepts only strings. Assigning `null`, `undefined` or any non-string value will result in removal of this attribute.
+  - `style` - accepts objects with dashed CSS properties names. For example `background-color` instead of `backgroundColor`. Browser prefixes and custom CSS properties are supported. Assigning `null` or `undefined` to `style` will remove this attribute. Assigning `null`, `undefined` or empty string to CSS property value will remove it from element's style declaration.
+  - `defaultValue` / `defaultChecked` - can be used to assign corresponding value to node on first mount, and skipping it on updates. Thus it's possible to create uncontrolled form elements.
+  - `innerHTML` is temporarily disabled.
+- Event handlers should have name starting with `on` and actual event name. For example `onclick` instead of `onClick`. Handlers are not attached to DOM nodes, instead library use automatic event delegation that should not affect normal usage.
+- For Custom Elements:
+  - Element should be registered before call to `html` with template containing this element.
+  - Property-first approach should work fine, as long as property is exposed in element instance. When assigning `null` or `undefined` to element property, it is going to be directly assigned to element, not triggering removal. For attributes `null` and `undefined` will work as usual, removing attribute from element.
+  - Delegated events will not work properly at the moment. This is going to be changed in the future.
 
 ##### Children
 
@@ -263,9 +282,9 @@ render(Item(item), document.body);
 
 Allows to consume observable from component props. When receiving observable, it sets up subscription to it.
 
-### Synthetic events
+### Delegated events
 
-Rendered DOM nodes don't have attached event listeners. Instead renderer creates and attaches global event handlers per each event type, then use rendered app instance to discover target event handler.
+Rendered DOM nodes don't have attached event listeners. Instead renderer use global event handlers attached to `document` per each event type, then use rendered app instance to discover target event handler.
 
 Current implementation is very limited, it doesn't support bubble and capture phases of native events, and used only to find first matched target event handler.
 
