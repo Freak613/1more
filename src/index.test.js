@@ -2061,6 +2061,99 @@ describe("events", () => {
 
       expect(order).toEqual(["target", "parent"]);
     });
+
+    describe("stopPropagation", () => {
+      it("stopPropagation 1", () => {
+        const container = document.getElementById("app");
+
+        const order = [];
+
+        render(
+          html`
+            <div onclick=${() => order.push("parent")}>
+              <div
+                id="target"
+                onclick=${e => {
+                  order.push("target");
+                  e.stopPropagation();
+                }}
+              ></div>
+            </div>
+          `,
+          container,
+        );
+        expect(container).toMatchSnapshot();
+
+        const target = document.getElementById("target");
+        target.dispatchEvent(new Event("click"));
+
+        expect(order).toEqual(["target"]);
+      });
+
+      it("stopPropagation 2", () => {
+        const container = document.getElementById("app");
+
+        const order = [];
+
+        const Child = html`
+          <div
+            id="target"
+            onclick=${e => {
+              order.push("target");
+              e.stopPropagation();
+            }}
+          ></div>
+        `;
+
+        render(
+          html`<div onclick=${() => order.push("parent")}>${Child}</div>`,
+          container,
+        );
+        expect(container).toMatchSnapshot();
+
+        const target = document.getElementById("target");
+        target.dispatchEvent(new Event("click"));
+
+        expect(order).toEqual(["target"]);
+      });
+
+      it("stopPropagation 3", () => {
+        const container = document.getElementById("app");
+
+        const order = [];
+
+        const Child = html`
+          <div
+            id="target"
+            onclick=${e => {
+              order.push("target");
+            }}
+          ></div>
+        `;
+
+        render(
+          html`
+            <div onclick=${() => order.push("parent")}>
+              <div
+                onclick=${e => {
+                  order.push("child");
+                  e.stopPropagation();
+                }}
+              >
+                ${Child}
+              </div>
+            </div>
+          `,
+          container,
+        );
+        expect(container).toMatchSnapshot();
+
+        const target = document.getElementById("target");
+        target.dispatchEvent(new Event("click"));
+
+        expect(order).toEqual(["target", "child"]);
+      });
+    });
   });
 });
 

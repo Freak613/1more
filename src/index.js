@@ -9,6 +9,7 @@ const nodeProto = Node.prototype;
 const elementProto = Element.prototype;
 const characterDataProto = CharacterData.prototype;
 const arrayProto = Array.prototype;
+const eventProto = Event.prototype;
 
 const objectHasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -25,6 +26,8 @@ const elementSetClassName = getDescriptor(elementProto, "className").set;
 const elementRemove = elementProto.remove;
 const elementSetAttribute = elementProto.setAttribute;
 const elementRemoveAttribute = elementProto.removeAttribute;
+
+const eventGetCancelBubble = getDescriptor(eventProto, "cancelBubble").get;
 
 const htmlElementGetStyle = getDescriptor(HTMLElement.prototype, "style").get;
 
@@ -1019,12 +1022,17 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
   let idx = 0;
+  let isTarget = true;
+
+  // Capture phase
   for (; idx < targets.length; idx++) {
     const target = targets[idx];
 
     const i2 = insertionRefs.indexOf(target);
 
     if (i2 >= 0) {
+      isTarget = false;
+
       const parent = insertionRefs[i2];
 
       const nodeIndex = indexOf.call(
@@ -1068,6 +1076,37 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
 
   const eventsRefs = events.map(({ refKey }) => refs[refKey]);
 
+  if (isTarget) {
+    // Target phase
+    const target = targets[--idx];
+
+    const i1 = eventsRefs.indexOf(target);
+    if (i1 >= 0) {
+      const eventName = event.type;
+
+      let eventIdx = 0;
+      for (let eventRef of eventsRefs) {
+        if (eventRef === target) {
+          const ev = events[eventIdx];
+          if (ev.type === eventName) {
+            const handler = props[ev.propIdx];
+            if (handler) handler(event);
+            break;
+          }
+        }
+        eventIdx++;
+      }
+      const stopped = eventGetCancelBubble.call(event);
+      if (stopped) return;
+    }
+
+    idx--;
+  } else {
+    const stopped = eventGetCancelBubble.call(event);
+    if (stopped) return;
+  }
+
+  // Bubble phase
   for (; idx >= 0; idx--) {
     const target = targets[idx];
 
@@ -1087,6 +1126,8 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
         }
         eventIdx++;
       }
+      const stopped = eventGetCancelBubble.call(event);
+      if (stopped) break;
     }
   }
 }
