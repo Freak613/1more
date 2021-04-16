@@ -1016,6 +1016,50 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   const { p: props, r: refs } = vnode;
   const { events, insertionPoints } = props.p;
 
+  const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
+
+  let idx = 0;
+  for (; idx < targets.length; idx++) {
+    const target = targets[idx];
+
+    const i2 = insertionRefs.indexOf(target);
+
+    if (i2 >= 0) {
+      const parent = insertionRefs[i2];
+
+      const nodeIndex = indexOf.call(
+        nodeGetChildNodes.call(parent),
+        targets[idx + 1],
+      );
+
+      let nodeInstance;
+      let shift = 0;
+      for (let insertionEl of insertionPoints[i2].points) {
+        shift += insertionEl.staticElemsBefore;
+
+        const inst = refs[insertionEl.instKey];
+        const size = inst.i.s(inst);
+        if (nodeIndex <= size - 1 + shift) {
+          nodeInstance = inst;
+          break;
+        } else {
+          shift += size;
+        }
+      }
+
+      if (nodeInstance) {
+        nodeInstance.i.e(
+          nodeInstance,
+          event,
+          targets.slice(idx + 1),
+          parent,
+          shift,
+        );
+      }
+      break;
+    }
+  }
+
   events.forEach(e => {
     if (refs[e.refKey] === undefined) {
       refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
@@ -1023,11 +1067,10 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   });
 
   const eventsRefs = events.map(({ refKey }) => refs[refKey]);
-  const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
-  let idx = 0;
-  let handled = false;
-  for (let target of targets) {
+  for (; idx >= 0; idx--) {
+    const target = targets[idx];
+
     const i1 = eventsRefs.indexOf(target);
     if (i1 >= 0) {
       const eventName = event.type;
@@ -1039,54 +1082,12 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           if (ev.type === eventName) {
             const handler = props[ev.propIdx];
             if (handler) handler(event);
-            handled = true;
             break;
           }
         }
         eventIdx++;
       }
     }
-
-    if (handled === false) {
-      const i2 = insertionRefs.indexOf(target);
-
-      if (i2 >= 0) {
-        const parent = insertionRefs[i2];
-
-        const nodeIndex = indexOf.call(
-          nodeGetChildNodes.call(parent),
-          targets[idx + 1],
-        );
-
-        let nodeInstance;
-        let shift = 0;
-        for (let insertionEl of insertionPoints[i2].points) {
-          shift += insertionEl.staticElemsBefore;
-
-          const inst = refs[insertionEl.instKey];
-          const size = inst.i.s(inst);
-          if (nodeIndex <= size - 1 + shift) {
-            nodeInstance = inst;
-            break;
-          } else {
-            shift += size;
-          }
-        }
-
-        if (nodeInstance) {
-          nodeInstance.i.e(
-            nodeInstance,
-            event,
-            targets.slice(idx + 1),
-            parent,
-            shift,
-          );
-        }
-        break;
-      }
-    }
-
-    idx++;
   }
 }
 
@@ -1388,6 +1389,8 @@ function globalEventHandler(event) {
       const inst = nodeInstance.c;
       inst.i.e(inst, event, targets.reverse(), node, 0);
       targets = [];
+      // Nested roots are not supported currently.
+      break;
     }
     if (node.parentNode === null) break;
     targets.push(node);

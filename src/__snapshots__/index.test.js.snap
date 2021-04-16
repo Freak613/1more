@@ -4373,6 +4373,30 @@ exports[`compiler mixed content mixed 17 2`] = `
 </div>
 `;
 
+exports[`events bubbling bubbling 1 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events bubbling bubbling 2 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
 exports[`events events 11 1`] = `
 <div
   id="app"
