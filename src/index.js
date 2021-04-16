@@ -1267,29 +1267,7 @@ function tracebackReference(path, root) {
   return result;
 }
 
-function findNodeInstance(insertions, nodeIndex, refs) {
-  let nodeInstance = null,
-    shift = 0;
-
-  for (let insertionEl of insertions) {
-    shift += insertionEl.staticElemsBefore;
-
-    const inst = refs[insertionEl.instKey];
-    const size = inst.i.s(inst);
-    if (nodeIndex <= size - 1 + shift) {
-      nodeInstance = inst;
-      break;
-    } else {
-      shift += size;
-    }
-  }
-
-  return [nodeInstance, shift];
-}
-
 function findEventTarget(vnode, event, targets, parent, outerShift) {
-  let handled = false;
-
   const { t } = vnode;
   if ((t & 1) !== 0) {
   } else if ((t & 2) !== 0) {
@@ -1308,10 +1286,10 @@ function findEventTarget(vnode, event, targets, parent, outerShift) {
       }
     }
     if (nodeInstance) {
-      handled = findEventTarget(nodeInstance, event, targets, parent, shift);
+      findEventTarget(nodeInstance, event, targets, parent, shift);
     }
   } else if ((t & 16) !== 0) {
-    handled = findEventTarget(vnode.q, event, targets, parent, outerShift);
+    findEventTarget(vnode.q, event, targets, parent, outerShift);
   } else if ((t & 32) !== 0) {
   } else {
     // Template or Fragment
@@ -1328,56 +1306,69 @@ function findEventTarget(vnode, event, targets, parent, outerShift) {
     const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
     let idx = 0;
+    let handled = false;
     for (let target of targets) {
       const i1 = eventsRefs.indexOf(target);
       if (i1 >= 0) {
         const eventName = event.type;
 
-        // Multiple handlers can be attached to one node
-        eventsRefs.forEach((r, i) => {
-          if (r === target) {
-            const ev = events[i];
+        let eventIdx = 0;
+        for (let eventRef of eventsRefs) {
+          if (eventRef === target) {
+            const ev = events[eventIdx];
             if (ev.type === eventName) {
               const handler = props[ev.propIdx];
               if (handler) handler(event);
               handled = true;
+              break;
             }
           }
-        });
+          eventIdx++;
+        }
       }
 
       if (handled === false) {
         const i2 = insertionRefs.indexOf(target);
 
         if (i2 >= 0) {
-          const nodeIdx = indexOf.call(
-            nodeGetChildNodes.call(insertionRefs[i2]),
+          const parent = insertionRefs[i2];
+
+          const nodeIndex = indexOf.call(
+            nodeGetChildNodes.call(parent),
             targets[idx + 1],
           );
 
-          const [inst, shift] = findNodeInstance(
-            insertionPoints[i2].points,
-            nodeIdx,
-            refs,
-          );
-          if (inst !== null) {
-            handled = findEventTarget(
-              inst,
+          let nodeInstance;
+          let shift = 0;
+          for (let insertionEl of insertionPoints[i2].points) {
+            shift += insertionEl.staticElemsBefore;
+
+            const inst = refs[insertionEl.instKey];
+            const size = inst.i.s(inst);
+            if (nodeIndex <= size - 1 + shift) {
+              nodeInstance = inst;
+              break;
+            } else {
+              shift += size;
+            }
+          }
+
+          if (nodeInstance) {
+            findEventTarget(
+              nodeInstance,
               event,
               targets.slice(idx + 1),
-              insertionRefs[i2],
+              parent,
               shift,
             );
           }
+          break;
         }
       }
 
-      if (handled === true) break;
       idx++;
     }
   }
-
-  return handled;
 }
 
 function globalEventHandler(event) {
