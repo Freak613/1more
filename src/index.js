@@ -817,6 +817,8 @@ function insertTextNode(vnode, parent, afterNode) {
   nativeInsert(vnode.n, parent, afterNode);
 }
 
+function textNodeEventHandler() {}
+
 const textNodeImpl = {
   u: updateTextNode,
   z: unmountTextNode,
@@ -824,6 +826,7 @@ const textNodeImpl = {
   s: textNodeSize,
   d: getTextDomNode,
   i: insertTextNode,
+  e: textNodeEventHandler,
 };
 
 const createTextVirtualNode = () => ({
@@ -916,6 +919,25 @@ function insertArrayNode(vnode, parent, afterNode) {
   vnode.n.forEach(n => n.i.i(n, parent, afterNode));
 }
 
+function arrayNodeEventHandler(vnode, event, targets, parent, outerShift) {
+  const nodeIdx = indexOf.call(nodeGetChildNodes.call(parent), targets[0]);
+  const nodes = vnode.n;
+  let shift = outerShift;
+  let nodeInstance;
+  for (let node of nodes) {
+    const size = node.i.s(node);
+    if (nodeIdx <= size - 1 + shift) {
+      nodeInstance = node;
+      break;
+    } else {
+      shift += size;
+    }
+  }
+  if (nodeInstance) {
+    nodeInstance.i.e(nodeInstance, event, targets, parent, shift);
+  }
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
@@ -923,6 +945,7 @@ const arrayNodeImpl = {
   s: arrayNodeSize,
   d: getArrayDomNode,
   i: insertArrayNode,
+  e: arrayNodeEventHandler,
 };
 
 const createArrayVirtualNode = () => ({
@@ -989,6 +1012,84 @@ function insertTemplateNode(vnode, parent, afterNode) {
   nativeInsert(vnode.r[0], parent, afterNode);
 }
 
+function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
+  const { p: props, r: refs } = vnode;
+  const { events, insertionPoints } = props.p;
+
+  events.forEach(e => {
+    if (refs[e.refKey] === undefined) {
+      refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
+    }
+  });
+
+  const eventsRefs = events.map(({ refKey }) => refs[refKey]);
+  const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
+
+  let idx = 0;
+  let handled = false;
+  for (let target of targets) {
+    const i1 = eventsRefs.indexOf(target);
+    if (i1 >= 0) {
+      const eventName = event.type;
+
+      let eventIdx = 0;
+      for (let eventRef of eventsRefs) {
+        if (eventRef === target) {
+          const ev = events[eventIdx];
+          if (ev.type === eventName) {
+            const handler = props[ev.propIdx];
+            if (handler) handler(event);
+            handled = true;
+            break;
+          }
+        }
+        eventIdx++;
+      }
+    }
+
+    if (handled === false) {
+      const i2 = insertionRefs.indexOf(target);
+
+      if (i2 >= 0) {
+        const parent = insertionRefs[i2];
+
+        const nodeIndex = indexOf.call(
+          nodeGetChildNodes.call(parent),
+          targets[idx + 1],
+        );
+
+        let nodeInstance;
+        let shift = 0;
+        for (let insertionEl of insertionPoints[i2].points) {
+          shift += insertionEl.staticElemsBefore;
+
+          const inst = refs[insertionEl.instKey];
+          const size = inst.i.s(inst);
+          if (nodeIndex <= size - 1 + shift) {
+            nodeInstance = inst;
+            break;
+          } else {
+            shift += size;
+          }
+        }
+
+        if (nodeInstance) {
+          nodeInstance.i.e(
+            nodeInstance,
+            event,
+            targets.slice(idx + 1),
+            parent,
+            shift,
+          );
+        }
+        break;
+      }
+    }
+
+    idx++;
+  }
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
@@ -996,6 +1097,7 @@ const templateNodeImpl = {
   s: templateNodeSize,
   d: getTemplateDomNode,
   i: insertTemplateNode,
+  e: templateNodeEventHandler,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -1078,6 +1180,11 @@ function insertComponentNode(vnode, parent, afterNode) {
   child.i.i(child, parent, afterNode);
 }
 
+function componentNodeEventHandler(vnode, event, targets, parent, outerShift) {
+  const child = vnode.q;
+  child.i.e(child, event, targets, parent, outerShift);
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
@@ -1085,6 +1192,7 @@ const componentNodeImpl = {
   s: componentNodeSize,
   d: getComponentDomNode,
   i: insertComponentNode,
+  e: componentNodeEventHandler,
 };
 
 const createComponentVirtualNode = () => ({
@@ -1126,6 +1234,8 @@ function getVoidDomNode(vnode) {}
 
 function insertVoidNode(vnode, parent, afterNode) {}
 
+function voidNodeEventHandler() {}
+
 const voidNodeImpl = {
   u: updateVoidNode,
   z: unmountVoidNode,
@@ -1133,6 +1243,7 @@ const voidNodeImpl = {
   s: voidNodeSize,
   d: getVoidDomNode,
   i: insertVoidNode,
+  e: voidNodeEventHandler,
 };
 
 const createVoidVirtualNode = () => ({
@@ -1267,110 +1378,6 @@ function tracebackReference(path, root) {
   return result;
 }
 
-function findEventTarget(vnode, event, targets, parent, outerShift) {
-  const { t } = vnode;
-  if ((t & 1) !== 0) {
-  } else if ((t & 2) !== 0) {
-    const nodeIdx = indexOf.call(nodeGetChildNodes.call(parent), targets[0]);
-    const nodes = vnode.n;
-    let shift = outerShift;
-    let node;
-    let nodeInstance;
-    for (node of nodes) {
-      const size = node.i.s(node);
-      if (nodeIdx <= size - 1 + shift) {
-        nodeInstance = node;
-        break;
-      } else {
-        shift += size;
-      }
-    }
-    if (nodeInstance) {
-      findEventTarget(nodeInstance, event, targets, parent, shift);
-    }
-  } else if ((t & 16) !== 0) {
-    findEventTarget(vnode.q, event, targets, parent, outerShift);
-  } else if ((t & 32) !== 0) {
-  } else {
-    // Template or Fragment
-    const { p: props, r: refs } = vnode;
-    const { events, insertionPoints } = props.p;
-
-    events.forEach(e => {
-      if (refs[e.refKey] === undefined) {
-        refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
-      }
-    });
-
-    const eventsRefs = events.map(({ refKey }) => refs[refKey]);
-    const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
-
-    let idx = 0;
-    let handled = false;
-    for (let target of targets) {
-      const i1 = eventsRefs.indexOf(target);
-      if (i1 >= 0) {
-        const eventName = event.type;
-
-        let eventIdx = 0;
-        for (let eventRef of eventsRefs) {
-          if (eventRef === target) {
-            const ev = events[eventIdx];
-            if (ev.type === eventName) {
-              const handler = props[ev.propIdx];
-              if (handler) handler(event);
-              handled = true;
-              break;
-            }
-          }
-          eventIdx++;
-        }
-      }
-
-      if (handled === false) {
-        const i2 = insertionRefs.indexOf(target);
-
-        if (i2 >= 0) {
-          const parent = insertionRefs[i2];
-
-          const nodeIndex = indexOf.call(
-            nodeGetChildNodes.call(parent),
-            targets[idx + 1],
-          );
-
-          let nodeInstance;
-          let shift = 0;
-          for (let insertionEl of insertionPoints[i2].points) {
-            shift += insertionEl.staticElemsBefore;
-
-            const inst = refs[insertionEl.instKey];
-            const size = inst.i.s(inst);
-            if (nodeIndex <= size - 1 + shift) {
-              nodeInstance = inst;
-              break;
-            } else {
-              shift += size;
-            }
-          }
-
-          if (nodeInstance) {
-            findEventTarget(
-              nodeInstance,
-              event,
-              targets.slice(idx + 1),
-              parent,
-              shift,
-            );
-          }
-          break;
-        }
-      }
-
-      idx++;
-    }
-  }
-}
-
 function globalEventHandler(event) {
   let targets = [];
   let node = event.target;
@@ -1378,7 +1385,8 @@ function globalEventHandler(event) {
     const nodeInstance = node.$INST;
 
     if (nodeInstance !== undefined) {
-      findEventTarget(nodeInstance.c, event, targets.reverse(), node, 0);
+      const inst = nodeInstance.c;
+      inst.i.e(inst, event, targets.reverse(), node, 0);
       targets = [];
     }
     if (node.parentNode === null) break;
