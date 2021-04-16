@@ -1119,6 +1119,65 @@ exports[`compiler basic basic 14 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 15 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 2,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 1,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "producer": [Function],
+  "templateNode": <div>
+    <div />
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+  ],
+}
+`;
+
+exports[`compiler basic basic 15 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+  </div>
+</div>
+`;
+
 exports[`compiler dynamic roots dynamic 1 1`] = `"Content"`;
 
 exports[`compiler dynamic roots dynamic 1 2`] = `
@@ -6817,6 +6876,99 @@ exports[`update update 33 2`] = `
     <div
       style=""
     />
+  </div>
+</div>
+`;
+
+exports[`update update 34 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      data-testid="me"
+      id="me"
+    />
+  </div>
+</div>
+`;
+
+exports[`update update 34 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+  </div>
+</div>
+`;
+
+exports[`update update 35 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <input
+      id="checkbox"
+      type="checkbox"
+    />
+    <input
+      id="checkbox-controlled"
+      type="checkbox"
+    />
+    <input
+      id="input"
+      type="text"
+    />
+    <input
+      id="input-controlled"
+      type="text"
+    />
+  </div>
+</div>
+`;
+
+exports[`update update 35 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <input
+      id="checkbox"
+      type="checkbox"
+    />
+    <input
+      id="checkbox-controlled"
+      type="checkbox"
+    />
+    <input
+      id="input"
+      type="text"
+    />
+    <input
+      id="input-controlled"
+      type="text"
+    />
+  </div>
+</div>
+`;
+
+exports[`update update 36 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
+  </div>
+</div>
+`;
+
+exports[`update update 36 2`] = `
+<div
+  id="app"
+>
+  <div>
+    <div />
   </div>
 </div>
 `;

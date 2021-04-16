@@ -192,6 +192,14 @@ describe("compiler", () => {
         </div>
       `);
     });
+
+    it("basic 15", () => {
+      testTemplate(html`
+        <div>
+          <div id=${null} data-testid=${null}></div>
+        </div>
+      `);
+    });
   });
 
   describe("afterNode", () => {
@@ -1506,6 +1514,84 @@ describe("update", () => {
     expect(container).toMatchSnapshot();
 
     state = true;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 34", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+
+    const App = () => {
+      return html`
+        <div>
+          <div
+            id=${state ? null : "me"}
+            data-testid=${state ? null : "me"}
+          ></div>
+        </div>
+      `;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 35", () => {
+    const container = document.getElementById("app");
+
+    let state = true;
+
+    const App = () => {
+      return html`
+        <div>
+          <input id="checkbox" type="checkbox" defaultChecked=${state} />
+          <input id="checkbox-controlled" type="checkbox" checked=${state} />
+          <input id="input" type="text" defaultValue=${String(state)} />
+          <input id="input-controlled" type="text" value=${String(state)} />
+        </div>
+      `;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    expect(document.getElementById("checkbox").checked).toBe(true);
+    expect(document.getElementById("checkbox-controlled").checked).toBe(true);
+    expect(document.getElementById("input").value).toBe("true");
+    expect(document.getElementById("input-controlled").value).toBe("true");
+
+    state = false;
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    expect(document.getElementById("checkbox").checked).toBe(true);
+    expect(document.getElementById("checkbox-controlled").checked).toBe(false);
+    expect(document.getElementById("input").value).toBe("true");
+    expect(document.getElementById("input-controlled").value).toBe("false");
+  });
+
+  it("update 36", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+
+    const App = () => {
+      return html`
+        <div>
+          <div innerHTML=${state ? "mo" : "me"}></div>
+        </div>
+      `;
+    };
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
     render(App(), container);
     expect(container).toMatchSnapshot();
   });

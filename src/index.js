@@ -598,56 +598,34 @@ const compileRoot = (vdom, domNode) => {
             break;
           default: {
             const { tag } = vdom;
-            const isCustomElement = tag.match(/-/) !== null;
-            let knownTag = TAG_KNOWLEDGE_BASE[tag];
-            if (knownTag) {
-              const known = knownTag[attrName];
-              if (known) {
-                if (known.type === "property") {
-                  nextArgNode.applyData = createPropertySetter(attrName);
-                  nextArgNode.updateData = createPropertyUpdater(
-                    attrName,
-                    isCustomElement,
-                  );
-                } else {
-                  nextArgNode.applyData = createAttributeSetter(attrName);
-                  nextArgNode.updateData = createAttributeUpdater(attrName);
-                }
-              } else {
-                const node = tracebackReference(domPath, domNode);
-                const isProperty = attrName in node;
-                knownTag[attrName] = {
-                  type: isProperty ? "property" : "attribute",
-                };
-                if (isProperty) {
-                  nextArgNode.applyData = createPropertySetter(attrName);
-                  nextArgNode.updateData = createPropertyUpdater(
-                    attrName,
-                    isCustomElement,
-                  );
-                } else {
-                  nextArgNode.applyData = createAttributeSetter(attrName);
-                  nextArgNode.updateData = createAttributeUpdater(attrName);
-                }
-              }
-            } else {
-              knownTag = TAG_KNOWLEDGE_BASE[tag] = {};
 
+            TAG_KNOWLEDGE_BASE[tag] = TAG_KNOWLEDGE_BASE[tag] || {};
+
+            const knownTag = TAG_KNOWLEDGE_BASE[tag];
+            const known = knownTag[attrName];
+
+            let isProperty;
+            if (known) {
+              isProperty = known.type === "property";
+            } else {
               const node = tracebackReference(domPath, domNode);
-              const isProperty = attrName in node;
+              isProperty = attrName in node;
               knownTag[attrName] = {
                 type: isProperty ? "property" : "attribute",
               };
-              if (isProperty) {
-                nextArgNode.applyData = createPropertySetter(attrName);
-                nextArgNode.updateData = createPropertyUpdater(
-                  attrName,
-                  isCustomElement,
-                );
-              } else {
-                nextArgNode.applyData = createAttributeSetter(attrName);
-                nextArgNode.updateData = createAttributeUpdater(attrName);
-              }
+            }
+
+            if (isProperty) {
+              const isCustomElement = tag.match(/-/) !== null;
+
+              nextArgNode.applyData = createPropertySetter(attrName);
+              nextArgNode.updateData = createPropertyUpdater(
+                attrName,
+                isCustomElement,
+              );
+            } else {
+              nextArgNode.applyData = createAttributeSetter(attrName);
+              nextArgNode.updateData = createAttributeUpdater(attrName);
             }
 
             break;
