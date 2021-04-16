@@ -1271,47 +1271,16 @@ function findNodeInstance(insertions, nodeIndex, refs) {
   let nodeInstance = null,
     shift = 0;
 
-  outer: for (let insertionEl of insertions) {
+  for (let insertionEl of insertions) {
     shift += insertionEl.staticElemsBefore;
 
     const inst = refs[insertionEl.instKey];
-    const { t } = inst;
-
-    if ((t & 1) !== 0) {
-      if (nodeIndex === shift) {
-        nodeInstance = inst;
-        break;
-      } else {
-        shift++;
-      }
-    } else if ((t & 2) !== 0) {
-      const nodes = inst.n;
-      let node;
-      for (node of nodes) {
-        const size = node.i.s(node);
-        if (nodeIndex <= size - 1 + shift) {
-          nodeInstance = node;
-          break outer;
-        } else {
-          shift += size;
-        }
-      }
-    } else if ((t & 16) !== 0) {
-      const size = inst.i.s(inst);
-      if (nodeIndex <= size - 1 + shift) {
-        nodeInstance = inst;
-        break;
-      } else {
-        shift += size;
-      }
-    } else if ((t & 32) !== 0) {
+    const size = inst.i.s(inst);
+    if (nodeIndex <= size - 1 + shift) {
+      nodeInstance = inst;
+      break;
     } else {
-      if (nodeIndex === shift) {
-        nodeInstance = inst;
-        break;
-      } else {
-        shift++;
-      }
+      shift += size;
     }
   }
 
