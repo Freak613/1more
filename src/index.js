@@ -119,9 +119,8 @@ function updateStyle(refs, b) {
         ? (matchCount++, b[key])
         : undefined;
     if (aValue !== bValue) {
-      // Setting style property to `null`
-      // will result in automatic removal
-      // of this property. (Chrome 89)
+      // Setting style property to `null` or empty string will result
+      // in automatic removal of this property. (Chrome 89)
       // The only required check is for `undefined`
       if (bValue !== undefined) {
         style.setProperty(key, bValue);
@@ -166,10 +165,10 @@ export function propertyToAttribute(name) {
   return PropertyToAttributeExceptions[name] || name.toLowerCase();
 }
 
-function createPropertyUpdater(key) {
+function createPropertyUpdater(key, isCustomElement) {
   return function (refs, v) {
     const node = refs[this.refKey];
-    if (v !== null && v !== undefined) {
+    if ((v !== null && v !== undefined) || isCustomElement) {
       node[key] = v;
     } else {
       elementRemoveAttribute.call(node, propertyToAttribute(key));
@@ -599,13 +598,17 @@ const compileRoot = (vdom, domNode) => {
             break;
           default: {
             const { tag } = vdom;
+            const isCustomElement = tag.match(/-/) !== null;
             let knownTag = TAG_KNOWLEDGE_BASE[tag];
             if (knownTag) {
               const known = knownTag[attrName];
               if (known) {
                 if (known.type === "property") {
                   nextArgNode.applyData = createPropertySetter(attrName);
-                  nextArgNode.updateData = createPropertyUpdater(attrName);
+                  nextArgNode.updateData = createPropertyUpdater(
+                    attrName,
+                    isCustomElement,
+                  );
                 } else {
                   nextArgNode.applyData = createAttributeSetter(attrName);
                   nextArgNode.updateData = createAttributeUpdater(attrName);
@@ -618,7 +621,10 @@ const compileRoot = (vdom, domNode) => {
                 };
                 if (isProperty) {
                   nextArgNode.applyData = createPropertySetter(attrName);
-                  nextArgNode.updateData = createPropertyUpdater(attrName);
+                  nextArgNode.updateData = createPropertyUpdater(
+                    attrName,
+                    isCustomElement,
+                  );
                 } else {
                   nextArgNode.applyData = createAttributeSetter(attrName);
                   nextArgNode.updateData = createAttributeUpdater(attrName);
@@ -634,7 +640,10 @@ const compileRoot = (vdom, domNode) => {
               };
               if (isProperty) {
                 nextArgNode.applyData = createPropertySetter(attrName);
-                nextArgNode.updateData = createPropertyUpdater(attrName);
+                nextArgNode.updateData = createPropertyUpdater(
+                  attrName,
+                  isCustomElement,
+                );
               } else {
                 nextArgNode.applyData = createAttributeSetter(attrName);
                 nextArgNode.updateData = createAttributeUpdater(attrName);
