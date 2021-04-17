@@ -2078,6 +2078,97 @@ describe("events", () => {
     expect(state).toBe(0);
   });
 
+  it("events 25", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div onclick=${() => state++}>
+          <div id="target"></div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 26", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div onclick=${() => state++}>
+          <div>
+            <div id="target"></div>
+          </div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(1);
+  });
+
+  it("events 27", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div onany=${() => state++}>
+          <div>
+            <div id="target"></div>
+          </div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 28", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div onclick=${null}>
+          <div>
+            <div id="target"></div>
+          </div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 29", () => {
+    const container = document.getElementById("app");
+    container.dispatchEvent(new Event("click", { bubbles: true }));
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
