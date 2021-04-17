@@ -1623,29 +1623,6 @@ describe("events", () => {
     expect(state).toBe(2);
   });
 
-  // it("events _012", () => {
-  //   const container = document.getElementById("app");
-
-  //   let state = 0;
-  //   const App = component(() => () =>
-  //     html`
-  //       <div>
-  //         <div id="target" onclick=${() => state++}>${"text"}</div>
-  //       </div>
-  //     `,
-  //   );
-
-  //   render(App(), container);
-
-  //   const target = document.getElementById("target");
-  //   target.dispatchEvent(new Event("click"));
-
-  //   expect(state).toBe(1);
-
-  //   target.dispatchEvent(new Event("click"));
-  //   expect(state).toBe(2);
-  // });
-
   it("events 02", () => {
     const container = document.getElementById("app");
 
@@ -2037,6 +2014,65 @@ describe("events", () => {
     expect(container).toMatchSnapshot();
 
     const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 22", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div>
+          <div id="target" onclick=${() => state++}>${"text"}</div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+
+    target.dispatchEvent(new Event("click"));
+    expect(state).toBe(2);
+  });
+
+  it("events 23", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html` <div id="target" onclick=${() => state++}>${"text"}</div> `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target").firstChild;
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(0);
+  });
+
+  it("events 24", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div>
+          <div id="target" onclick=${() => state++}>${"text"}</div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target").firstChild;
     target.dispatchEvent(new Event("click"));
 
     expect(state).toBe(0);
