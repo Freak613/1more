@@ -28,6 +28,7 @@ const elementSetAttribute = elementProto.setAttribute;
 const elementRemoveAttribute = elementProto.removeAttribute;
 
 const eventGetCancelBubble = getDescriptor(eventProto, "cancelBubble").get;
+const eventGetBubbles = getDescriptor(eventProto, "bubbles").get;
 
 const htmlElementGetStyle = getDescriptor(HTMLElement.prototype, "style").get;
 
@@ -1019,53 +1020,58 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   const { p: props, r: refs } = vnode;
   const { events, insertionPoints } = props.p;
 
-  const insertionRefs = insertionPoints.map(({ refIdx }) => refs[refIdx]);
+  const insertionParents = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
   let idx = 0;
   let isTarget = true;
 
-  // Capture phase
-  for (; idx < targets.length; idx++) {
-    const target = targets[idx];
+  if (targets.length > 1) {
+    // Capture phase
+    for (; idx < targets.length; idx++) {
+      const target = targets[idx];
 
-    const i2 = insertionRefs.indexOf(target);
+      const i2 = insertionParents.indexOf(target);
+      // console.log({ target, i2, insertionParents, insertionPoints });
 
-    if (i2 >= 0) {
-      isTarget = false;
+      if (i2 >= 0) {
+        isTarget = false;
 
-      const parent = insertionRefs[i2];
+        const parent = insertionParents[i2];
 
-      const nodeIndex = indexOf.call(
-        nodeGetChildNodes.call(parent),
-        targets[idx + 1],
-      );
-
-      let nodeInstance;
-      let shift = 0;
-      for (let insertionEl of insertionPoints[i2].points) {
-        shift += insertionEl.staticElemsBefore;
-
-        const inst = refs[insertionEl.instKey];
-        const size = inst.i.s(inst);
-        if (nodeIndex <= size - 1 + shift) {
-          nodeInstance = inst;
-          break;
-        } else {
-          shift += size;
-        }
-      }
-
-      if (nodeInstance) {
-        nodeInstance.i.e(
-          nodeInstance,
-          event,
-          targets.slice(idx + 1),
-          parent,
-          shift,
+        const nodeIndex = indexOf.call(
+          nodeGetChildNodes.call(parent),
+          targets[idx + 1],
         );
+
+        let nodeInstance;
+        let shift = 0;
+        for (let insertionEl of insertionPoints[i2].points) {
+          shift += insertionEl.staticElemsBefore;
+
+          const inst = refs[insertionEl.instKey];
+          const size = inst.i.s(inst);
+          if (nodeIndex <= size - 1 + shift) {
+            nodeInstance = inst;
+            break;
+          } else {
+            shift += size;
+          }
+        }
+
+        if (nodeInstance) {
+          nodeInstance.i.e(
+            nodeInstance,
+            event,
+            targets.slice(idx + 1),
+            parent,
+            shift,
+          );
+        }
+        break;
       }
-      break;
     }
+  } else {
+    idx = targets.length;
   }
 
   events.forEach(e => {
@@ -1096,13 +1102,19 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
         }
         eventIdx++;
       }
-      const stopped = eventGetCancelBubble.call(event);
+
+      const stopped =
+        eventGetCancelBubble.call(event) || !eventGetBubbles.call(event);
+      if (stopped) return;
+    } else {
+      const stopped = !eventGetBubbles.call(event);
       if (stopped) return;
     }
 
     idx--;
   } else {
-    const stopped = eventGetCancelBubble.call(event);
+    const stopped =
+      eventGetCancelBubble.call(event) || !eventGetBubbles.call(event);
     if (stopped) return;
   }
 

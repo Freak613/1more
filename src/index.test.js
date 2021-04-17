@@ -1604,7 +1604,7 @@ describe("events", () => {
     document.body.innerHTML = "<div id='app'></div>";
   });
 
-  it("events 1", () => {
+  it("events 01", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1622,6 +1622,29 @@ describe("events", () => {
     target.dispatchEvent(new Event("click"));
     expect(state).toBe(2);
   });
+
+  // it("events _012", () => {
+  //   const container = document.getElementById("app");
+
+  //   let state = 0;
+  //   const App = component(() => () =>
+  //     html`
+  //       <div>
+  //         <div id="target" onclick=${() => state++}>${"text"}</div>
+  //       </div>
+  //     `,
+  //   );
+
+  //   render(App(), container);
+
+  //   const target = document.getElementById("target");
+  //   target.dispatchEvent(new Event("click"));
+
+  //   expect(state).toBe(1);
+
+  //   target.dispatchEvent(new Event("click"));
+  //   expect(state).toBe(2);
+  // });
 
   it("events 2", () => {
     const container = document.getElementById("app");
@@ -2036,7 +2059,7 @@ describe("events", () => {
       expect(container).toMatchSnapshot();
 
       const target = document.getElementById("target");
-      target.dispatchEvent(new Event("click"));
+      target.dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(order).toEqual(["target", "parent"]);
     });
@@ -2057,9 +2080,30 @@ describe("events", () => {
       expect(container).toMatchSnapshot();
 
       const target = document.getElementById("target");
-      target.dispatchEvent(new Event("click"));
+      target.dispatchEvent(new Event("click", { bubbles: true }));
 
       expect(order).toEqual(["target", "parent"]);
+    });
+
+    it("bubbling 3", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            <div id="target"></div>
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+      target.dispatchEvent(new Event("click"));
+
+      expect(order).toEqual([]);
     });
 
     describe("stopPropagation", () => {
@@ -2149,7 +2193,7 @@ describe("events", () => {
         expect(container).toMatchSnapshot();
 
         const target = document.getElementById("target");
-        target.dispatchEvent(new Event("click"));
+        target.dispatchEvent(new Event("click", { bubbles: true }));
 
         expect(order).toEqual(["target", "child"]);
       });
