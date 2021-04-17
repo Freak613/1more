@@ -65,11 +65,11 @@ describe("compiler", () => {
   };
 
   describe("basic", () => {
-    it("basic 1", () => {
+    it("basic 01", () => {
       testTemplate(html`<div></div>`);
     });
 
-    it("basic 2", () => {
+    it("basic 02", () => {
       testTemplate(html`
         <tr class=${"danger"}>
           <td class="col-md-1">${1}</td>
@@ -89,7 +89,7 @@ describe("compiler", () => {
       `);
     });
 
-    it("basic 3", () => {
+    it("basic 03", () => {
       testTemplate(html`
         <div>
           <span>Space should be preserved when on single line </span>
@@ -98,7 +98,7 @@ describe("compiler", () => {
       `);
     });
 
-    it("basic 4", () => {
+    it("basic 04", () => {
       testTemplate(
         // prettier-ignore
         html`
@@ -112,7 +112,7 @@ describe("compiler", () => {
       );
     });
 
-    it("basic 5", () => {
+    it("basic 05", () => {
       testTemplate(
         html`
           <button id="test1" class=${"value2"} disabled>
@@ -122,7 +122,7 @@ describe("compiler", () => {
       );
     });
 
-    it("basic 6", () => {
+    it("basic 06", () => {
       testTemplate(
         html`
           <button id="test1" disabled class=${"value2"}>
@@ -132,11 +132,11 @@ describe("compiler", () => {
       );
     });
 
-    it("basic 7", () => {
+    it("basic 07", () => {
       testTemplate(html`<input id="test1" class=${"value2"} disabled />`);
     });
 
-    it("basic 8", () => {
+    it("basic 08", () => {
       const container = testTemplate(
         html`<input type=${"checkbox"} checked=${true} class=${"some"} />`,
       );
@@ -145,7 +145,7 @@ describe("compiler", () => {
       expect(checkbox.checked).toBe(true);
     });
 
-    it("basic 9", () => {
+    it("basic 09", () => {
       testTemplate(
         html`<input
           type=${"checkbox"}
@@ -203,7 +203,7 @@ describe("compiler", () => {
   });
 
   describe("afterNode", () => {
-    it("afterNode 1", () => {
+    it("afterNode 01", () => {
       testTemplate(html`
         <div>
           ${1}
@@ -212,7 +212,7 @@ describe("compiler", () => {
       `);
     });
 
-    it("afterNode 2", () => {
+    it("afterNode 02", () => {
       testTemplate(
         html`
           <div>
@@ -225,7 +225,7 @@ describe("compiler", () => {
   });
 
   describe("fragments", () => {
-    it("fragments 1", () => {
+    it("fragments 01", () => {
       testFragment(
         html`
           <div></div>
@@ -234,7 +234,7 @@ describe("compiler", () => {
       );
     });
 
-    it("fragments 2", () => {
+    it("fragments 02", () => {
       testFragment(
         html`
           <div>${1}</div>
@@ -245,11 +245,11 @@ describe("compiler", () => {
   });
 
   describe("dynamic roots", () => {
-    it("dynamic 1", () => {
+    it("dynamic 01", () => {
       testRawInsertion(html`${"Content"}`);
     });
 
-    it("dynamic 2", () => {
+    it("dynamic 02", () => {
       testFragment(html`
         <div>Header ${"left"}</div>
         ${"Content"} ${"After"}
@@ -257,11 +257,11 @@ describe("compiler", () => {
       `);
     });
 
-    it("dynamic 3", () => {
+    it("dynamic 03", () => {
       testFragment(html`Header ${"Content"} After`);
     });
 
-    it("dynamic 4", () => {
+    it("dynamic 04", () => {
       testFragment(html`
         Count: ${0}
         <button onclick=${() => {}}>Reset</button>
@@ -270,17 +270,17 @@ describe("compiler", () => {
       `);
     });
 
-    it("dynamic 5", () => {
+    it("dynamic 05", () => {
       testFragment(html`Hello ${"World"}`);
     });
   });
 
   describe("mixed content", () => {
-    it("mixed 1", () => {
+    it("mixed 01", () => {
       testTemplate(html`<div>Hello ${"World"}</div>`);
     });
 
-    it("mixed 2", () => {
+    it("mixed 02", () => {
       testTemplate(
         html`
           <div>
@@ -292,7 +292,7 @@ describe("compiler", () => {
       );
     });
 
-    it("mixed 3", () => {
+    it("mixed 03", () => {
       testTemplate(
         html`
           <div>
@@ -305,7 +305,7 @@ describe("compiler", () => {
       );
     });
 
-    it("mixed 4", () => {
+    it("mixed 04", () => {
       testFragment(
         html`
           <div></div>
@@ -317,7 +317,7 @@ describe("compiler", () => {
       );
     });
 
-    it("mixed 5", () => {
+    it("mixed 05", () => {
       testTemplate(
         html`
           <div>
@@ -329,19 +329,19 @@ describe("compiler", () => {
       );
     });
 
-    it("mixed 6", () => {
+    it("mixed 06", () => {
       testTemplate(
         html`<div>Zero ${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`,
       );
     });
 
-    it("mixed 7", () => {
+    it("mixed 07", () => {
       testTemplate(
         html`<div>${"First"} Second ${"Third"} Fourth ${"Fifth"}</div>`,
       );
     });
 
-    it("mixed 8", () => {
+    it("mixed 08", () => {
       testTemplate(
         html`
           <div>
@@ -355,7 +355,7 @@ describe("compiler", () => {
       );
     });
 
-    it("mixed 9", () => {
+    it("mixed 09", () => {
       testTemplate(
         html`
           <div>
@@ -507,39 +507,39 @@ describe("reconcile", () => {
     expect(container).toMatchSnapshot();
   };
 
-  it("reconcile 1", () => {
+  it("reconcile 01", () => {
     testReconcile([1, 2], [3, 4, 1, 2]);
   });
 
-  it("reconcile 2", () => {
+  it("reconcile 02", () => {
     testReconcile([1, 2], [1, 3, 4, 2]);
   });
 
-  it("reconcile 3", () => {
+  it("reconcile 03", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [1, 5, 3, 4, 2, 6]);
   });
 
-  it("reconcile 4", () => {
+  it("reconcile 04", () => {
     testReconcile([1, 2, 3, 4, 5], [1, 4, 3, 2, 5]);
   });
 
-  it("reconcile 5", () => {
+  it("reconcile 05", () => {
     testReconcile([1, 2, 3, 4, 5], [5, 4, 3, 2, 1]);
   });
 
-  it("reconcile 6", () => {
+  it("reconcile 06", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1]);
   });
 
-  it("reconcile 7", () => {
+  it("reconcile 07", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [2, 3, 4, 5, 6, 1]);
   });
 
-  it("reconcile 8", () => {
+  it("reconcile 08", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [3, 4, 5, 6, 1, 2]);
   });
 
-  it("reconcile 9", () => {
+  it("reconcile 09", () => {
     testReconcile([1, 2, 3, 4, 5, 6], [6, 1, 2, 3, 4, 5]);
   });
 
@@ -1162,21 +1162,21 @@ describe("update", () => {
     expect(container).toMatchSnapshot();
   };
 
-  it("update 1", () => {
+  it("update 01", () => {
     testUpdate("one", "two");
   });
 
-  it("update 2", () => {
+  it("update 02", () => {
     const Child = component(() => () => html`<span>child</span>`);
     testUpdate("one", Child());
   });
 
-  it("update 3", () => {
+  it("update 03", () => {
     const Child = component(() => () => html`<span>child</span>`);
     testUpdate([Child()], []);
   });
 
-  it("update 4", () => {
+  it("update 04", () => {
     const container = document.getElementById("app");
 
     const App = component(() => state => html`
@@ -1192,16 +1192,16 @@ describe("update", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("update 5", () => {
+  it("update 05", () => {
     const Child = component(() => () => html`<span>child</span>`);
     testUpdate([], [Child()]);
   });
 
-  it("update 6", () => {
+  it("update 06", () => {
     testUpdate([], "text");
   });
 
-  it("update 7", () => {
+  it("update 07", () => {
     const container = document.getElementById("app");
 
     const App = component(() => state => html`
@@ -1215,12 +1215,12 @@ describe("update", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("update 8", () => {
+  it("update 08", () => {
     const Child = component(() => () => html`<span>child</span>`);
     testUpdate(Child(), Child());
   });
 
-  it("update 9", () => {
+  it("update 09", () => {
     const Child = component(() => () => html`<span>child</span>`);
     testUpdate(Child(), "text");
   });
@@ -1646,7 +1646,7 @@ describe("events", () => {
   //   expect(state).toBe(2);
   // });
 
-  it("events 2", () => {
+  it("events 02", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1663,7 +1663,7 @@ describe("events", () => {
     expect(state).toBe(1);
   });
 
-  it("events 3", () => {
+  it("events 03", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1680,7 +1680,7 @@ describe("events", () => {
     expect(state).toBe(1);
   });
 
-  it("events 4", () => {
+  it("events 04", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1700,7 +1700,7 @@ describe("events", () => {
     expect(state).toBe(1);
   });
 
-  it("events 5", () => {
+  it("events 05", () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1728,7 +1728,7 @@ describe("events", () => {
     expect(state1).toBe(0);
   });
 
-  it("events 6", () => {
+  it("events 06", () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1752,7 +1752,7 @@ describe("events", () => {
     expect(state1).toBe(0);
   });
 
-  it("events 7", () => {
+  it("events 07", () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1779,7 +1779,7 @@ describe("events", () => {
     expect(state1).toBe(0);
   });
 
-  it("events 8", () => {
+  it("events 08", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1802,7 +1802,7 @@ describe("events", () => {
     expect(state).toBe(2);
   });
 
-  it("events 9", () => {
+  it("events 09", () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2043,7 +2043,7 @@ describe("events", () => {
   });
 
   describe("bubbling", () => {
-    it("bubbling 1", () => {
+    it("bubbling 01", () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2064,7 +2064,7 @@ describe("events", () => {
       expect(order).toEqual(["target", "parent"]);
     });
 
-    it("bubbling 2", () => {
+    it("bubbling 02", () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2085,7 +2085,7 @@ describe("events", () => {
       expect(order).toEqual(["target", "parent"]);
     });
 
-    it("bubbling 3", () => {
+    it("bubbling 03", () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2107,7 +2107,7 @@ describe("events", () => {
     });
 
     describe("stopPropagation", () => {
-      it("stopPropagation 1", () => {
+      it("stopPropagation 01", () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2134,7 +2134,7 @@ describe("events", () => {
         expect(order).toEqual(["target"]);
       });
 
-      it("stopPropagation 2", () => {
+      it("stopPropagation 02", () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2161,7 +2161,7 @@ describe("events", () => {
         expect(order).toEqual(["target"]);
       });
 
-      it("stopPropagation 3", () => {
+      it("stopPropagation 03", () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2208,7 +2208,7 @@ describe("invalidate", () => {
     document.body.innerHTML = "<div id='app'></div>";
   });
 
-  it("invalidate 1", async () => {
+  it("invalidate 01", async () => {
     const container = document.getElementById("app");
 
     let renderCount = 0;
@@ -2244,7 +2244,7 @@ describe("invalidate", () => {
     expect(renderCount).toBe(2);
   });
 
-  it("invalidate 2", async () => {
+  it("invalidate 02", async () => {
     const container = document.getElementById("app");
 
     const Child = component(c => {
@@ -2290,7 +2290,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 3", async () => {
+  it("invalidate 03", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2315,7 +2315,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 4", async () => {
+  it("invalidate 04", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2340,7 +2340,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 5", async () => {
+  it("invalidate 05", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2365,7 +2365,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 6", async () => {
+  it("invalidate 06", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2390,7 +2390,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 7", async () => {
+  it("invalidate 07", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2415,7 +2415,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 8", async () => {
+  it("invalidate 08", async () => {
     const container = document.getElementById("app");
 
     let state = false;
@@ -2440,7 +2440,7 @@ describe("invalidate", () => {
     expect(container).toMatchSnapshot();
   });
 
-  it("invalidate 9", async () => {
+  it("invalidate 09", async () => {
     const container = document.getElementById("app");
 
     let state = false;
