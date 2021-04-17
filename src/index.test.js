@@ -2349,6 +2349,74 @@ describe("events", () => {
       });
     });
   });
+
+  describe("capture", () => {
+    it("capture 01", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      render(
+        html`
+          <div
+            onclick=${{
+              handleEvent: () => order.push("parent"),
+              capture: true,
+            }}
+          >
+            <div
+              id="target"
+              onclick=${{
+                handleEvent: () => order.push("target"),
+                capture: true,
+              }}
+            ></div>
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+      target.dispatchEvent(new Event("click"));
+
+      expect(order).toEqual(["parent", "target"]);
+    });
+
+    it("capture 02", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      const Child = html`
+        <div
+          id="target"
+          onclick=${{
+            handleEvent: () => order.push("target"),
+            capture: true,
+          }}
+        ></div>
+      `;
+
+      render(
+        html`<div
+          onclick=${{
+            handleEvent: () => order.push("parent"),
+            capture: true,
+          }}
+        >
+          ${Child}
+        </div>`,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+      target.dispatchEvent(new Event("click"));
+
+      expect(order).toEqual(["parent", "target"]);
+    });
+  });
 });
 
 describe("invalidate", () => {

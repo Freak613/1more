@@ -1022,14 +1022,49 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
 
   const insertionParents = insertionPoints.map(({ refIdx }) => refs[refIdx]);
 
+  events.forEach(e => {
+    if (refs[e.refKey] === undefined) {
+      refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
+    }
+  });
+
+  const eventsRefs = events.map(({ refKey }) => refs[refKey]);
+
   let idx = 0;
   let isTarget = true;
 
   // Capture phase
   for (; idx < targets.length - 1; idx++) {
-    const el = targets[idx];
+    const target = targets[idx];
 
-    const i2 = insertionParents.indexOf(el);
+    const i1 = eventsRefs.indexOf(target);
+    if (i1 >= 0) {
+      const eventName = event.type;
+
+      let eventIdx = 0;
+      for (let eventRef of eventsRefs) {
+        if (eventRef === target) {
+          const ev = events[eventIdx];
+          if (ev.type === eventName) {
+            const handlerProp = props[ev.propIdx];
+            if (handlerProp) {
+              if (handlerProp.capture) {
+                const handler = handlerProp.handleEvent || handlerProp;
+                handler(event);
+              }
+            }
+            break;
+          }
+        }
+        eventIdx++;
+      }
+
+      // const stopped =
+      //   eventGetCancelBubble.call(event) || !eventGetBubbles.call(event);
+      // if (stopped) return;
+    }
+
+    const i2 = insertionParents.indexOf(target);
 
     if (i2 >= 0) {
       isTarget = false;
@@ -1068,14 +1103,6 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
       break;
     }
   }
-
-  events.forEach(e => {
-    if (refs[e.refKey] === undefined) {
-      refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
-    }
-  });
-
-  const eventsRefs = events.map(({ refKey }) => refs[refKey]);
 
   if (isTarget) {
     // Target phase
@@ -1131,8 +1158,10 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           if (ev.type === eventName) {
             const handlerProp = props[ev.propIdx];
             if (handlerProp) {
-              const handler = handlerProp.handleEvent || handlerProp;
-              handler(event);
+              if (!handlerProp.capture) {
+                const handler = handlerProp.handleEvent || handlerProp;
+                handler(event);
+              }
             }
             break;
           }
