@@ -4471,6 +4471,30 @@ exports[`events capture capture 02 1`] = `
 </div>
 `;
 
+exports[`events capture stopPropagation stopPropagation 01 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
+exports[`events capture stopPropagation stopPropagation 02 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div
+      id="target"
+    />
+  </div>
+</div>
+`;
+
 exports[`events events 11 1`] = `
 <div
   id="app"

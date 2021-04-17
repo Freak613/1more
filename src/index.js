@@ -1059,9 +1059,8 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
         eventIdx++;
       }
 
-      // const stopped =
-      //   eventGetCancelBubble.call(event) || !eventGetBubbles.call(event);
-      // if (stopped) return;
+      const stopped = eventGetCancelBubble.call(event);
+      if (stopped) return;
     }
 
     const i2 = insertionParents.indexOf(target);

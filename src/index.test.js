@@ -2416,6 +2416,80 @@ describe("events", () => {
 
       expect(order).toEqual(["parent", "target"]);
     });
+
+    describe("stopPropagation", () => {
+      it("stopPropagation 01", () => {
+        const container = document.getElementById("app");
+
+        const order = [];
+
+        render(
+          html`
+            <div
+              onclick=${{
+                handleEvent: e => {
+                  order.push("parent");
+                  e.stopPropagation();
+                },
+                capture: true,
+              }}
+            >
+              <div
+                id="target"
+                onclick=${{
+                  handleEvent: () => order.push("target"),
+                  capture: true,
+                }}
+              ></div>
+            </div>
+          `,
+          container,
+        );
+        expect(container).toMatchSnapshot();
+
+        const target = document.getElementById("target");
+        target.dispatchEvent(new Event("click"));
+
+        expect(order).toEqual(["parent"]);
+      });
+
+      it("stopPropagation 02", () => {
+        const container = document.getElementById("app");
+
+        const order = [];
+
+        const Child = html`
+          <div
+            id="target"
+            onclick=${{
+              handleEvent: () => order.push("target"),
+              capture: true,
+            }}
+          ></div>
+        `;
+
+        render(
+          html`<div
+            onclick=${{
+              handleEvent: e => {
+                order.push("parent");
+                e.stopPropagation();
+              },
+              capture: true,
+            }}
+          >
+            ${Child}
+          </div>`,
+          container,
+        );
+        expect(container).toMatchSnapshot();
+
+        const target = document.getElementById("target");
+        target.dispatchEvent(new Event("click"));
+
+        expect(order).toEqual(["parent"]);
+      });
+    });
   });
 });
 
