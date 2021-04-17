@@ -1090,8 +1090,11 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
         if (eventRef === target) {
           const ev = events[eventIdx];
           if (ev.type === eventName) {
-            const handler = props[ev.propIdx];
-            if (handler) handler(event);
+            const handlerProp = props[ev.propIdx];
+            if (handlerProp) {
+              const handler = handlerProp.handleEvent || handlerProp;
+              handler(event);
+            }
             break;
           }
         }
@@ -1126,8 +1129,11 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
         if (eventRef === target) {
           const ev = events[eventIdx];
           if (ev.type === eventName) {
-            const handler = props[ev.propIdx];
-            if (handler) handler(event);
+            const handlerProp = props[ev.propIdx];
+            if (handlerProp) {
+              const handler = handlerProp.handleEvent || handlerProp;
+              handler(event);
+            }
             break;
           }
         }

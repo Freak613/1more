@@ -2169,6 +2169,29 @@ describe("events", () => {
     container.dispatchEvent(new Event("click", { bubbles: true }));
   });
 
+  it("events 30", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = () => {
+      return html`<div
+        id="target"
+        onclick=${{
+          handleEvent: () => state++,
+        }}
+      >
+        ${"text"}
+      </div>`;
+    };
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
