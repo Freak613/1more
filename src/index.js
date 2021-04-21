@@ -1452,7 +1452,10 @@ function globalEventHandler(event) {
 
 function setupGlobalHandler(name) {
   if (GLOBAL_HANDLERS[name] === 1) return;
-  document.addEventListener(name, globalEventHandler, true);
+  document.addEventListener(name, globalEventHandler, {
+    capture: true,
+    passive: false,
+  });
   GLOBAL_HANDLERS[name] = 1;
 }
 
