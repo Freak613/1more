@@ -67,7 +67,7 @@ html`
   - `style` - accepts objects with dashed CSS properties names. For example `background-color` instead of `backgroundColor`. Browser prefixes and custom CSS properties are supported. Assigning `null` or `undefined` to `style` will remove this attribute. Assigning `null`, `undefined` or empty string to CSS property value will remove it from element's style declaration.
   - `defaultValue` / `defaultChecked` - can be used to assign corresponding value to node on first mount, and skipping it on updates. Thus it's possible to create uncontrolled form elements.
   - `innerHTML` is temporarily disabled.
-- Event handlers should have name starting with `on` and actual event name. For example `onclick` instead of `onClick`. Handlers are not attached to DOM nodes, instead library use automatic event delegation that should not affect normal usage.
+- Event handlers should have name starting with `on` and actual event name. For example `onclick` instead of `onClick`. Handlers are not attached to DOM nodes, instead library use automatic event delegation for better render and update performance.
 - For Custom Elements:
   - Element should be registered before call to `html` with template containing this element.
   - Property-first approach should work fine, as long as property is exposed in element instance. When assigning `null` or `undefined` to element property, it is going to be directly assigned to element, not triggering removal. For attributes `null` and `undefined` will work as usual, removing attribute from element.
@@ -284,9 +284,11 @@ Allows to consume observable from component props. When receiving observable, it
 
 ### Delegated events
 
-Rendered DOM nodes don't have attached event listeners. Instead renderer use global event handlers attached to `document` per each event type, then use rendered app instance to discover target event handler.
+Rendered DOM nodes don't have attached event listeners. Instead renderer attaches global event handlers attached to `document` per each event type, then use rendered app instance to discover target event handler.
 
-Current implementation is very limited, it doesn't support bubble and capture phases of native events, and used only to find first matched target event handler.
+All events are working only in the `bubble` phase, with proper handling of `stopPropagation` and event's `bubbles` flag.
+
+Note: Global event handlers are active (with `passive: false`), and system doesn't support `capture` phase. This being done to avoid having custom syntax or diff event handlers flags, and because this library main purpose is to have minimal API surface to solve most of the use cases.
 
 ### Does this implementation use Virtual DOM?
 
