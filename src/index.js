@@ -1037,32 +1037,6 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   for (; idx < targets.length - 1; idx++) {
     const target = targets[idx];
 
-    const i1 = eventsRefs.indexOf(target);
-    if (i1 >= 0) {
-      const eventName = event.type;
-
-      let eventIdx = 0;
-      for (let eventRef of eventsRefs) {
-        if (eventRef === target) {
-          const ev = events[eventIdx];
-          if (ev.type === eventName) {
-            const handlerProp = props[ev.propIdx];
-            if (handlerProp) {
-              if (handlerProp.capture) {
-                const handler = handlerProp.handleEvent || handlerProp;
-                handler(event);
-              }
-            }
-            break;
-          }
-        }
-        eventIdx++;
-      }
-
-      const stopped = eventGetCancelBubble.call(event);
-      if (stopped) return;
-    }
-
     const i2 = insertionParents.indexOf(target);
 
     if (i2 >= 0) {
@@ -1118,8 +1092,7 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           if (ev.type === eventName) {
             const handlerProp = props[ev.propIdx];
             if (handlerProp) {
-              const handler = handlerProp.handleEvent || handlerProp;
-              handler(event);
+              handlerProp(event);
             }
             break;
           }
@@ -1157,10 +1130,7 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           if (ev.type === eventName) {
             const handlerProp = props[ev.propIdx];
             if (handlerProp) {
-              if (!handlerProp.capture) {
-                const handler = handlerProp.handleEvent || handlerProp;
-                handler(event);
-              }
+              handlerProp(event);
             }
             break;
           }
