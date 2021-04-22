@@ -1,7 +1,6 @@
 let TEMPLATE_COUNTER = 0;
 const TEMPLATE_CACHE = new Map();
 const COMPILER_TEMPLATE = document.createElement("template");
-const GLOBAL_HANDLERS = {};
 
 const getDescriptor = (o, p) => Object.getOwnPropertyDescriptor(o, p);
 
@@ -481,6 +480,7 @@ const compileRoot = (vdom, domNode) => {
   const events = [];
   const activeWayNodes = {};
   const insertionPoints = [];
+  const knownEvents = {};
   let instanceIdx = 0;
 
   const compileNode = (
@@ -571,7 +571,7 @@ const compileRoot = (vdom, domNode) => {
         nextArgNode.path = eventsPath;
 
         events.push(nextArgNode);
-        setupGlobalHandler(nextArgNode.type);
+        knownEvents[nextArgNode.type] = true;
       } else {
         const nextArgNode = getArgNode();
         nextArgNode.propIdx = prop.propIdx;
@@ -719,6 +719,7 @@ const compileRoot = (vdom, domNode) => {
     producer,
     unmountPoints,
     templateNode: domNode,
+    knownEvents: Object.keys(knownEvents),
   };
 };
 
@@ -1413,7 +1414,12 @@ function renderValue(
         vnode.p = props;
         vnode.j = rootVnode;
 
-        const { templateNode, ways, argsWays, producer } = props.p;
+        const { type, templateNode, ways, argsWays, producer } = props.p;
+
+        if (!rootVnode.s[type]) {
+          setupTemplateEventHandlers(props.p.knownEvents, rootVnode);
+          rootVnode.s[type] = true;
+        }
 
         const tNode = nodeCloneNode.call(templateNode, true);
 
@@ -1462,8 +1468,11 @@ function removeVNode(vnode) {
   vnode.i.r(vnode);
 }
 
-const createRootVirtualNode = () => ({
+const createRootVirtualNode = o => ({
+  o, // container
   c: undefined, // root element
+  s: {}, // known templates
+  e: {}, // known event types
 });
 
 export function render(component, container) {
@@ -1478,7 +1487,7 @@ export function render(component, container) {
   } else {
     nodeSetTextContent.call(container, "");
 
-    inst = createRootVirtualNode();
+    inst = createRootVirtualNode(container);
 
     const vnode = renderValue(component, container, null, 0, null, inst);
     inst.c = vnode;
@@ -1520,13 +1529,18 @@ function globalEventHandler(event) {
   }
 }
 
-function setupGlobalHandler(name) {
-  if (GLOBAL_HANDLERS[name] === 1) return;
-  document.addEventListener(name, globalEventHandler, {
-    capture: true,
-    passive: false,
+function setupTemplateEventHandlers(events, root) {
+  const { e: knownEvents, o: container } = root;
+
+  events.forEach(name => {
+    if (!knownEvents[name]) {
+      container.addEventListener(name, globalEventHandler, {
+        capture: true,
+        passive: false,
+      });
+      knownEvents[name] = true;
+    }
   });
-  GLOBAL_HANDLERS[name] = 1;
 }
 
 function nativeInsert(node, parent, afterNode) {
