@@ -53,7 +53,7 @@ export function _resetTemplateCounter() {
 }
 
 // Getters/setters
-function setContent(refs, v, vnode) {
+function setContent(refs, v, vnode, rootVnode) {
   const prevArg = _arg;
   _arg = this;
   refs[this.instKey] = renderValue(
@@ -62,6 +62,7 @@ function setContent(refs, v, vnode) {
     this.afterNodeFn(refs),
     this.flag,
     vnode,
+    rootVnode,
   );
   _arg = prevArg;
 }
@@ -797,7 +798,14 @@ function updateTextNode(b, vnode) {
     const notSingleNode = vnode.g;
 
     if (vnode.n) nodeRemoveChild.call(parent, vnode.n);
-    vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
+    vnode = renderValue(
+      b,
+      parent,
+      _getAfterNode(),
+      notSingleNode,
+      vnode.x,
+      vnode.j,
+    );
   }
 
   return vnode;
@@ -841,11 +849,13 @@ const createTextVirtualNode = () => ({
   g: undefined, // notSingleNode flag
   a: _arg, // closest template arg
   i: textNodeImpl,
+  j: undefined, // root vnode
 });
 
 function updateArrayNode(b, vnode) {
   const parent = vnode.w;
   const notSingleNode = vnode.g;
+  const rootVnode = vnode.j;
 
   const nodes = vnode.n;
   if (b instanceof Array) {
@@ -865,12 +875,12 @@ function updateArrayNode(b, vnode) {
       const afterNode = _getAfterNode();
 
       vnode.n = b.map(function (props) {
-        return renderValue(props.v, parent, afterNode, 2, vnode);
+        return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
       });
     } else {
       const prevState = _getAfterNode;
 
-      vnode.n = updateArray(b, _getAfterNode(), vnode);
+      vnode.n = updateArray(b, _getAfterNode(), vnode, rootVnode);
 
       _getAfterNode = prevState;
     }
@@ -882,7 +892,14 @@ function updateArrayNode(b, vnode) {
       nodes.forEach(n => n.i.z(n));
       nodeSetTextContent.call(parent, "");
     }
-    vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
+    vnode = renderValue(
+      b,
+      parent,
+      _getAfterNode(),
+      notSingleNode,
+      vnode.x,
+      vnode.j,
+    );
   }
 
   return vnode;
@@ -961,6 +978,7 @@ const createArrayVirtualNode = () => ({
   g: undefined, // notSingleNode flag
   a: _arg, // closest template arg
   i: arrayNodeImpl,
+  j: undefined, // root vnode
 });
 
 function updateTemplateNode(b, vnode) {
@@ -983,7 +1001,14 @@ function updateTemplateNode(b, vnode) {
     const notSingleNode = vnode.g;
 
     removeVNode(vnode);
-    vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
+    vnode = renderValue(
+      b,
+      parent,
+      _getAfterNode(),
+      notSingleNode,
+      vnode.x,
+      vnode.j,
+    );
   }
 
   return vnode;
@@ -1162,6 +1187,7 @@ const createTemplateVirtualNode = () => ({
   g: undefined, // notSingleNode flag
   a: _arg, // closest template arg
   i: templateNodeImpl,
+  j: undefined, // root vnode
 });
 
 function updateComponentNode(b, vnode) {
@@ -1189,7 +1215,14 @@ function updateComponentNode(b, vnode) {
     const notSingleNode = vnode.g;
 
     removeVNode(vnode);
-    vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
+    vnode = renderValue(
+      b,
+      parent,
+      _getAfterNode(),
+      notSingleNode,
+      vnode.x,
+      vnode.j,
+    );
   }
 
   return vnode;
@@ -1262,6 +1295,7 @@ const createComponentVirtualNode = () => ({
   g: undefined, // notSingleNode flag
   a: _arg, // closest template arg
   i: componentNodeImpl,
+  j: undefined, // root vnode
 });
 
 function updateVoidNode(b, vnode) {
@@ -1269,7 +1303,14 @@ function updateVoidNode(b, vnode) {
   const notSingleNode = vnode.g;
 
   if (b !== null && b !== undefined && typeof b !== "boolean") {
-    vnode = renderValue(b, parent, _getAfterNode(), notSingleNode, vnode.x);
+    vnode = renderValue(
+      b,
+      parent,
+      _getAfterNode(),
+      notSingleNode,
+      vnode.x,
+      vnode.j,
+    );
   }
 
   return vnode;
@@ -1306,9 +1347,17 @@ const createVoidVirtualNode = () => ({
   g: undefined, // notSingleNode flag
   a: _arg, // closest template arg
   i: voidNodeImpl,
+  j: undefined, // root vnode
 });
 
-function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
+function renderValue(
+  props,
+  parent,
+  afterNode,
+  notSingleNode,
+  parentVnode,
+  rootVnode,
+) {
   let vnode;
 
   const t = typeof props;
@@ -1320,18 +1369,20 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.x = parentVnode;
         vnode.w = parent;
         vnode.g = notSingleNode;
+        vnode.j = rootVnode;
 
         props = props.map(normalizeArrayItem);
         vnode.v = props;
 
         vnode.n = props.map(function (props) {
-          return renderValue(props.v, parent, afterNode, 2, vnode);
+          return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
         });
       } else if ((props.t & 16) !== 0) {
         vnode = createComponentVirtualNode();
         vnode.x = parentVnode;
         vnode.w = parent;
         vnode.g = notSingleNode;
+        vnode.j = rootVnode;
 
         vnode.c = props.p;
 
@@ -1345,7 +1396,14 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
 
         const currentDepth = _depth;
         _depth = currentDepth + 1;
-        vnode.q = renderValue(view, parent, afterNode, notSingleNode, vnode);
+        vnode.q = renderValue(
+          view,
+          parent,
+          afterNode,
+          notSingleNode,
+          vnode,
+          rootVnode,
+        );
         _depth = currentDepth;
       } else {
         vnode = createTemplateVirtualNode();
@@ -1353,6 +1411,7 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.w = parent;
         vnode.g = notSingleNode;
         vnode.p = props;
+        vnode.j = rootVnode;
 
         const { templateNode, ways, argsWays, producer } = props.p;
 
@@ -1363,7 +1422,8 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
         vnode.r = refs;
 
         for (let w of ways) refs[w.refKey] = w.getRef.call(refs[w.prevKey]);
-        for (let a of argsWays) a.applyData(refs, props[a.propIdx], vnode);
+        for (let a of argsWays)
+          a.applyData(refs, props[a.propIdx], vnode, rootVnode);
 
         if (afterNode) {
           nodeInsertBefore.call(parent, tNode, afterNode);
@@ -1376,6 +1436,7 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
       vnode.x = parentVnode;
       vnode.w = parent;
       vnode.g = notSingleNode;
+      vnode.j = rootVnode;
 
       if ((notSingleNode & 2) !== 0) {
         const node = document.createTextNode(props);
@@ -1391,6 +1452,7 @@ function renderValue(props, parent, afterNode, notSingleNode, parentVnode) {
     vnode.x = parentVnode;
     vnode.w = parent;
     vnode.g = notSingleNode;
+    vnode.j = rootVnode;
   }
   return vnode;
 }
@@ -1418,7 +1480,7 @@ export function render(component, container) {
 
     inst = createRootVirtualNode();
 
-    const vnode = renderValue(component, container, null, 0, null);
+    const vnode = renderValue(component, container, null, 0, null, inst);
     inst.c = vnode;
 
     container.$INST = inst;
@@ -1483,7 +1545,7 @@ function normalizeArrayItem(value, idx) {
   }
 }
 
-function updateArray(newArray, _afterNode, vnode) {
+function updateArray(newArray, _afterNode, vnode, rootVnode) {
   const nodes = vnode.n;
   const parent = vnode.w;
   const notSingleNode = vnode.g;
@@ -1639,7 +1701,14 @@ function updateArray(newArray, _afterNode, vnode) {
       newNodes.length = newArray.length;
       const afterNode = lookupNewAfterNode();
       while (1) {
-        newNodes[b1] = renderValue(newArray[b1].v, parent, afterNode, 2, vnode);
+        newNodes[b1] = renderValue(
+          newArray[b1].v,
+          parent,
+          afterNode,
+          2,
+          vnode,
+          rootVnode,
+        );
         if (b1 === b2) break;
         b1++;
       }
@@ -1696,7 +1765,7 @@ function updateArray(newArray, _afterNode, vnode) {
       const afterNode = lookupNewAfterNode();
 
       newNodes = newArray.map(function (props) {
-        return renderValue(props.v, parent, afterNode, 2, vnode);
+        return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
       });
     } else {
       toRemove.forEach(removeVNode);
@@ -1721,7 +1790,14 @@ function updateArray(newArray, _afterNode, vnode) {
           let n;
           const afterNode = lookupNewAfterNode();
           if (P[b2] === -1) {
-            n = renderValue(newArray[b2].v, parent, afterNode, 2, vnode);
+            n = renderValue(
+              newArray[b2].v,
+              parent,
+              afterNode,
+              2,
+              vnode,
+              rootVnode,
+            );
           } else {
             _getAfterNode = () => afterNode;
 
