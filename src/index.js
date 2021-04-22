@@ -1400,6 +1400,10 @@ function removeVNode(vnode) {
   vnode.i.r(vnode);
 }
 
+const createRootVirtualNode = () => ({
+  c: undefined, // root element
+});
+
 export function render(component, container) {
   _resetState();
 
@@ -1411,8 +1415,12 @@ export function render(component, container) {
     inst.c = vnode.i.u(component, vnode);
   } else {
     nodeSetTextContent.call(container, "");
+
+    inst = createRootVirtualNode();
+
     const vnode = renderValue(component, container, null, 0, null);
-    inst = { c: vnode };
+    inst.c = vnode;
+
     container.$INST = inst;
   }
 }
