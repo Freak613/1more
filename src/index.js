@@ -362,7 +362,7 @@ const wrapTextNodes = strings => {
   const process = str => {
     str = str.trim();
 
-    const terms = str.split(/(<\/?[\w|\s]+\/?>)/g);
+    const terms = str.split(/(<\/?[^>]+\/?>)/g);
 
     terms.unshift(...terms.shift().split(/^(\/?>)/g));
     terms.push(...terms.pop().split(/(<\w.*)$/g));

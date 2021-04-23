@@ -200,6 +200,10 @@ describe("compiler", () => {
         </div>
       `);
     });
+
+    it("basic 16", () => {
+      testTemplate(html` <div id="target">Web Component ${"World"}</div> `);
+    });
   });
 
   describe("afterNode", () => {
@@ -3016,5 +3020,36 @@ describe("nestedRoots", () => {
     await wait(1);
 
     expect(order).toEqual(["child", "parent"]);
+  });
+});
+
+describe("webcomponents", () => {
+  it("webcomponents 01", () => {
+    const container = document.getElementById("app");
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(html`<div>Web Component ${name}</div>`, shadowRoot);
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-1", XSearch);
+
+    render(
+      html`
+        <div>
+          Hello
+          <x-search-1 name=${"World"}></x-search-1>
+          !
+        </div>
+      `,
+      container,
+    );
+
+    expect(container).toMatchSnapshot();
   });
 });

@@ -1197,6 +1197,69 @@ exports[`compiler basic basic 15 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 16 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [],
+  "gen": [Function],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 1,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "knownEvents": Array [],
+  "producer": [Function],
+  "templateNode": <div
+    id="target"
+  >
+    Web Component 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 1,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 16 2`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  >
+    Web Component 
+    World
+  </div>
+</div>
+`;
+
 exports[`compiler dynamic roots dynamic 01 1`] = `"Content"`;
 
 exports[`compiler dynamic roots dynamic 01 2`] = `
@@ -7112,6 +7175,27 @@ exports[`update update 36 2`] = `
 >
   <div>
     <div />
+  </div>
+</div>
+`;
+
+exports[`webcomponents webcomponents 01 1`] = `
+<div>
+  Web Component 
+  World
+</div>
+`;
+
+exports[`webcomponents webcomponents 01 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-1
+      name="World"
+    />
+    !
   </div>
 </div>
 `;
