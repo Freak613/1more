@@ -1260,6 +1260,162 @@ exports[`compiler basic basic 16 2`] = `
 </div>
 `;
 
+exports[`compiler basic basic 17 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": [Function],
+      "flag": 0,
+      "instKey": 3,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 1,
+      "refKey": 2,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [
+        1,
+        0,
+      ],
+      "prevRef": 0,
+      "propIdx": 2,
+      "refKey": 4,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "gen": [Function],
+  "insertionPoints": Array [],
+  "knownEvents": Array [
+    "click",
+  ],
+  "producer": [Function],
+  "templateNode": <div>
+    Hello
+    <x-search-4 />
+    !
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [],
+  "ways": Array [
+    Object {
+      "getRef": [Function],
+      "prevKey": 0,
+      "refKey": 1,
+    },
+    Object {
+      "getRef": [Function],
+      "prevKey": 1,
+      "refKey": 2,
+    },
+  ],
+}
+`;
+
+exports[`compiler basic basic 17 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-4
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
+
+exports[`compiler basic basic 18 1`] = `
+Object {
+  "argsWays": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": [Function],
+      "applyData": [Function],
+      "flag": 2,
+      "instKey": 1,
+      "path": null,
+      "prevRef": null,
+      "propIdx": 2,
+      "refKey": 0,
+      "type": null,
+      "updateData": [Function],
+    },
+  ],
+  "events": Array [
+    Object {
+      "afterKey": null,
+      "afterNodeFn": null,
+      "applyData": null,
+      "flag": 0,
+      "instKey": null,
+      "path": Array [],
+      "prevRef": 0,
+      "propIdx": 1,
+      "refKey": 2,
+      "type": "click",
+      "updateData": null,
+    },
+  ],
+  "gen": [Function],
+  "insertionPoints": Array [
+    Object {
+      "points": Array [
+        Object {
+          "instKey": 1,
+          "propIdx": 2,
+          "staticElemsBefore": 1,
+        },
+      ],
+      "refIdx": 0,
+    },
+  ],
+  "knownEvents": Array [
+    "click",
+  ],
+  "producer": [Function],
+  "templateNode": <div
+    id="target"
+  >
+    Web Component 
+  </div>,
+  "type": 8,
+  "unmountPoints": Array [
+    Object {
+      "instKey": 1,
+      "propIdx": 2,
+      "staticElemsBefore": 1,
+    },
+  ],
+  "ways": Array [],
+}
+`;
+
+exports[`compiler basic basic 18 2`] = `
+<div
+  id="app"
+>
+  <div
+    id="target"
+  >
+    Web Component 
+    World
+  </div>
+</div>
+`;
+
 exports[`compiler dynamic roots dynamic 01 1`] = `"Content"`;
 
 exports[`compiler dynamic roots dynamic 01 2`] = `
@@ -7204,6 +7360,7 @@ exports[`webcomponents webcomponents 02 1`] = `
 <div
   id="target"
 >
+  Web Component 
   World
 </div>
 `;
@@ -7226,6 +7383,7 @@ exports[`webcomponents webcomponents 03 1`] = `
 <div
   id="target"
 >
+  Web Component 
   World
 </div>
 `;
@@ -7237,6 +7395,29 @@ exports[`webcomponents webcomponents 03 2`] = `
   <div>
     Hello
     <x-search-3
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents webcomponents 04 1`] = `
+<div
+  id="target"
+>
+  Web Component 
+  World
+</div>
+`;
+
+exports[`webcomponents webcomponents 04 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-4
       name="World"
     />
     !

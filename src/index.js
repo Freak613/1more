@@ -364,8 +364,10 @@ const wrapTextNodes = strings => {
 
     const terms = str.split(/(<\/?[^>]+\/?>)/g);
 
-    terms.unshift(...terms.shift().split(/^(\/?>)/g));
-    terms.push(...terms.pop().split(/(<\w.*)$/g));
+    // terms.unshift(...terms.shift().split(/^(\/?>)/g));
+    terms.unshift(...terms.shift().split(/^([^>]*\/?>)/g));
+    // terms.push(...terms.pop().split(/(<\w.*)$/g));
+    terms.push(...terms.pop().split(/(<\w[^]*)$/g));
     return terms
       .map(v => {
         if (v.match(/<|>/g)) return v;

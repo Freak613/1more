@@ -204,6 +204,31 @@ describe("compiler", () => {
     it("basic 16", () => {
       testTemplate(html` <div id="target">Web Component ${"World"}</div> `);
     });
+
+    it("basic 17", () => {
+      testTemplate(
+        // prettier-ignore
+        html`
+          <div>
+            Hello
+            <x-search-4
+              name=${"World"}
+              onclick=${() => {}}
+            ></x-search-4>
+            !
+          </div>
+        `,
+      );
+    });
+
+    it("basic 18", () => {
+      testTemplate(
+        // prettier-ignore
+        html`<div onclick=${() => {}} id="target">
+          Web Component ${"World"}
+        </div>`,
+      );
+    });
   });
 
   describe("afterNode", () => {
@@ -3137,5 +3162,51 @@ describe("webcomponents", () => {
     await wait(1);
 
     expect(order).toEqual(["target", "parent"]);
+  });
+
+  it("webcomponents 04", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div onclick=${() => order.push("target")} id="target">
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-4", XSearch);
+
+    render(
+      html`
+        <div>
+          Hello
+          <x-search-4
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-4>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
+    await wait(1);
+
+    expect(order).toEqual(["target", "custom-element"]);
   });
 });
