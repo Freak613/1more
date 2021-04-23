@@ -1512,9 +1512,8 @@ function tracebackReference(path, root) {
   return result;
 }
 
-function callEvents(event) {
+function callEvents(event, node) {
   let targets = [];
-  let node = event.target;
   while (1) {
     const nodeInstance = node.$INST;
 
@@ -1523,27 +1522,33 @@ function callEvents(event) {
       inst.i.e(inst, event, targets.reverse(), node, 0);
       targets = [];
     }
-    if (node.parentNode === null) break;
     targets.push(node);
-    node = node.parentNode;
+    node = node.parentNode || node.host;
+    if (node == null) break;
   }
-  return node;
 }
 
+const createPendingEventConfig = () => ({
+  e: undefined,
+  t: undefined,
+});
+
 let _eventsFlags = 0;
-const _pendingEvent = box(undefined);
+const _pendingEvent = box(createPendingEventConfig());
 
 const flushEvent = () => {
-  const event = _pendingEvent.v;
+  const config = _pendingEvent.v;
 
-  callEvents(event);
+  callEvents(config.e, config.t);
 
   _eventsFlags = 0;
-  _pendingEvent.v = undefined;
+  _pendingEvent.v = createPendingEventConfig();
 };
 
 const globalEventHandler = event => {
-  _pendingEvent.v = event;
+  const config = _pendingEvent.v;
+  config.e = event;
+  config.t = event.target;
 
   if ((_eventsFlags & 2) === 0) {
     _eventsFlags = 2;

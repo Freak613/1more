@@ -3052,4 +3052,90 @@ describe("webcomponents", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("webcomponents 02", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div onclick=${() => order.push("target")} id="target">
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-2", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-2 name=${"World"}></x-search-2>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
+    await wait(1);
+
+    expect(order).toEqual(["target", "parent"]);
+  });
+
+  it("webcomponents 03", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "closed" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div onclick=${() => order.push("target")} id="target">
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-3", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-3 name=${"World"}></x-search-3>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
+    await wait(1);
+
+    expect(order).toEqual(["target", "parent"]);
+  });
 });
