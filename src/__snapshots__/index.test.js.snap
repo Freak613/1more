@@ -7491,3 +7491,51 @@ exports[`webcomponents webcomponents 07 2`] = `
   </div>
 </div>
 `;
+
+exports[`webcomponents webcomponents 08 1`] = `
+<div
+  id="target"
+>
+  Web Component World
+</div>
+`;
+
+exports[`webcomponents webcomponents 08 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-8
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents webcomponents 09 1`] = `
+<div
+  id="search-root"
+>
+  <div
+    id="target"
+  >
+    Web Component World
+  </div>
+</div>
+`;
+
+exports[`webcomponents webcomponents 09 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-9
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;

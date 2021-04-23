@@ -3049,6 +3049,12 @@ describe("nestedRoots", () => {
 });
 
 describe("webcomponents", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
   it("webcomponents 01", () => {
     const container = document.getElementById("app");
 
@@ -3343,5 +3349,94 @@ describe("webcomponents", () => {
     await wait(1);
 
     expect(order).toEqual(["target"]);
+  });
+
+  it("webcomponents 08", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        shadowRoot.innerHTML = `<div id='target'>Web Component ${name}</div>`;
+
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-8", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-8
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-8>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+    await wait(1);
+
+    expect(order).toEqual([]);
+  });
+
+  it("webcomponents 09", async () => {
+    const container = document.getElementById("app");
+
+    let target, searchRoot;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        shadowRoot.innerHTML = `<div id='search-root'><div id='target'>Web Component ${name}</div></div>`;
+
+        target = shadowRoot.getElementById("target");
+        searchRoot = shadowRoot.getElementById("search-root");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-9", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-9
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-9>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    searchRoot.addEventListener("click", e => {
+      e.stopPropagation();
+    });
+
+    target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
+    await wait(1);
+
+    expect(order).toEqual([]);
   });
 });
