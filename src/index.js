@@ -37,6 +37,8 @@ const indexOf = arrayProto.indexOf;
 
 const noOp = () => {};
 
+const box = v => ({ v });
+
 let _depth = 0;
 let _arg;
 let _getAfterNode;
@@ -1510,7 +1512,7 @@ function tracebackReference(path, root) {
   return result;
 }
 
-function globalEventHandler(event) {
+function callEvents(event) {
   let targets = [];
   let node = event.target;
   while (1) {
@@ -1520,14 +1522,34 @@ function globalEventHandler(event) {
       const inst = nodeInstance.c;
       inst.i.e(inst, event, targets.reverse(), node, 0);
       targets = [];
-      // Nested roots are not supported currently.
-      break;
     }
     if (node.parentNode === null) break;
     targets.push(node);
     node = node.parentNode;
   }
+  return node;
 }
+
+let _eventsFlags = 0;
+const _pendingEvent = box(undefined);
+
+const flushEvent = () => {
+  const event = _pendingEvent.v;
+
+  callEvents(event);
+
+  _eventsFlags = 0;
+  _pendingEvent.v = undefined;
+};
+
+const globalEventHandler = event => {
+  _pendingEvent.v = event;
+
+  if ((_eventsFlags & 2) === 0) {
+    _eventsFlags = 2;
+    _resolvedPromise.then(flushEvent);
+  }
+};
 
 function setupTemplateEventHandlers(events, root) {
   const { e: knownEvents, o: container } = root;
@@ -1952,8 +1974,6 @@ export function useUnmount(component, hook) {
 }
 
 // Scheduling
-
-const box = v => ({ v });
 
 let _flags = 0;
 const _resolvedPromise = Promise.resolve();

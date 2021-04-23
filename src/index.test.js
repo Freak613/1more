@@ -1604,7 +1604,7 @@ describe("events", () => {
     document.body.innerHTML = "<div id='app'></div>";
   });
 
-  it("events 01", () => {
+  it("events 01", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1616,14 +1616,17 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
 
     target.dispatchEvent(new Event("click"));
+    await wait(1);
+
     expect(state).toBe(2);
   });
 
-  it("events 02", () => {
+  it("events 02", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1636,11 +1639,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 03", () => {
+  it("events 03", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1653,11 +1657,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 04", () => {
+  it("events 04", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1673,11 +1678,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 05", () => {
+  it("events 05", async () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1700,12 +1706,13 @@ describe("events", () => {
 
     const target = document.getElementById("target2");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state2).toBe(1);
     expect(state1).toBe(0);
   });
 
-  it("events 06", () => {
+  it("events 06", async () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1724,12 +1731,13 @@ describe("events", () => {
 
     const target = document.getElementById("target2");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state2).toBe(1);
     expect(state1).toBe(0);
   });
 
-  it("events 07", () => {
+  it("events 07", async () => {
     const container = document.getElementById("app");
 
     let state1 = 0;
@@ -1751,12 +1759,13 @@ describe("events", () => {
 
     const target = document.getElementById("target2");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state2).toBe(1);
     expect(state1).toBe(0);
   });
 
-  it("events 08", () => {
+  it("events 08", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1772,14 +1781,17 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
 
     target.dispatchEvent(new Event("click"));
+    await wait(1);
+
     expect(state).toBe(2);
   });
 
-  it("events 09", () => {
+  it("events 09", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1799,11 +1811,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 10", () => {
+  it("events 10", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1818,11 +1831,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.firstChild.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 11", () => {
+  it("events 11", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1843,11 +1857,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 12", () => {
+  it("events 12", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1867,11 +1882,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 13", () => {
+  it("events 13", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1889,11 +1905,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 14", () => {
+  it("events 14", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1906,11 +1923,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 15", () => {
+  it("events 15", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1923,11 +1941,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 16", () => {
+  it("events 16", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1940,11 +1959,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 17", () => {
+  it("events 17", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1961,11 +1981,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 18", () => {
+  it("events 18", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1974,11 +1995,12 @@ describe("events", () => {
     expect(container).toMatchSnapshot();
 
     container.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 19", () => {
+  it("events 19", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -1987,11 +2009,12 @@ describe("events", () => {
     expect(container).toMatchSnapshot();
 
     container.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 20", () => {
+  it("events 20", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2001,11 +2024,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 21", () => {
+  it("events 21", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2015,11 +2039,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 22", () => {
+  it("events 22", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2035,14 +2060,17 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(1);
 
     target.dispatchEvent(new Event("click"));
+    await wait(1);
+
     expect(state).toBe(2);
   });
 
-  it("events 23", () => {
+  it("events 23", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2054,11 +2082,12 @@ describe("events", () => {
 
     const target = document.getElementById("target").firstChild;
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 24", () => {
+  it("events 24", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2074,11 +2103,12 @@ describe("events", () => {
 
     const target = document.getElementById("target").firstChild;
     target.dispatchEvent(new Event("click"));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 25", () => {
+  it("events 25", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2094,11 +2124,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 26", () => {
+  it("events 26", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2116,11 +2147,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
 
     expect(state).toBe(1);
   });
 
-  it("events 27", () => {
+  it("events 27", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2138,11 +2170,12 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
 
     expect(state).toBe(0);
   });
 
-  it("events 28", () => {
+  it("events 28", async () => {
     const container = document.getElementById("app");
 
     let state = 0;
@@ -2160,6 +2193,7 @@ describe("events", () => {
 
     const target = document.getElementById("target");
     target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
 
     expect(state).toBe(0);
   });
@@ -2170,7 +2204,7 @@ describe("events", () => {
   });
 
   describe("bubbling", () => {
-    it("bubbling 01", () => {
+    it("bubbling 01", async () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2187,11 +2221,12 @@ describe("events", () => {
 
       const target = document.getElementById("target");
       target.dispatchEvent(new Event("click", { bubbles: true }));
+      await wait(1);
 
       expect(order).toEqual(["target", "parent"]);
     });
 
-    it("bubbling 02", () => {
+    it("bubbling 02", async () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2208,11 +2243,12 @@ describe("events", () => {
 
       const target = document.getElementById("target");
       target.dispatchEvent(new Event("click", { bubbles: true }));
+      await wait(1);
 
       expect(order).toEqual(["target", "parent"]);
     });
 
-    it("bubbling 03", () => {
+    it("bubbling 03", async () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -2229,12 +2265,13 @@ describe("events", () => {
 
       const target = document.getElementById("target");
       target.dispatchEvent(new Event("click"));
+      await wait(1);
 
       expect(order).toEqual([]);
     });
 
     describe("stopPropagation", () => {
-      it("stopPropagation 01", () => {
+      it("stopPropagation 01", async () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2257,11 +2294,12 @@ describe("events", () => {
 
         const target = document.getElementById("target");
         target.dispatchEvent(new Event("click"));
+        await wait(1);
 
         expect(order).toEqual(["target"]);
       });
 
-      it("stopPropagation 02", () => {
+      it("stopPropagation 02", async () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2284,11 +2322,12 @@ describe("events", () => {
 
         const target = document.getElementById("target");
         target.dispatchEvent(new Event("click"));
+        await wait(1);
 
         expect(order).toEqual(["target"]);
       });
 
-      it("stopPropagation 03", () => {
+      it("stopPropagation 03", async () => {
         const container = document.getElementById("app");
 
         const order = [];
@@ -2321,6 +2360,7 @@ describe("events", () => {
 
         const target = document.getElementById("target");
         target.dispatchEvent(new Event("click", { bubbles: true }));
+        await wait(1);
 
         expect(order).toEqual(["target", "child"]);
       });
@@ -2928,4 +2968,53 @@ describe("propertyToAttribute", () => {
   testValue("version", "version");
   testValue("width", "width");
   testValue("wrap", "wrap");
+});
+
+describe("nestedRoots", () => {
+  it("nestedRoots 01", async () => {
+    const container = document.getElementById("app");
+
+    const order = [];
+    render(
+      html` <div id="parent" onclick=${() => order.push("parent")}></div> `,
+      container,
+    );
+
+    const parent = document.getElementById("parent");
+    render(
+      html`<div id="target" onclick=${() => order.push("child")}></div>`,
+      parent,
+    );
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
+
+    expect(order).toEqual(["child", "parent"]);
+  });
+
+  it("nestedRoots 02", async () => {
+    const container = document.getElementById("app");
+
+    const order = [];
+    render(
+      html` <div id="parent" onclick=${() => order.push("parent")}></div> `,
+      container,
+    );
+
+    const parent = document.getElementById("parent");
+    parent.innerHTML = "<div id='middle'></div>";
+
+    const middle = document.getElementById("middle");
+    render(
+      html`<div id="target" onclick=${() => order.push("child")}></div>`,
+      middle,
+    );
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+    await wait(1);
+
+    expect(order).toEqual(["child", "parent"]);
+  });
 });
