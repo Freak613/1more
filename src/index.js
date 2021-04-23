@@ -1525,8 +1525,16 @@ function callEvents(event, node) {
       targets = [];
     }
     targets.push(node);
-    node = node.parentNode || node.host;
-    if (node == null) break;
+    const parent = node.parentNode;
+    if (parent == null) {
+      const host = node.host;
+      if (host == null || !event.composed) {
+        break;
+      }
+      node = host;
+    } else {
+      node = parent;
+    }
   }
 }
 
