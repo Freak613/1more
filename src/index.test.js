@@ -3203,7 +3203,7 @@ describe("webcomponents", () => {
 
     render(
       html`
-        <div>
+        <div id="parent" onclick=${() => order.push("parent")}>
           Hello
           <x-search-4
             name=${"World"}
@@ -3219,7 +3219,7 @@ describe("webcomponents", () => {
     target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
     await wait(1);
 
-    expect(order).toEqual(["target", "custom-element"]);
+    expect(order).toEqual(["target", "custom-element", "parent"]);
   });
 
   it("webcomponents 05", async () => {
@@ -3539,6 +3539,63 @@ describe("webcomponents", () => {
     );
     await wait(1);
 
-    expect(order).toEqual(["target"]);
+    /**
+     * This may be counter-intuitive, but it looks like the browser
+     * fire event handler on custom-element in target phase
+     * for event that has `bubbles: false`, `composed: true`
+     * and its target is inside of its Shadow DOM.
+     * Thus allowing for event to escape custom element shadow tree
+     * but not going further.
+     * OR this is a bug in jsdom implementation.
+     */
+    expect(order).toEqual(["target", "custom-element"]);
+  });
+
+  it("webcomponents 12", async () => {
+    const container = document.getElementById("app");
+
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div id="target" onclick=${() => order.push("target")}>
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-12", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-12
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-12>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = container.firstChild.firstChild.nextSibling;
+    expect(target.tagName).toBe("X-SEARCH-12");
+
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+    await wait(1);
+
+    expect(order).toEqual(["custom-element"]);
   });
 });

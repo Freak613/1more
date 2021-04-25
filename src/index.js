@@ -82,6 +82,35 @@ function updateContent(refs, v) {
   _getAfterNode = _prevState;
 }
 
+// Set native event handler for target phase.
+// For usage with web components.
+function setTargetEventHandler(refs, _, vnode) {
+  const propIdx = this.propIdx;
+  const node = refs[this.refKey];
+  node.addEventListener(
+    this.type,
+    event => {
+      // console.log(
+      //   "native event handler",
+      //   event.bubbles,
+      //   event.target.tagName,
+      //   event.target.id,
+      // );
+
+      // if (event.bubbles) return;
+      // if (event.bubbles) {
+      //   throw new Error("Hello");
+      // }
+
+      vnode.p[propIdx](event);
+    },
+    {
+      capture: false,
+      passive: false,
+    },
+  );
+}
+
 function setClassname(refs, v) {
   if (typeof v === "string") elementSetClassName.call(refs[this.refKey], v);
 }
@@ -563,6 +592,9 @@ const compileRoot = (vdom, domNode) => {
 
     ways.push(nextNode);
 
+    const { tag } = vdom;
+    const isCustomElement = tag.match(/-/) !== null;
+
     vdom.props.forEach(prop => {
       const attrName = prop.name;
       if (attrName[0] === "o" && attrName[1] === "n") {
@@ -574,8 +606,17 @@ const compileRoot = (vdom, domNode) => {
         nextArgNode.prevRef = lastDataRefIdx;
         nextArgNode.path = eventsPath;
 
-        events.push(nextArgNode);
-        knownEvents[nextArgNode.type] = true;
+        if (isCustomElement) {
+          activeWayNodes[nextNode.refKey] = 1;
+
+          nextArgNode.applyData = setTargetEventHandler;
+          nextArgNode.updateData = noOp;
+
+          argsWays.push(nextArgNode);
+        } else {
+          events.push(nextArgNode);
+          knownEvents[nextArgNode.type] = true;
+        }
       } else {
         const nextArgNode = getArgNode();
         nextArgNode.propIdx = prop.propIdx;
@@ -606,8 +647,6 @@ const compileRoot = (vdom, domNode) => {
             nextArgNode.updateData = noOp;
             break;
           default: {
-            const { tag } = vdom;
-
             TAG_KNOWLEDGE_BASE[tag] = TAG_KNOWLEDGE_BASE[tag] || {};
 
             const knownTag = TAG_KNOWLEDGE_BASE[tag];
@@ -625,8 +664,6 @@ const compileRoot = (vdom, domNode) => {
             }
 
             if (isProperty) {
-              const isCustomElement = tag.match(/-/) !== null;
-
               nextArgNode.applyData = createPropertySetter(attrName);
               nextArgNode.updateData = createPropertyUpdater(
                 attrName,
@@ -1566,7 +1603,15 @@ function tracebackReference(path, root) {
 //   }
 // };
 
-const bubbleEventHandler = event => {
+function bubbleEventHandler(event) {
+  // console.log(
+  //   "global bubble event handler",
+  //   event.target.tagName,
+  //   event.target.id,
+  //   this.tagName || "shadowRoot",
+  //   this.id,
+  // );
+
   // console.log("bubble", event.bubbles, event.target);
 
   const prevTarget = event.$TARGET;
@@ -1604,9 +1649,17 @@ const bubbleEventHandler = event => {
     if (node === null) break;
   }
   event.$TARGET = node;
-};
+}
 
-const captureEventHandler = event => {
+function captureEventHandler(event) {
+  // console.log(
+  //   "global capture event handler",
+  //   event.target.tagName,
+  //   event.target.id,
+  //   this.tagName || "shadowRoot",
+  //   this.id,
+  // );
+
   // console.log("capture", event.bubbles, event.target, event.target.id);
   if (event.bubbles) return;
 
@@ -1630,7 +1683,7 @@ const captureEventHandler = event => {
     node = node.parentNode;
     if (node === null) break;
   }
-};
+}
 
 function setupTemplateEventHandlers(events, root) {
   const { e: knownEvents, o: container } = root;
