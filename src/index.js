@@ -1617,19 +1617,44 @@ function bubbleEventHandler(event) {
   const prevTarget = event.$TARGET;
   if (prevTarget) {
     const targets = [prevTarget];
-    let node = prevTarget.parentNode || event.target;
-    while (1) {
-      const nodeInstance = node.$INST;
+    const prevParent = prevTarget.parentNode;
 
-      if (nodeInstance !== undefined) {
-        const inst = nodeInstance.c;
-        inst.i.e(inst, event, targets.reverse(), node, 0);
-        break;
+    let node;
+    let handled = false;
+    if (prevParent) {
+      node = prevParent;
+      while (1) {
+        const nodeInstance = node.$INST;
+
+        if (nodeInstance !== undefined) {
+          const inst = nodeInstance.c;
+          inst.i.e(inst, event, targets.reverse(), node, 0);
+          handled = true;
+          break;
+        }
+        targets.push(node);
+        node = node.parentNode;
+        if (node === null) break;
       }
-      targets.push(node);
-      node = node.parentNode;
-      if (node === null) break;
     }
+
+    if (!handled) {
+      node = event.target;
+      while (1) {
+        const nodeInstance = node.$INST;
+
+        if (nodeInstance !== undefined) {
+          const inst = nodeInstance.c;
+          inst.i.e(inst, event, targets.reverse(), node, 0);
+          handled = true;
+          break;
+        }
+        targets.push(node);
+        node = node.parentNode;
+        if (node === null) break;
+      }
+    }
+
     event.$TARGET = node;
     return;
   }

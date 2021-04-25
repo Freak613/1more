@@ -3548,4 +3548,50 @@ describe("webcomponents", () => {
 
     expect(order).toEqual(["custom-element"]);
   });
+
+  it("webcomponents 13", () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const mountPoint = document.createElement("span");
+        this.attachShadow({ mode: "open" }).appendChild(mountPoint);
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div onclick=${() => order.push("target")} id="target">
+            Web Component ${name}
+          </div>`,
+          mountPoint,
+        );
+
+        target = mountPoint.firstChild;
+
+        expect(mountPoint).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-13", XSearch);
+
+    render(
+      html`
+        <div id="parent" onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-13
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-13>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
+
+    expect(order).toEqual(["target", "custom-element", "parent"]);
+  });
 });
