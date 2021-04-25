@@ -1514,55 +1514,112 @@ function tracebackReference(path, root) {
   return result;
 }
 
-function callEvents(event, node) {
-  let targets = [];
+// function callEvents(event, node) {
+//   let targets = [];
+//   while (1) {
+//     const nodeInstance = node.$INST;
+
+//     if (nodeInstance !== undefined) {
+//       const inst = nodeInstance.c;
+//       inst.i.e(inst, event, targets.reverse(), node, 0);
+//       targets = [];
+//     }
+//     targets.push(node);
+//     const parent = node.parentNode;
+//     if (parent == null) {
+//       const host = node.host;
+//       if (host == null || !event.composed) {
+//         break;
+//       }
+//       node = host;
+//     } else {
+//       node = parent;
+//     }
+//   }
+// }
+
+// const createPendingEventConfig = () => ({
+//   e: undefined,
+//   t: undefined,
+// });
+
+// let _eventsFlags = 0;
+// const _pendingEvent = box(createPendingEventConfig());
+
+// const flushEvent = () => {
+//   const config = _pendingEvent.v;
+
+//   callEvents(config.e, config.t);
+
+//   _eventsFlags = 0;
+//   _pendingEvent.v = createPendingEventConfig();
+// };
+
+// const globalEventHandler = event => {
+//   const config = _pendingEvent.v;
+//   config.e = event;
+//   config.t = event.target;
+
+//   if ((_eventsFlags & 2) === 0) {
+//     _eventsFlags = 2;
+//     _resolvedPromise.then(flushEvent);
+//   }
+// };
+
+const bubbleEventHandler = event => {
+  const prevTarget = event.$TARGET;
+  if (prevTarget) {
+    const targets = [prevTarget];
+    let node = prevTarget.parentNode || event.target;
+    while (1) {
+      const nodeInstance = node.$INST;
+
+      if (nodeInstance !== undefined) {
+        const inst = nodeInstance.c;
+        inst.i.e(inst, event, targets.reverse(), node, 0);
+        break;
+      }
+      targets.push(node);
+      node = node.parentNode;
+      if (node === null) break;
+    }
+    event.$TARGET = node;
+    return;
+  }
+
+  const targets = [];
+  let node = event.target;
   while (1) {
     const nodeInstance = node.$INST;
 
     if (nodeInstance !== undefined) {
       const inst = nodeInstance.c;
       inst.i.e(inst, event, targets.reverse(), node, 0);
-      targets = [];
+      break;
     }
     targets.push(node);
-    const parent = node.parentNode;
-    if (parent == null) {
-      const host = node.host;
-      if (host == null || !event.composed) {
-        break;
-      }
-      node = host;
-    } else {
-      node = parent;
-    }
+    node = node.parentNode;
+    if (node === null) break;
   }
-}
-
-const createPendingEventConfig = () => ({
-  e: undefined,
-  t: undefined,
-});
-
-let _eventsFlags = 0;
-const _pendingEvent = box(createPendingEventConfig());
-
-const flushEvent = () => {
-  const config = _pendingEvent.v;
-
-  callEvents(config.e, config.t);
-
-  _eventsFlags = 0;
-  _pendingEvent.v = createPendingEventConfig();
+  event.$TARGET = node;
 };
 
-const globalEventHandler = event => {
-  const config = _pendingEvent.v;
-  config.e = event;
-  config.t = event.target;
+const captureEventHandler = event => {
+  if (event.bubbles) return;
 
-  if ((_eventsFlags & 2) === 0) {
-    _eventsFlags = 2;
-    _resolvedPromise.then(flushEvent);
+  let targets = [];
+  let node = event.target;
+  while (1) {
+    const nodeInstance = node.$INST;
+
+    if (nodeInstance !== undefined) {
+      const inst = nodeInstance.c;
+      inst.i.e(inst, event, targets.reverse(), node, 0);
+      break;
+    }
+    targets.push(node);
+    node = node.parentNode;
+    if (node === null) break;
   }
 };
 
@@ -1571,10 +1628,21 @@ function setupTemplateEventHandlers(events, root) {
 
   events.forEach(name => {
     if (!knownEvents[name]) {
-      container.addEventListener(name, globalEventHandler, {
+      // container.addEventListener(name, globalEventHandler, {
+      //   capture: true,
+      //   passive: false,
+      // });
+
+      container.addEventListener(name, captureEventHandler, {
         capture: true,
         passive: false,
       });
+
+      container.addEventListener(name, bubbleEventHandler, {
+        capture: false,
+        passive: false,
+      });
+
       knownEvents[name] = true;
     }
   });

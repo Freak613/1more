@@ -3000,6 +3000,12 @@ describe("propertyToAttribute", () => {
 });
 
 describe("nestedRoots", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
   it("nestedRoots 01", async () => {
     const container = document.getElementById("app");
 
