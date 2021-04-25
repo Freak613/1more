@@ -3257,7 +3257,9 @@ describe("webcomponents", () => {
     const target = container.firstChild.firstChild.nextSibling;
     expect(target.tagName).toBe("X-SEARCH-5");
 
-    target.dispatchEvent(new Event("click"));
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: true }),
+    );
     await wait(1);
 
     expect(order).toEqual(["custom-element"]);
@@ -3444,5 +3446,99 @@ describe("webcomponents", () => {
     await wait(1);
 
     expect(order).toEqual([]);
+  });
+
+  it("webcomponents 10", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div id="target" onclick=${() => order.push("target")}>
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-10", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-10
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-10>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+    await wait(1);
+
+    expect(order).toEqual(["target"]);
+  });
+
+  it("webcomponents 11", async () => {
+    const container = document.getElementById("app");
+
+    let target;
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div id="target" onclick=${() => order.push("target")}>
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+        target = shadowRoot.getElementById("target");
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-11", XSearch);
+
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-11
+            name=${"World"}
+            onclick=${() => order.push("custom-element")}
+          ></x-search-11>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: true }),
+    );
+    await wait(1);
+
+    expect(order).toEqual(["target"]);
   });
 });

@@ -1567,6 +1567,8 @@ function tracebackReference(path, root) {
 // };
 
 const bubbleEventHandler = event => {
+  // console.log("bubble", event.bubbles, event.target);
+
   const prevTarget = event.$TARGET;
   if (prevTarget) {
     const targets = [prevTarget];
@@ -1605,10 +1607,17 @@ const bubbleEventHandler = event => {
 };
 
 const captureEventHandler = event => {
+  // console.log("capture", event.bubbles, event.target, event.target.id);
   if (event.bubbles) return;
 
+  const target = event.target;
+  const tagName = target.tagName;
+  if (tagName && tagName.match(/-/)) {
+    return;
+  }
+
   let targets = [];
-  let node = event.target;
+  let node = target;
   while (1) {
     const nodeInstance = node.$INST;
 

@@ -7539,3 +7539,49 @@ exports[`webcomponents webcomponents 09 2`] = `
   </div>
 </div>
 `;
+
+exports[`webcomponents webcomponents 10 1`] = `
+<div
+  id="target"
+>
+  Web Component 
+  World
+</div>
+`;
+
+exports[`webcomponents webcomponents 10 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-10
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents webcomponents 11 1`] = `
+<div
+  id="target"
+>
+  Web Component 
+  World
+</div>
+`;
+
+exports[`webcomponents webcomponents 11 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-11
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
