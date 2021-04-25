@@ -87,28 +87,10 @@ function updateContent(refs, v) {
 function setTargetEventHandler(refs, _, vnode) {
   const propIdx = this.propIdx;
   const node = refs[this.refKey];
-  node.addEventListener(
-    this.type,
-    event => {
-      // console.log(
-      //   "native event handler",
-      //   event.bubbles,
-      //   event.target.tagName,
-      //   event.target.id,
-      // );
-
-      // if (event.bubbles) return;
-      // if (event.bubbles) {
-      //   throw new Error("Hello");
-      // }
-
-      vnode.p[propIdx](event);
-    },
-    {
-      capture: false,
-      passive: false,
-    },
-  );
+  node.addEventListener(this.type, event => vnode.p[propIdx](event), {
+    capture: false,
+    passive: false,
+  });
 }
 
 function setClassname(refs, v) {
@@ -393,9 +375,7 @@ const wrapTextNodes = strings => {
 
     const terms = str.split(/(<\/?[^>]+\/?>)/g);
 
-    // terms.unshift(...terms.shift().split(/^(\/?>)/g));
     terms.unshift(...terms.shift().split(/^([^>]*\/?>)/g));
-    // terms.push(...terms.pop().split(/(<\w.*)$/g));
     terms.push(...terms.pop().split(/(<\w[^]*)$/g));
     return terms
       .map(v => {
@@ -1551,69 +1531,7 @@ function tracebackReference(path, root) {
   return result;
 }
 
-// function callEvents(event, node) {
-//   let targets = [];
-//   while (1) {
-//     const nodeInstance = node.$INST;
-
-//     if (nodeInstance !== undefined) {
-//       const inst = nodeInstance.c;
-//       inst.i.e(inst, event, targets.reverse(), node, 0);
-//       targets = [];
-//     }
-//     targets.push(node);
-//     const parent = node.parentNode;
-//     if (parent == null) {
-//       const host = node.host;
-//       if (host == null || !event.composed) {
-//         break;
-//       }
-//       node = host;
-//     } else {
-//       node = parent;
-//     }
-//   }
-// }
-
-// const createPendingEventConfig = () => ({
-//   e: undefined,
-//   t: undefined,
-// });
-
-// let _eventsFlags = 0;
-// const _pendingEvent = box(createPendingEventConfig());
-
-// const flushEvent = () => {
-//   const config = _pendingEvent.v;
-
-//   callEvents(config.e, config.t);
-
-//   _eventsFlags = 0;
-//   _pendingEvent.v = createPendingEventConfig();
-// };
-
-// const globalEventHandler = event => {
-//   const config = _pendingEvent.v;
-//   config.e = event;
-//   config.t = event.target;
-
-//   if ((_eventsFlags & 2) === 0) {
-//     _eventsFlags = 2;
-//     _resolvedPromise.then(flushEvent);
-//   }
-// };
-
 function bubbleEventHandler(event) {
-  // console.log(
-  //   "global bubble event handler",
-  //   event.target.tagName,
-  //   event.target.id,
-  //   this.tagName || "shadowRoot",
-  //   this.id,
-  // );
-
-  // console.log("bubble", event.bubbles, event.target);
-
   const prevTarget = event.$TARGET;
   if (prevTarget) {
     const targets = [prevTarget];
@@ -1677,15 +1595,6 @@ function bubbleEventHandler(event) {
 }
 
 function captureEventHandler(event) {
-  // console.log(
-  //   "global capture event handler",
-  //   event.target.tagName,
-  //   event.target.id,
-  //   this.tagName || "shadowRoot",
-  //   this.id,
-  // );
-
-  // console.log("capture", event.bubbles, event.target, event.target.id);
   if (event.bubbles) return;
 
   const target = event.target;
@@ -1715,11 +1624,6 @@ function setupTemplateEventHandlers(events, root) {
 
   events.forEach(name => {
     if (!knownEvents[name]) {
-      // container.addEventListener(name, globalEventHandler, {
-      //   capture: true,
-      //   passive: false,
-      // });
-
       container.addEventListener(name, captureEventHandler, {
         capture: true,
         passive: false,
