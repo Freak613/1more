@@ -3491,7 +3491,7 @@ describe("webcomponents", () => {
     );
 
     /**
-     * This may be counter-intuitive, but it looks like the browser
+     * This may seem counter-intuitive, but it looks like the browser
      * fire event handler on custom-element in target phase
      * for event that has `bubbles: false`, `composed: true`
      * and its target is inside of its Shadow DOM.
@@ -3593,5 +3593,59 @@ describe("webcomponents", () => {
     target.dispatchEvent(new Event("click", { bubbles: true, composed: true }));
 
     expect(order).toEqual(["target", "custom-element", "parent"]);
+  });
+
+  it("webcomponents 14", () => {
+    const container = document.getElementById("app");
+
+    const order = [];
+
+    class XSearch extends HTMLElement {
+      connectedCallback() {
+        const shadowRoot = this.attachShadow({ mode: "open" });
+
+        const name = this.getAttribute("name");
+        render(
+          html`<div id="target" onclick=${() => order.push("target")}>
+            Web Component ${name}
+          </div>`,
+          shadowRoot,
+        );
+
+        expect(shadowRoot.firstChild).toMatchSnapshot();
+      }
+    }
+    customElements.define("x-search-14", XSearch);
+
+    let state = 0;
+    render(
+      html`
+        <div onclick=${() => order.push("parent")}>
+          Hello
+          <x-search-14
+            name=${"World"}
+            onclick=${() => order.push(state++)}
+          ></x-search-14>
+          !
+        </div>
+      `,
+      container,
+    );
+    expect(container).toMatchSnapshot();
+
+    const target = container.firstChild.firstChild.nextSibling;
+    expect(target.tagName).toBe("X-SEARCH-14");
+
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+    target.dispatchEvent(
+      new Event("click", { bubbles: false, composed: false }),
+    );
+
+    expect(order).toEqual([0, 1, 2]);
   });
 });

@@ -7634,3 +7634,26 @@ exports[`webcomponents webcomponents 13 2`] = `
   </div>
 </div>
 `;
+
+exports[`webcomponents webcomponents 14 1`] = `
+<div
+  id="target"
+>
+  Web Component 
+  World
+</div>
+`;
+
+exports[`webcomponents webcomponents 14 2`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-14
+      name="World"
+    />
+    !
+  </div>
+</div>
+`;
