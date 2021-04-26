@@ -67,11 +67,12 @@ html`
   - `style` - accepts objects with dashed CSS properties names. For example `background-color` instead of `backgroundColor`. Browser prefixes and custom CSS properties are supported. Assigning `null` or `undefined` to `style` will remove this attribute. Assigning `null`, `undefined` or empty string to CSS property value will remove it from element's style declaration.
   - `defaultValue` / `defaultChecked` - can be used to assign corresponding value to node on first mount, and skipping it on updates. Thus it's possible to create uncontrolled form elements.
   - `innerHTML` is temporarily disabled.
-- Event handlers should have name starting with `on` and actual event name. For example `onclick` instead of `onClick`. Handlers are not attached to DOM nodes, instead library use automatic event delegation for better render and update performance.
+- Event handlers should have name starting with `on` and actual event name. For example `onclick` instead of `onClick`. Handlers are not attached to DOM nodes, instead library use automatic event delegation.
 - For Custom Elements:
   - Element should be registered before call to `html` with template containing this element.
   - Property-first approach should work fine, as long as property is exposed in element instance. When assigning `null` or `undefined` to element property, it is going to be directly assigned to element, not triggering removal. For attributes `null` and `undefined` will work as usual, removing attribute from element.
-  - Delegated events will not work properly at the moment. This is going to be changed in the future.
+  - Delegated events will work fine from both inside and outside of Shadow DOM content (even in closed mode) and doesn't require for events to be `composed`. Only current limitation is that for slotted content event order will not be correct.
+  - It's possible to render to `shadowRoot` directly, without any container element.
 
 ##### Children
 
@@ -284,11 +285,13 @@ Allows to consume observable from component props. When receiving observable, it
 
 ### Delegated events
 
-Rendered DOM nodes don't have attached event listeners. Instead renderer attaches global event handlers attached to `document` per each event type, then use rendered app instance to discover target event handler.
+Rendered DOM nodes don't have attached event listeners. Instead renderer attaches delegated event handlers to rendering root (container argument in `render` function) for each event type, then will use rendered app instance to discover target event handler.
 
-All events are working only in the `bubble` phase, with proper handling of `stopPropagation` and event's `bubbles` flag.
+Events that have `bubbles: true` will be handled in `bubble` phase (from bottom to top), with proper handling of `stopPropagation` calls.
 
-Note: Global event handlers are active (with `passive: false`), and system doesn't support `capture` phase. This being done to avoid having custom syntax or diff event handlers flags, and because this library main purpose is to have minimal API surface to solve most of the use cases.
+Events that have `bubbles: false` (like `focus` event) will be handled in their `capture` phase on the target. This should not affect normal usage, but worth keep in mind when debugging.
+
+Note: All event handlers are active (with `passive: false`), and system doesn't have built-in support to handle events in `capture` phase.
 
 ### Does this implementation use Virtual DOM?
 
