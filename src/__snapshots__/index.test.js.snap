@@ -7332,6 +7332,56 @@ exports[`update update 36 2`] = `
 </div>
 `;
 
+exports[`webcomponents slots slots 01 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-01>
+      <div
+        id="target"
+      />
+    </x-search-slots-01>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 02 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-02>
+      <div
+        id="target"
+      />
+    </x-search-slots-02>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 03 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-03>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-03>
+    !
+  </div>
+</div>
+`;
+
 exports[`webcomponents webcomponents 01 1`] = `
 <div>
   Web Component 
