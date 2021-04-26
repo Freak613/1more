@@ -219,6 +219,25 @@ function createAttributeUpdater(key) {
   };
 }
 
+function setNodeAsRenderingRoot(refs, v, vnode, rootVnode) {
+  const node = refs[this.refKey];
+  const knownEvents = this.knownEvents;
+
+  node.$INST = rootVnode;
+
+  knownEvents.forEach(name => {
+    node.addEventListener(name, captureEventHandler, {
+      capture: true,
+      passive: false,
+    });
+
+    node.addEventListener(name, bubbleEventHandler, {
+      capture: false,
+      passive: false,
+    });
+  });
+}
+
 const TAG_KNOWLEDGE_BASE = {};
 
 // Compiler
@@ -494,6 +513,7 @@ const compileRoot = (vdom, domNode) => {
     prevRef: null,
     type: null,
     path: null,
+    knownEvents: null,
   });
 
   let ways = [];
@@ -515,6 +535,7 @@ const compileRoot = (vdom, domNode) => {
     lastDataRefIdx,
     eventsPath,
     domPath,
+    knownEvents,
   ) => {
     if (vdom.type === "insertion") {
       const nextArgNode = getArgNode();
@@ -581,6 +602,24 @@ const compileRoot = (vdom, domNode) => {
     ways.push(nextNode);
 
     const { tag, isCustomElement } = vdom;
+
+    let slotArgNode;
+    if (parent && parent.isCustomElement) {
+      const nextArgNode = getArgNode();
+      slotArgNode = nextArgNode;
+
+      nextArgNode.refKey = nextNode.refKey;
+      nextArgNode.propIdx = 0;
+
+      activeWayNodes[nextNode.refKey] = 1;
+
+      nextArgNode.applyData = setNodeAsRenderingRoot;
+      nextArgNode.updateData = noOp;
+
+      knownEvents = {};
+
+      argsWays.push(nextArgNode);
+    }
 
     vdom.props.forEach(prop => {
       const attrName = prop.name;
@@ -690,6 +729,7 @@ const compileRoot = (vdom, domNode) => {
         lastDataRefIdx,
         eventsPath,
         domPath,
+        knownEvents,
       );
 
       if (childHasNestedData) {
@@ -707,6 +747,10 @@ const compileRoot = (vdom, domNode) => {
       }
     });
 
+    if (slotArgNode) {
+      slotArgNode.knownEvents = Object.keys(knownEvents);
+    }
+
     if (parent) {
       const prevSibling = parent.children[idx - 1];
       if (prevSibling && prevSibling.type === "insertion") {
@@ -718,7 +762,7 @@ const compileRoot = (vdom, domNode) => {
     return [nextNode.refKey, hasNestedData];
   };
 
-  compileNode(vdom, 0, null, null, [], 0, null, 0, [], []);
+  compileNode(vdom, 0, null, null, [], 0, null, 0, [], [], knownEvents);
 
   const foldedWays = foldStaticTrees(ways.slice(1), activeWayNodes);
 
