@@ -1585,7 +1585,11 @@ function tracebackReference(path, root) {
 function bubbleEventHandler(event) {
   const prevTarget = event.$TARGET;
   if (prevTarget) {
-    const targets = [prevTarget];
+    const targets = [];
+    if (!prevTarget.assignedSlot) {
+      targets.push(prevTarget);
+    }
+
     const prevParent = prevTarget.parentNode;
 
     let node;
@@ -1634,6 +1638,10 @@ function bubbleEventHandler(event) {
     const nodeInstance = node.$INST;
 
     if (nodeInstance !== undefined) {
+      if (targets.length === 0) {
+        targets.push(node);
+      }
+
       const inst = nodeInstance.c;
       inst.i.e(inst, event, targets.reverse(), node, 0);
       break;
