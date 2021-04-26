@@ -1583,14 +1583,24 @@ function tracebackReference(path, root) {
 }
 
 function bubbleEventHandler(event) {
-  const prevTarget = event.$TARGET;
+  let prevTarget = event.$TARGET;
   if (prevTarget) {
     const targets = [];
-    if (!prevTarget.assignedSlot) {
-      targets.push(prevTarget);
+
+    let isSlot;
+    const prevParent = prevTarget.parentNode;
+    if (prevParent) {
+      const tag = prevParent.tagName;
+      if (tag) {
+        isSlot = tag.match(/-/) !== null;
+      }
     }
 
-    const prevParent = prevTarget.parentNode;
+    if (!isSlot) {
+      targets.push(prevTarget);
+    } else {
+      // prevTarget = slot;
+    }
 
     let node;
     let handled = false;

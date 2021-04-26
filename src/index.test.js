@@ -3701,7 +3701,7 @@ describe("webcomponents", () => {
 
       class XSearch extends HTMLElement {
         connectedCallback() {
-          const shadowRoot = this.attachShadow({ mode: "open" });
+          const shadowRoot = this.attachShadow({ mode: "closed" });
 
           shadowRoot.innerHTML = `<div id='content'><slot></slot></div>`;
 
@@ -3743,7 +3743,7 @@ describe("webcomponents", () => {
 
       class XSearch extends HTMLElement {
         connectedCallback() {
-          const shadowRoot = this.attachShadow({ mode: "open" });
+          const shadowRoot = this.attachShadow({ mode: "closed" });
 
           shadowRoot.innerHTML = `<div id='content'><slot></slot></div>`;
 
@@ -3789,7 +3789,7 @@ describe("webcomponents", () => {
 
       class XSearch extends HTMLElement {
         connectedCallback() {
-          const shadowRoot = this.attachShadow({ mode: "open" });
+          const shadowRoot = this.attachShadow({ mode: "closed" });
 
           shadowRoot.innerHTML = `<div id='content'><slot></slot></div>`;
 
