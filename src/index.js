@@ -87,10 +87,17 @@ function updateContent(refs, v) {
 function setTargetEventHandler(refs, _, vnode) {
   const propIdx = this.propIdx;
   const node = refs[this.refKey];
-  node.addEventListener(this.type, event => vnode.p[propIdx](event), {
-    capture: false,
-    passive: false,
-  });
+  node.addEventListener(
+    this.type,
+    event => {
+      const handler = vnode.p[propIdx];
+      if (handler) handler(event);
+    },
+    {
+      capture: false,
+      passive: false,
+    },
+  );
 }
 
 function setClassname(refs, v) {
