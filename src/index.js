@@ -403,6 +403,7 @@ const getTemplateRepresentation = strings => {
     props: [],
     children: [],
     remove: false,
+    isCustomElement: tag !== undefined && tag.match(/-/) !== null,
   });
 
   const getInsertionNode = propIdx => ({
@@ -579,8 +580,7 @@ const compileRoot = (vdom, domNode) => {
 
     ways.push(nextNode);
 
-    const { tag } = vdom;
-    const isCustomElement = tag.match(/-/) !== null;
+    const { tag, isCustomElement } = vdom;
 
     vdom.props.forEach(prop => {
       const attrName = prop.name;
