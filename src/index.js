@@ -55,6 +55,15 @@ export function _resetTemplateCounter() {
 
 // Getters/setters
 function setContent(refs, v, vnode, rootVnode) {
+  // console.log(
+  //   "setContent",
+  //   this.slotArgNode,
+  //   this.slotArgNode && refs[this.slotArgNode.instKey],
+  // );
+
+  const nextRoot =
+    this.slotArgNode !== null ? refs[this.slotArgNode.instKey] : rootVnode;
+
   const prevArg = _arg;
   _arg = this;
   refs[this.instKey] = renderValue(
@@ -63,7 +72,7 @@ function setContent(refs, v, vnode, rootVnode) {
     this.afterNodeFn(refs),
     this.flag,
     vnode,
-    rootVnode,
+    nextRoot,
   );
   _arg = prevArg;
 }
@@ -519,7 +528,7 @@ const compileRoot = (vdom, domNode) => {
     type: null,
     path: null,
     knownEvents: null,
-    rootVnodeIdx: null,
+    slotArgNode: null,
   });
 
   let ways = [];
@@ -542,6 +551,7 @@ const compileRoot = (vdom, domNode) => {
     eventsPath,
     domPath,
     knownEvents,
+    parentSlotArgNode,
   ) => {
     if (vdom.type === "insertion") {
       const nextArgNode = getArgNode();
@@ -550,6 +560,7 @@ const compileRoot = (vdom, domNode) => {
       nextArgNode.instKey = instanceIdx++;
       nextArgNode.applyData = setContent;
       nextArgNode.updateData = updateContent;
+      nextArgNode.slotArgNode = parentSlotArgNode;
 
       insertionPoints[parentRefIdx] = insertionPoints[parentRefIdx] || [];
 
@@ -736,6 +747,7 @@ const compileRoot = (vdom, domNode) => {
         eventsPath,
         domPath,
         knownEvents,
+        slotArgNode || parentSlotArgNode,
       );
 
       if (childHasNestedData) {
@@ -768,7 +780,7 @@ const compileRoot = (vdom, domNode) => {
     return [nextNode.refKey, hasNestedData];
   };
 
-  compileNode(vdom, 0, null, null, [], 0, null, 0, [], [], knownEvents);
+  compileNode(vdom, 0, null, null, [], 0, null, 0, [], [], knownEvents, null);
 
   const foldedWays = foldStaticTrees(ways.slice(1), activeWayNodes);
 
