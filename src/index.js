@@ -1583,62 +1583,96 @@ function tracebackReference(path, root) {
 }
 
 function bubbleEventHandler(event) {
-  let prevTarget = event.$TARGET;
-  if (prevTarget) {
-    const targets = [];
+  let prevTargets = event.$TARGETS;
+  if (prevTargets) {
+    // const targets = [];
 
-    let isSlot;
-    const prevParent = prevTarget.parentNode;
-    if (prevParent) {
-      const tag = prevParent.tagName;
-      if (tag) {
-        isSlot = tag.match(/-/) !== null;
-      }
-    }
+    // let isSlot;
+    // const prevParent = prevTarget.parentNode;
+    // if (prevParent) {
+    //   const tag = prevParent.tagName;
+    //   if (tag) {
+    //     isSlot = tag.match(/-/) !== null;
+    //   }
+    // }
 
-    if (!isSlot) {
-      targets.push(prevTarget);
-    } else {
-      // prevTarget = slot;
-    }
+    // if (!isSlot) {
+    //   targets.push(prevTarget);
+    // } else {
+    //   // prevTarget = slot;
+    // }
 
-    let node;
-    let handled = false;
-    if (prevParent) {
-      node = prevParent;
-      while (1) {
-        const nodeInstance = node.$INST;
+    const eventTargets = event.composedPath();
+    // console.log({ eventTargets, prevTargets });
 
-        if (nodeInstance !== undefined) {
-          const inst = nodeInstance.c;
-          inst.i.e(inst, event, targets.reverse(), node, 0);
-          handled = true;
-          break;
+    for (const prevTarget of prevTargets) {
+      const targetIdx = eventTargets.indexOf(prevTarget);
+      if (targetIdx >= 0) {
+        let idx = eventTargets.indexOf(prevTarget) + 1;
+        // console.log({ idx });
+
+        let node;
+        for (; idx < eventTargets.length; idx++) {
+          node = eventTargets[idx];
+
+          const nodeInstance = node.$INST;
+
+          if (nodeInstance !== undefined) {
+            // console.log(eventTargets.slice(targetIdx + 1, idx).reverse());
+            const inst = nodeInstance.c;
+            inst.i.e(
+              inst,
+              event,
+              eventTargets.slice(targetIdx + 1, idx).reverse(),
+              node,
+              0,
+            );
+            break;
+          }
         }
-        targets.push(node);
-        node = node.parentNode;
-        if (node === null) break;
+
+        prevTargets.push(node);
+        return;
       }
     }
 
-    if (!handled) {
-      node = event.target;
-      while (1) {
-        const nodeInstance = node.$INST;
+    // let node;
+    // let handled = false;
+    // if (prevParent) {
+    //   node = prevParent;
+    //   while (1) {
+    //     const nodeInstance = node.$INST;
 
-        if (nodeInstance !== undefined) {
-          const inst = nodeInstance.c;
-          inst.i.e(inst, event, targets.reverse(), node, 0);
-          handled = true;
-          break;
-        }
-        targets.push(node);
-        node = node.parentNode;
-        if (node === null) break;
-      }
-    }
+    //     if (nodeInstance !== undefined) {
+    //       const inst = nodeInstance.c;
+    //       inst.i.e(inst, event, targets.reverse(), node, 0);
+    //       handled = true;
+    //       break;
+    //     }
+    //     targets.push(node);
+    //     node = node.parentNode;
+    //     if (node === null) break;
+    //   }
+    // }
 
-    event.$TARGET = node;
+    // if (!handled) {
+    //   node = event.target;
+    //   while (1) {
+    //     const nodeInstance = node.$INST;
+
+    //     if (nodeInstance !== undefined) {
+    //       const inst = nodeInstance.c;
+    //       inst.i.e(inst, event, targets.reverse(), node, 0);
+    //       handled = true;
+    //       break;
+    //     }
+    //     targets.push(node);
+    //     node = node.parentNode;
+    //     if (node === null) break;
+    //   }
+    // }
+
+    // event.$TARGET = node;
     return;
   }
 
@@ -1660,7 +1694,7 @@ function bubbleEventHandler(event) {
     node = node.parentNode;
     if (node === null) break;
   }
-  event.$TARGET = node;
+  event.$TARGETS = [node];
 }
 
 function captureEventHandler(event) {

@@ -3736,7 +3736,7 @@ describe("webcomponents", () => {
       expect(order).toEqual(["target", "custom-element-content", "parent"]);
     });
 
-    it("slots 02", () => {
+    it.skip("slots 02", () => {
       const container = document.getElementById("app");
 
       const order = [];
@@ -3810,6 +3810,57 @@ describe("webcomponents", () => {
                 <div id="target" onclick=${() => order.push("target")}></div>
               </div>
             </x-search-slots-03>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual(["target", "custom-element-content", "parent"]);
+    });
+
+    it("slots 04", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => {
+                  order.push("custom-element-content");
+                }}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-04", XSearch);
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-04>
+              <div>
+                <div id="target" onclick=${() => order.push("target")}></div>
+              </div>
+            </x-search-slots-04>
             !
           </div>
         `,
