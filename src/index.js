@@ -1585,23 +1585,6 @@ function tracebackReference(path, root) {
 function bubbleEventHandler(event) {
   let prevTargets = event.$TARGETS;
   if (prevTargets) {
-    // const targets = [];
-
-    // let isSlot;
-    // const prevParent = prevTarget.parentNode;
-    // if (prevParent) {
-    //   const tag = prevParent.tagName;
-    //   if (tag) {
-    //     isSlot = tag.match(/-/) !== null;
-    //   }
-    // }
-
-    // if (!isSlot) {
-    //   targets.push(prevTarget);
-    // } else {
-    //   // prevTarget = slot;
-    // }
-
     const eventTargets = event.composedPath();
     // console.log({ eventTargets, prevTargets });
 
@@ -1618,12 +1601,19 @@ function bubbleEventHandler(event) {
           const nodeInstance = node.$INST;
 
           if (nodeInstance !== undefined) {
-            // console.log(eventTargets.slice(targetIdx + 1, idx).reverse());
+            const startIdx =
+              prevTarget.$INST === nodeInstance ? targetIdx + 1 : targetIdx;
+            // console.log(
+            //   startIdx,
+            //   idx,
+            //   eventTargets.slice(startIdx, idx).reverse(),
+            //   prevTarget.$INST === nodeInstance,
+            // );
             const inst = nodeInstance.c;
             inst.i.e(
               inst,
               event,
-              eventTargets.slice(targetIdx + 1, idx).reverse(),
+              eventTargets.slice(startIdx, idx).reverse(),
               node,
               0,
             );
@@ -1636,43 +1626,40 @@ function bubbleEventHandler(event) {
       }
     }
 
-    // let node;
-    // let handled = false;
-    // if (prevParent) {
-    //   node = prevParent;
-    //   while (1) {
-    //     const nodeInstance = node.$INST;
+    const target = event.target;
+    const targetIdx = eventTargets.indexOf(target);
+    if (targetIdx >= 0) {
+      let idx = targetIdx + 1;
+      // console.log({ idx });
 
-    //     if (nodeInstance !== undefined) {
-    //       const inst = nodeInstance.c;
-    //       inst.i.e(inst, event, targets.reverse(), node, 0);
-    //       handled = true;
-    //       break;
-    //     }
-    //     targets.push(node);
-    //     node = node.parentNode;
-    //     if (node === null) break;
-    //   }
-    // }
+      let node;
+      for (; idx < eventTargets.length; idx++) {
+        node = eventTargets[idx];
 
-    // if (!handled) {
-    //   node = event.target;
-    //   while (1) {
-    //     const nodeInstance = node.$INST;
+        const nodeInstance = node.$INST;
 
-    //     if (nodeInstance !== undefined) {
-    //       const inst = nodeInstance.c;
-    //       inst.i.e(inst, event, targets.reverse(), node, 0);
-    //       handled = true;
-    //       break;
-    //     }
-    //     targets.push(node);
-    //     node = node.parentNode;
-    //     if (node === null) break;
-    //   }
-    // }
+        if (nodeInstance !== undefined) {
+          // console.log(
+          //   targetIdx,
+          //   idx,
+          //   eventTargets.slice(targetIdx, idx).reverse(),
+          // );
+          const inst = nodeInstance.c;
+          inst.i.e(
+            inst,
+            event,
+            eventTargets.slice(targetIdx, idx).reverse(),
+            node,
+            0,
+          );
+          break;
+        }
+      }
 
-    // event.$TARGET = node;
+      prevTargets.push(node);
+      return;
+    }
+
     return;
   }
 
