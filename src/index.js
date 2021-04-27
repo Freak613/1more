@@ -1693,14 +1693,18 @@ function captureEventHandler(event) {
     return;
   }
 
+  const handlerInstance = this.$INST;
+
   let targets = [];
   let node = target;
   while (1) {
     const nodeInstance = node.$INST;
 
     if (nodeInstance !== undefined) {
-      const inst = nodeInstance.c;
-      inst.i.e(inst, event, targets.reverse(), node, 0);
+      if (nodeInstance === handlerInstance && node === this) {
+        const inst = nodeInstance.c;
+        inst.i.e(inst, event, targets.reverse(), node, 0);
+      }
       break;
     }
     targets.push(node);

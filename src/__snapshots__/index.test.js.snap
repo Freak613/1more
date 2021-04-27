@@ -7507,6 +7507,96 @@ exports[`webcomponents slots slots 04 1`] = `
 </div>
 `;
 
+exports[`webcomponents slots slots 05 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-05>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-05>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 06 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-06>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-06>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 07 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-07>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-07>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 08 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-08>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-08>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 09 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-09>
+      <div>
+        <div
+          id="target"
+        />
+      </div>
+    </x-search-slots-09>
+    !
+  </div>
+</div>
+`;
+
 exports[`webcomponents webcomponents 01 1`] = `
 <div>
   Web Component 
