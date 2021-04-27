@@ -519,6 +519,7 @@ const compileRoot = (vdom, domNode) => {
     type: null,
     path: null,
     knownEvents: null,
+    rootVnodeIdx: null,
   });
 
   let ways = [];
