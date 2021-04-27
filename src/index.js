@@ -240,6 +240,9 @@ function setNodeAsRenderingRoot(refs, v, vnode, rootVnode) {
   refs[this.instKey] = inst;
 
   knownEvents.forEach(name => {
+    inst.e[name] = true;
+
+    // console.log("Add slot handler", { name });
     node.addEventListener(name, captureEventHandler, {
       capture: true,
       passive: false,
@@ -1740,6 +1743,7 @@ function setupTemplateEventHandlers(events, root) {
 
   events.forEach(name => {
     if (!knownEvents[name]) {
+      // console.log("Add container handler", { name, root });
       container.addEventListener(name, captureEventHandler, {
         capture: true,
         passive: false,
