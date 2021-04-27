@@ -223,7 +223,10 @@ function setNodeAsRenderingRoot(refs, v, vnode, rootVnode) {
   const node = refs[this.refKey];
   const knownEvents = this.knownEvents;
 
-  node.$INST = rootVnode;
+  const inst = createRootVirtualNode(node);
+  inst.c = vnode;
+  inst.r = rootVnode;
+  node.$INST = inst;
 
   knownEvents.forEach(name => {
     node.addEventListener(name, captureEventHandler, {
@@ -1545,6 +1548,7 @@ const createRootVirtualNode = o => ({
   c: undefined, // root element
   s: {}, // known templates
   e: {}, // known event types
+  r: undefined, // root vnode
 });
 
 export function render(component, container) {
@@ -1602,7 +1606,7 @@ function bubbleEventHandler(event) {
 
           if (nodeInstance !== undefined) {
             const startIdx =
-              prevTarget.$INST === nodeInstance ? targetIdx + 1 : targetIdx;
+              prevTarget.$INST.r === nodeInstance ? targetIdx + 1 : targetIdx;
             // console.log(
             //   startIdx,
             //   idx,

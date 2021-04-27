@@ -4145,5 +4145,59 @@ describe("webcomponents", () => {
 
       expect(order).toEqual(["target", "custom-element-content", "parent"]);
     });
+
+    it("slots 10", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => {
+                  order.push("custom-element-content");
+                }}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-10", XSearch);
+
+      const Target = component(() => () => {
+        return html`
+          <x-search-slots-10>
+            <div>
+              <div id="target" onclick=${() => order.push("target")}></div>
+            </div>
+          </x-search-slots-10>
+        `;
+      });
+
+      const App = component(() => () => {
+        return html`
+          <div onclick=${() => order.push("parent")}>Hello ${Target()} !</div>
+        `;
+      });
+
+      render(App(), container);
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual(["target", "custom-element-content", "parent"]);
+    });
   });
 });
