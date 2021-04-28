@@ -55,12 +55,6 @@ export function _resetTemplateCounter() {
 
 // Getters/setters
 function setContent(refs, v, vnode, rootVnode) {
-  // console.log(
-  //   "setContent",
-  //   this.slotArgNode,
-  //   this.slotArgNode && refs[this.slotArgNode.instKey],
-  // );
-
   const nextRoot =
     this.slotArgNode !== null ? refs[this.slotArgNode.instKey] : rootVnode;
 
@@ -243,7 +237,6 @@ function setNodeAsRenderingRoot(refs, v, vnode, rootVnode) {
   knownEvents.forEach(name => {
     inst.e[name] = true;
 
-    // console.log("Add slot handler", { name });
     node.addEventListener(name, captureEventHandler, {
       capture: true,
       passive: false,
@@ -766,8 +759,6 @@ const compileRoot = (vdom, domNode) => {
       );
 
       if (childHasNestedData) {
-        // lastDataRefIdx = nextChildRefIdx;
-        // lastDataRefIdx = resultChild.instKey || nextChildRefIdx;
         lastDataRefIdx =
           resultChild.t === "argNode" ? resultChild.instKey : nextChildRefIdx;
         eventsPath = [];
@@ -1725,13 +1716,11 @@ function bubbleEventHandler(event) {
   let prevTargets = event.$TARGETS;
   if (prevTargets) {
     const eventTargets = event.composedPath();
-    // console.log({ eventTargets, prevTargets });
 
     for (const prevTarget of prevTargets) {
       const targetIdx = eventTargets.indexOf(prevTarget);
       if (targetIdx >= 0) {
         let idx = eventTargets.indexOf(prevTarget) + 1;
-        // console.log({ idx });
 
         let node;
         for (; idx < eventTargets.length; idx++) {
@@ -1742,12 +1731,7 @@ function bubbleEventHandler(event) {
           if (nodeInstance !== undefined) {
             const startIdx =
               prevTarget.$INST.r === nodeInstance ? targetIdx + 1 : targetIdx;
-            // console.log(
-            //   startIdx,
-            //   idx,
-            //   eventTargets.slice(startIdx, idx).reverse(),
-            //   prevTarget.$INST === nodeInstance,
-            // );
+
             const inst = nodeInstance.c;
             inst.i.e(
               inst,
@@ -1769,7 +1753,6 @@ function bubbleEventHandler(event) {
     const targetIdx = eventTargets.indexOf(target);
     if (targetIdx >= 0) {
       let idx = targetIdx + 1;
-      // console.log({ idx });
 
       let node;
       for (; idx < eventTargets.length; idx++) {
@@ -1778,11 +1761,6 @@ function bubbleEventHandler(event) {
         const nodeInstance = node.$INST;
 
         if (nodeInstance !== undefined) {
-          // console.log(
-          //   targetIdx,
-          //   idx,
-          //   eventTargets.slice(targetIdx, idx).reverse(),
-          // );
           const inst = nodeInstance.c;
           inst.i.e(
             inst,
@@ -1859,7 +1837,6 @@ function setupTemplateEventHandlers(events, root) {
 
   events.forEach(name => {
     if (!knownEvents[name]) {
-      // console.log("Add container handler", { name, root });
       container.addEventListener(name, captureEventHandler, {
         capture: true,
         passive: false,
