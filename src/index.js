@@ -513,12 +513,14 @@ const getTemplateRepresentation = strings => {
 
 const compileRoot = (vdom, domNode) => {
   const getWalkNode = () => ({
+    t: "walkNode",
     getRef: null,
     refKey: null,
     prevKey: null,
   });
 
   const getArgNode = () => ({
+    t: "argNode",
     flag: 0,
     refKey: null,
     afterKey: null,
@@ -532,6 +534,7 @@ const compileRoot = (vdom, domNode) => {
     path: null,
     knownEvents: null,
     slotArgNode: null,
+    isPreviousInsertion: false,
   });
 
   let ways = [];
@@ -555,6 +558,7 @@ const compileRoot = (vdom, domNode) => {
     domPath,
     knownEvents,
     parentSlotArgNode,
+    isPreviousInsertion,
   ) => {
     if (vdom.type === "insertion") {
       const nextArgNode = getArgNode();
@@ -593,7 +597,7 @@ const compileRoot = (vdom, domNode) => {
 
       argsWays.push(nextArgNode);
 
-      return [lastChildRefIdx, true];
+      return [lastChildRefIdx, true, nextArgNode];
     }
 
     if (vdom.remove) {
@@ -648,6 +652,7 @@ const compileRoot = (vdom, domNode) => {
         nextArgNode.propIdx = prop.propIdx;
         nextArgNode.refKey = nextNode.refKey;
         nextArgNode.type = attrName.slice(2);
+        nextArgNode.isPreviousInsertion = isPreviousInsertion;
 
         nextArgNode.prevRef = lastDataRefIdx;
         nextArgNode.path = eventsPath;
@@ -738,7 +743,7 @@ const compileRoot = (vdom, domNode) => {
       eventsPath = [...eventsPath, idx === 0 ? 1 : 0];
       domPath = [...domPath, lastChildRefIdx ? 0 : 1];
 
-      const [nextChildRefIdx, childHasNestedData] = compileNode(
+      const [nextChildRefIdx, childHasNestedData, resultChild] = compileNode(
         child,
         idx,
         nextNode.refKey,
@@ -751,11 +756,16 @@ const compileRoot = (vdom, domNode) => {
         domPath,
         knownEvents,
         slotArgNode || parentSlotArgNode,
+        isPreviousInsertion,
       );
 
       if (childHasNestedData) {
-        lastDataRefIdx = nextChildRefIdx;
+        // lastDataRefIdx = nextChildRefIdx;
+        // lastDataRefIdx = resultChild.instKey || nextChildRefIdx;
+        lastDataRefIdx =
+          resultChild.t === "argNode" ? resultChild.instKey : nextChildRefIdx;
         eventsPath = [];
+        if (resultChild.t === "argNode") isPreviousInsertion = true;
       }
 
       if (nextChildRefIdx === lastChildRefIdx) {
@@ -780,10 +790,24 @@ const compileRoot = (vdom, domNode) => {
       }
     }
 
-    return [nextNode.refKey, hasNestedData];
+    return [nextNode.refKey, hasNestedData, nextNode];
   };
 
-  compileNode(vdom, 0, null, null, [], 0, null, 0, [], [], knownEvents, null);
+  compileNode(
+    vdom,
+    0,
+    null,
+    null,
+    [],
+    0,
+    null,
+    0,
+    [],
+    [],
+    knownEvents,
+    null,
+    false,
+  );
 
   const foldedWays = foldStaticTrees(ways.slice(1), activeWayNodes);
 
@@ -919,6 +943,10 @@ function getTextDomNode(vnode) {
   return vnode.n;
 }
 
+function getTextTailDomNode(vnode) {
+  return vnode.n;
+}
+
 function insertTextNode(vnode, parent, afterNode) {
   nativeInsert(vnode.n, parent, afterNode);
 }
@@ -933,6 +961,7 @@ const textNodeImpl = {
   d: getTextDomNode,
   i: insertTextNode,
   e: textNodeEventHandler,
+  a: getTextTailDomNode,
 };
 
 const createTextVirtualNode = () => ({
@@ -1030,6 +1059,19 @@ function getArrayDomNode(vnode) {
   return maybeDomNode;
 }
 
+function getArrayTailDomNode(vnode) {
+  const nodes = vnode.n;
+
+  let maybeDomNode;
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const node = nodes[i];
+    maybeDomNode = node.i.a(node);
+    if (maybeDomNode) break;
+  }
+
+  return maybeDomNode;
+}
+
 function insertArrayNode(vnode, parent, afterNode) {
   vnode.n.forEach(n => n.i.i(n, parent, afterNode));
 }
@@ -1061,6 +1103,7 @@ const arrayNodeImpl = {
   d: getArrayDomNode,
   i: insertArrayNode,
   e: arrayNodeEventHandler,
+  a: getArrayTailDomNode,
 };
 
 const createArrayVirtualNode = () => ({
@@ -1131,6 +1174,10 @@ function getTemplateDomNode(vnode) {
   return vnode.r[0];
 }
 
+function getTemplateTailDomNode(vnode) {
+  return vnode.r[0];
+}
+
 function insertTemplateNode(vnode, parent, afterNode) {
   nativeInsert(vnode.r[0], parent, afterNode);
 }
@@ -1143,7 +1190,9 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
 
   events.forEach(e => {
     if (refs[e.refKey] === undefined) {
-      refs[e.refKey] = tracebackReference(e.path, refs[e.prevRef]);
+      const prev = refs[e.prevRef];
+      const start = e.isPreviousInsertion ? prev.i.a(prev) : prev;
+      refs[e.refKey] = tracebackReference(e.path, start);
     }
   });
 
@@ -1191,8 +1240,10 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           parent,
           shift,
         );
+        break;
+      } else {
+        isTarget = true;
       }
-      break;
     }
   }
 
@@ -1270,6 +1321,7 @@ const templateNodeImpl = {
   d: getTemplateDomNode,
   i: insertTemplateNode,
   e: templateNodeEventHandler,
+  a: getTemplateTailDomNode,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -1355,6 +1407,11 @@ function getComponentDomNode(vnode) {
   return child.i.d(child);
 }
 
+function getComponentTailDomNode(vnode) {
+  const child = vnode.q;
+  return child.i.a(child);
+}
+
 function insertComponentNode(vnode, parent, afterNode) {
   const child = vnode.q;
   child.i.i(child, parent, afterNode);
@@ -1373,6 +1430,7 @@ const componentNodeImpl = {
   d: getComponentDomNode,
   i: insertComponentNode,
   e: componentNodeEventHandler,
+  a: getComponentTailDomNode,
 };
 
 const createComponentVirtualNode = () => ({
@@ -1420,6 +1478,8 @@ function voidNodeSize(vnode) {
 
 function getVoidDomNode(vnode) {}
 
+function getVoidTailDomNode(vnode) {}
+
 function insertVoidNode(vnode, parent, afterNode) {}
 
 function voidNodeEventHandler() {}
@@ -1432,6 +1492,7 @@ const voidNodeImpl = {
   d: getVoidDomNode,
   i: insertVoidNode,
   e: voidNodeEventHandler,
+  a: getVoidTailDomNode,
 };
 
 const createVoidVirtualNode = () => ({

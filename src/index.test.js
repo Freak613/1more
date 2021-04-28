@@ -2201,6 +2201,27 @@ describe("events", () => {
     container.dispatchEvent(new Event("click", { bubbles: true }));
   });
 
+  it("events 30", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+    const App = component(() => () =>
+      html`
+        <div>
+          ${"Text"}
+          <div id="target" onclick=${() => state++}></div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click"));
+
+    expect(state).toBe(1);
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
@@ -4418,7 +4439,7 @@ describe("webcomponents", () => {
       ]);
     });
 
-    it.skip("slots 15", () => {
+    it("slots 15", () => {
       const container = document.getElementById("app");
 
       const order = [];
