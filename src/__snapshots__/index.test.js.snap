@@ -8263,6 +8263,29 @@ exports[`webcomponents slots slots 16 1`] = `
 </div>
 `;
 
+exports[`webcomponents slots slots 17 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-17>
+      <div>
+        <div
+          id="target1"
+        />
+      </div>
+      <div>
+        <div
+          id="target2"
+        />
+      </div>
+    </x-search-slots-17>
+    !
+  </div>
+</div>
+`;
+
 exports[`webcomponents webcomponents 01 1`] = `
 <div>
   Web Component 

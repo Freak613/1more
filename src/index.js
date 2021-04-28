@@ -1614,12 +1614,21 @@ function renderValue(
 
         const { type, templateNode, ways, argsWays, producer } = props.p;
 
+        const tNode = nodeCloneNode.call(templateNode, true);
+
+        if (isDelegationRoot) {
+          const inst = createRootVirtualNode(tNode);
+          inst.z = 1;
+          inst.c = vnode;
+          inst.r = rootVnode;
+          tNode.$INST = inst;
+          rootVnode = inst;
+        }
+
         if (!rootVnode.s[type]) {
           setupTemplateEventHandlers(props.p.knownEvents, rootVnode);
           rootVnode.s[type] = true;
         }
-
-        const tNode = nodeCloneNode.call(templateNode, true);
 
         const refs = producer();
         refs[0] = tNode;

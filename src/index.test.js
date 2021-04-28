@@ -4560,5 +4560,75 @@ describe("webcomponents", () => {
         "parent",
       ]);
     });
+
+    it("slots 17", () => {
+      const container = document.getElementById("app");
+
+      let order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          shadowRoot.innerHTML = `<div id='content'><slot></slot></div>`;
+
+          const content = shadowRoot.getElementById("content");
+          content.addEventListener("click", () => {
+            order.push("custom-element-content");
+          });
+        }
+      }
+      customElements.define("x-search-slots-17", XSearch);
+
+      const Target = component(() => id => {
+        return html`
+          <div>
+            <div id=${id} onclick=${() => order.push(id)}></div>
+          </div>
+        `;
+      });
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-17 onclick=${() => order.push("custom-element")}>
+              ${[Target("target1"), Target("target2")]}
+            </x-search-slots-17>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target1 = document.getElementById("target1");
+
+      target1.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target1",
+        "custom-element-content",
+        "custom-element",
+        "parent",
+      ]);
+
+      order = [];
+
+      const target2 = document.getElementById("target2");
+
+      target2.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target2",
+        "custom-element-content",
+        "custom-element",
+        "parent",
+      ]);
+    });
   });
 });
