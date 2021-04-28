@@ -4669,5 +4669,87 @@ describe("webcomponents", () => {
 
       expect(order).toEqual(["target", "custom-element-content"]);
     });
+
+    it("slots 19", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          const name = this.getAttribute("name");
+          const id = `custom-element-content-${name}`;
+
+          render(
+            html`
+              <div id=${id} onclick=${() => order.push(id)}>
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-19", XSearch);
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-19
+              name="first"
+              onclick=${() => order.push("custom-element-first")}
+            >
+              <x-search-slots-19
+                name="second"
+                onclick=${() => order.push("custom-element-second")}
+              >
+                <x-search-slots-19
+                  name="third"
+                  onclick=${() => order.push("custom-element-third")}
+                >
+                  <x-search-slots-19
+                    name="fourth"
+                    onclick=${() => order.push("custom-element-fourth")}
+                  >
+                    <div onclick=${() => order.push("slot-target")}>
+                      <div
+                        id="target"
+                        onclick=${() => order.push("target")}
+                      ></div>
+                    </div>
+                  </x-search-slots-19>
+                </x-search-slots-19>
+              </x-search-slots-19>
+            </x-search-slots-19>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target",
+        "slot-target",
+        "custom-element-content-fourth",
+        "custom-element-fourth",
+        "custom-element-content-third",
+        "custom-element-third",
+        "custom-element-content-second",
+        "custom-element-second",
+        "custom-element-content-first",
+        "custom-element-first",
+        "parent",
+      ]);
+    });
   });
 });

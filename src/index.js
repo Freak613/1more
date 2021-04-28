@@ -1731,31 +1731,23 @@ function bubbleEventHandler(event) {
     for (const prevTarget of prevTargets) {
       const targetIdx = eventTargets.indexOf(prevTarget);
       if (targetIdx >= 0) {
-        let idx = eventTargets.indexOf(prevTarget) + 1;
+        const nodeInstance = this.$INST;
 
-        let node;
-        for (; idx < eventTargets.length; idx++) {
-          node = eventTargets[idx];
+        const idx = eventTargets.indexOf(this);
 
-          const nodeInstance = node.$INST;
+        const startIdx =
+          prevTarget.$INST.r === nodeInstance ? targetIdx + 1 : targetIdx;
 
-          if (nodeInstance !== undefined) {
-            const startIdx =
-              prevTarget.$INST.r === nodeInstance ? targetIdx + 1 : targetIdx;
+        const inst = nodeInstance.c;
+        inst.i.e(
+          inst,
+          event,
+          eventTargets.slice(startIdx, idx).reverse(),
+          this,
+          0,
+        );
 
-            const inst = nodeInstance.c;
-            inst.i.e(
-              inst,
-              event,
-              eventTargets.slice(startIdx, idx).reverse(),
-              node,
-              0,
-            );
-            break;
-          }
-        }
-
-        prevTargets.push(node);
+        prevTargets.push(this);
         return;
       }
     }
