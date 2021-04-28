@@ -3757,7 +3757,7 @@ describe("webcomponents", () => {
       expect(order).toEqual(["target", "custom-element-content", "parent"]);
     });
 
-    it.skip("slots 02", () => {
+    it("slots 02", () => {
       const container = document.getElementById("app");
 
       const order = [];

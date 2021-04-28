@@ -73,6 +73,7 @@ function setContent(refs, v, vnode, rootVnode) {
     this.flag,
     vnode,
     nextRoot,
+    this.isDelegationRoot,
   );
   _arg = prevArg;
 }
@@ -535,6 +536,7 @@ const compileRoot = (vdom, domNode) => {
     knownEvents: null,
     slotArgNode: null,
     isPreviousInsertion: false,
+    isDelegationRoot: false,
   });
 
   let ways = [];
@@ -568,6 +570,10 @@ const compileRoot = (vdom, domNode) => {
       nextArgNode.applyData = setContent;
       nextArgNode.updateData = updateContent;
       nextArgNode.slotArgNode = parentSlotArgNode;
+
+      if (parent && parent.isCustomElement) {
+        nextArgNode.isDelegationRoot = true;
+      }
 
       insertionPoints[parentRefIdx] = insertionPoints[parentRefIdx] || [];
 
@@ -923,6 +929,7 @@ function updateTextNode(b, vnode) {
       notSingleNode,
       vnode.x,
       vnode.j,
+      vnode.z,
     );
   }
 
@@ -973,12 +980,14 @@ const createTextVirtualNode = () => ({
   a: _arg, // closest template arg
   i: textNodeImpl,
   j: undefined, // root vnode
+  z: false, // isDelegationRoot
 });
 
 function updateArrayNode(b, vnode) {
   const parent = vnode.w;
   const notSingleNode = vnode.g;
   const rootVnode = vnode.j;
+  const isDelegationRoot = vnode.z;
 
   const nodes = vnode.n;
   if (b instanceof Array) {
@@ -998,12 +1007,26 @@ function updateArrayNode(b, vnode) {
       const afterNode = _getAfterNode();
 
       vnode.n = b.map(function (props) {
-        return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
+        return renderValue(
+          props.v,
+          parent,
+          afterNode,
+          2,
+          vnode,
+          rootVnode,
+          isDelegationRoot,
+        );
       });
     } else {
       const prevState = _getAfterNode;
 
-      vnode.n = updateArray(b, _getAfterNode(), vnode, rootVnode);
+      vnode.n = updateArray(
+        b,
+        _getAfterNode(),
+        vnode,
+        rootVnode,
+        isDelegationRoot,
+      );
 
       _getAfterNode = prevState;
     }
@@ -1022,6 +1045,7 @@ function updateArrayNode(b, vnode) {
       notSingleNode,
       vnode.x,
       vnode.j,
+      vnode.z,
     );
   }
 
@@ -1116,6 +1140,7 @@ const createArrayVirtualNode = () => ({
   a: _arg, // closest template arg
   i: arrayNodeImpl,
   j: undefined, // root vnode
+  z: false, // isDelegationRoot
 });
 
 function updateTemplateNode(b, vnode) {
@@ -1145,6 +1170,7 @@ function updateTemplateNode(b, vnode) {
       notSingleNode,
       vnode.x,
       vnode.j,
+      vnode.z,
     );
   }
 
@@ -1334,6 +1360,7 @@ const createTemplateVirtualNode = () => ({
   a: _arg, // closest template arg
   i: templateNodeImpl,
   j: undefined, // root vnode
+  z: false, // isDelegationRoot
 });
 
 function updateComponentNode(b, vnode) {
@@ -1368,6 +1395,7 @@ function updateComponentNode(b, vnode) {
       notSingleNode,
       vnode.x,
       vnode.j,
+      vnode.z,
     );
   }
 
@@ -1448,6 +1476,7 @@ const createComponentVirtualNode = () => ({
   a: _arg, // closest template arg
   i: componentNodeImpl,
   j: undefined, // root vnode
+  z: false, // isDelegationRoot
 });
 
 function updateVoidNode(b, vnode) {
@@ -1462,6 +1491,7 @@ function updateVoidNode(b, vnode) {
       notSingleNode,
       vnode.x,
       vnode.j,
+      vnode.z,
     );
   }
 
@@ -1503,6 +1533,7 @@ const createVoidVirtualNode = () => ({
   a: _arg, // closest template arg
   i: voidNodeImpl,
   j: undefined, // root vnode
+  z: false, // isDelegationRoot
 });
 
 function renderValue(
@@ -1512,6 +1543,7 @@ function renderValue(
   notSingleNode,
   parentVnode,
   rootVnode,
+  isDelegationRoot,
 ) {
   let vnode;
 
@@ -1525,12 +1557,21 @@ function renderValue(
         vnode.w = parent;
         vnode.g = notSingleNode;
         vnode.j = rootVnode;
+        vnode.z = isDelegationRoot;
 
         props = props.map(normalizeArrayItem);
         vnode.v = props;
 
         vnode.n = props.map(function (props) {
-          return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
+          return renderValue(
+            props.v,
+            parent,
+            afterNode,
+            2,
+            vnode,
+            rootVnode,
+            isDelegationRoot,
+          );
         });
       } else if ((props.t & 16) !== 0) {
         vnode = createComponentVirtualNode();
@@ -1538,6 +1579,7 @@ function renderValue(
         vnode.w = parent;
         vnode.g = notSingleNode;
         vnode.j = rootVnode;
+        vnode.z = isDelegationRoot;
 
         vnode.c = props.p;
 
@@ -1558,6 +1600,7 @@ function renderValue(
           notSingleNode,
           vnode,
           rootVnode,
+          isDelegationRoot,
         );
         _depth = currentDepth;
       } else {
@@ -1567,6 +1610,7 @@ function renderValue(
         vnode.g = notSingleNode;
         vnode.p = props;
         vnode.j = rootVnode;
+        vnode.z = isDelegationRoot;
 
         const { type, templateNode, ways, argsWays, producer } = props.p;
 
@@ -1597,6 +1641,7 @@ function renderValue(
       vnode.w = parent;
       vnode.g = notSingleNode;
       vnode.j = rootVnode;
+      vnode.z = isDelegationRoot;
 
       if ((notSingleNode & 2) !== 0) {
         const node = document.createTextNode(props);
@@ -1613,6 +1658,7 @@ function renderValue(
     vnode.w = parent;
     vnode.g = notSingleNode;
     vnode.j = rootVnode;
+    vnode.z = isDelegationRoot;
   }
   return vnode;
 }
@@ -1645,7 +1691,7 @@ export function render(component, container) {
 
     inst = createRootVirtualNode(container);
 
-    const vnode = renderValue(component, container, null, 0, null, inst);
+    const vnode = renderValue(component, container, null, 0, null, inst, false);
     inst.c = vnode;
 
     container.$INST = inst;
@@ -1836,7 +1882,7 @@ function normalizeArrayItem(value, idx) {
   }
 }
 
-function updateArray(newArray, _afterNode, vnode, rootVnode) {
+function updateArray(newArray, _afterNode, vnode, rootVnode, isDelegationRoot) {
   const nodes = vnode.n;
   const parent = vnode.w;
   const notSingleNode = vnode.g;
@@ -1999,6 +2045,7 @@ function updateArray(newArray, _afterNode, vnode, rootVnode) {
           2,
           vnode,
           rootVnode,
+          isDelegationRoot,
         );
         if (b1 === b2) break;
         b1++;
@@ -2056,7 +2103,15 @@ function updateArray(newArray, _afterNode, vnode, rootVnode) {
       const afterNode = lookupNewAfterNode();
 
       newNodes = newArray.map(function (props) {
-        return renderValue(props.v, parent, afterNode, 2, vnode, rootVnode);
+        return renderValue(
+          props.v,
+          parent,
+          afterNode,
+          2,
+          vnode,
+          rootVnode,
+          isDelegationRoot,
+        );
       });
     } else {
       toRemove.forEach(removeVNode);
@@ -2088,6 +2143,7 @@ function updateArray(newArray, _afterNode, vnode, rootVnode) {
               2,
               vnode,
               rootVnode,
+              isDelegationRoot,
             );
           } else {
             _getAfterNode = () => afterNode;
