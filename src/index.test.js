@@ -4751,5 +4751,109 @@ describe("webcomponents", () => {
         "parent",
       ]);
     });
+
+    it("slots 20", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+      let target;
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => {
+                  order.push("custom-element-content");
+                }}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+
+          target = shadowRoot.getElementById("content");
+        }
+      }
+      customElements.define("x-search-slots-20", XSearch);
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-20 onclick=${() => order.push("custom-element")}>
+              <div>
+                <div id="target" onclick=${() => order.push("target")}></div>
+              </div>
+            </x-search-slots-20>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: false, composed: false }),
+      );
+
+      expect(order).toEqual(["custom-element-content"]);
+    });
+
+    it("slots 21", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+      let target;
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => {
+                  order.push("custom-element-content");
+                }}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+
+          target = shadowRoot.getElementById("content");
+        }
+      }
+      customElements.define("x-search-slots-21", XSearch);
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-21 onclick=${() => order.push("custom-element")}>
+              <div>
+                <div id="target" onclick=${() => order.push("target")}></div>
+              </div>
+            </x-search-slots-21>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: false, composed: true }),
+      );
+
+      expect(order).toEqual(["custom-element-content", "custom-element"]);
+    });
   });
 });
