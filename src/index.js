@@ -1691,7 +1691,18 @@ export function render(component, container) {
 
     inst = createRootVirtualNode(container);
 
-    const vnode = renderValue(component, container, null, 0, null, inst, false);
+    const tagName = container.tagName;
+    const isCustomElement = tagName ? tagName.match(/-/) !== null : false;
+
+    const vnode = renderValue(
+      component,
+      container,
+      null,
+      0,
+      null,
+      inst,
+      isCustomElement,
+    );
     inst.c = vnode;
 
     container.$INST = inst;

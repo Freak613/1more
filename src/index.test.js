@@ -4630,5 +4630,44 @@ describe("webcomponents", () => {
         "parent",
       ]);
     });
+
+    it("slots 18", () => {
+      const container = document.getElementById("app");
+
+      let order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          shadowRoot.innerHTML = `<div id='content'><slot></slot></div>`;
+
+          const content = shadowRoot.getElementById("content");
+          content.addEventListener("click", () => {
+            order.push("custom-element-content");
+          });
+        }
+      }
+      customElements.define("x-search-slots-18", XSearch);
+
+      container.innerHTML = `<x-search-slots-18></x-search-slots-18>`;
+
+      const root = container.firstChild;
+
+      render(
+        html`<div id="target" onclick=${() => order.push("target")}></div>`,
+        root,
+      );
+
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual(["target", "custom-element-content"]);
+    });
   });
 });
