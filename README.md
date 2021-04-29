@@ -71,7 +71,7 @@ html`
 - For Custom Elements:
   - Element should be registered before call to `html` with template containing this element.
   - Property-first approach should work fine, as long as property is exposed in element instance. When assigning `null` or `undefined` to element property, it is going to be directly assigned to element, not triggering removal. For attributes `null` and `undefined` will work as usual, removing attribute from element.
-  - Delegated events will work fine from both inside and outside of Shadow DOM content (even in closed mode) and doesn't require for events to be `composed`. Only current limitation is that for slotted content event order will not be correct.
+  - Delegated events will work fine from both inside and outside of Shadow DOM content (even in closed mode) and doesn't require for events to be `composed`. Also, system ensures correct event propagation order for slotted content.
   - It's possible to render to `shadowRoot` directly, without any container element.
 
 ##### Children
