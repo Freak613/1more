@@ -4855,5 +4855,133 @@ describe("webcomponents", () => {
 
       expect(order).toEqual(["custom-element-content", "custom-element"]);
     });
+
+    it("slots 22", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearchFour extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          const id = `custom-element-content-four`;
+
+          render(
+            html`
+              <div id=${id} onclick=${() => order.push(id)}>
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-22-four", XSearchFour);
+
+      class XSearchThree extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          const id = `custom-element-content-three`;
+
+          render(
+            html`
+              <div id=${id} onclick=${() => order.push(id)}>
+                <x-search-slots-22-four
+                  onclick=${() => order.push("custom-element-four")}
+                >
+                  <slot></slot>
+                </x-search-slots-22-four>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-22-three", XSearchThree);
+
+      class XSearchTwo extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          const id = `custom-element-content-two`;
+
+          render(
+            html`
+              <div id=${id} onclick=${() => order.push(id)}>
+                <x-search-slots-22-three
+                  onclick=${() => order.push("custom-element-three")}
+                >
+                  <slot></slot>
+                </x-search-slots-22-three>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-22-two", XSearchTwo);
+
+      class XSearchOne extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          const id = `custom-element-content-one`;
+
+          render(
+            html`
+              <div id=${id} onclick=${() => order.push(id)}>
+                <x-search-slots-22-two
+                  onclick=${() => order.push("custom-element-two")}
+                >
+                  <slot></slot>
+                </x-search-slots-22-two>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-22-one", XSearchOne);
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-22-one
+              onclick=${() => order.push("custom-element-one")}
+            >
+              <div onclick=${() => order.push("slot-target")}>
+                <div id="target" onclick=${() => order.push("target")}></div>
+              </div>
+            </x-search-slots-22-one>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target",
+        "slot-target",
+        "custom-element-content-four",
+        "custom-element-four",
+        "custom-element-content-three",
+        "custom-element-three",
+        "custom-element-content-two",
+        "custom-element-two",
+        "custom-element-content-one",
+        "custom-element-one",
+        "parent",
+      ]);
+    });
   });
 });
