@@ -2222,6 +2222,27 @@ describe("events", () => {
     expect(state).toBe(1);
   });
 
+  it("events 31", () => {
+    const container = document.getElementById("app");
+
+    const order = [];
+
+    const App = component(() => () =>
+      html`
+        <div onfocus=${() => order.push("parent")}>
+          <div id="target" onclick=${() => order.push("target")}></div>
+        </div>
+      `,
+    );
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(order).toEqual(["target"]);
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
@@ -4980,6 +5001,128 @@ describe("webcomponents", () => {
         "custom-element-two",
         "custom-element-content-one",
         "custom-element-one",
+        "parent",
+      ]);
+    });
+
+    it("slots 23", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => order.push("custom-element-content")}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-23", XSearch);
+
+      const Target = component(() => () => {
+        return html`
+          <div id="target" onclick=${() => order.push("target")}></div>
+        `;
+      });
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-23 onclick=${() => order.push("custom-element")}>
+              <div>
+                ${[Target()]}
+                <div onclick=${() => order.push("side")}></div>
+              </div>
+            </x-search-slots-23>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target",
+        "custom-element-content",
+        "custom-element",
+        "parent",
+      ]);
+    });
+
+    it("slots 24", () => {
+      const container = document.getElementById("app");
+
+      const order = [];
+
+      class XSearch extends HTMLElement {
+        connectedCallback() {
+          const shadowRoot = this.attachShadow({ mode: "closed" });
+
+          render(
+            html`
+              <div
+                id="content"
+                onclick=${() => order.push("custom-element-content")}
+              >
+                <slot></slot>
+              </div>
+            `,
+            shadowRoot,
+          );
+        }
+      }
+      customElements.define("x-search-slots-24", XSearch);
+
+      const Target = component(() => () => {
+        return html`
+          <div id="target" onclick=${() => order.push("target")}></div>
+        `;
+      });
+
+      render(
+        html`
+          <div onclick=${() => order.push("parent")}>
+            Hello
+            <x-search-slots-24 onclick=${() => order.push("custom-element")}>
+              <div>
+                ${[Target(), null]}
+                <div onclick=${() => order.push("side")}></div>
+              </div>
+            </x-search-slots-24>
+            !
+          </div>
+        `,
+        container,
+      );
+      expect(container).toMatchSnapshot();
+
+      const target = document.getElementById("target");
+
+      target.dispatchEvent(
+        new Event("click", { bubbles: true, composed: true }),
+      );
+
+      expect(order).toEqual([
+        "target",
+        "custom-element-content",
+        "custom-element",
         "parent",
       ]);
     });

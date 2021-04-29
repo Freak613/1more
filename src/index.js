@@ -1105,9 +1105,7 @@ function arrayNodeEventHandler(vnode, event, targets, parent, outerShift) {
       shift += size;
     }
   }
-  if (nodeInstance) {
-    nodeInstance.i.e(nodeInstance, event, targets, parent, shift);
-  }
+  nodeInstance.i.e(nodeInstance, event, targets, parent, shift);
 }
 
 const arrayNodeImpl = {
@@ -1754,32 +1752,28 @@ function bubbleEventHandler(event) {
 
     const target = event.target;
     const targetIdx = eventTargets.indexOf(target);
-    if (targetIdx >= 0) {
-      let idx = targetIdx + 1;
+    let idx = targetIdx + 1;
 
-      let node;
-      for (; idx < eventTargets.length; idx++) {
-        node = eventTargets[idx];
+    let node;
+    for (; idx < eventTargets.length; idx++) {
+      node = eventTargets[idx];
 
-        const nodeInstance = node.$INST;
+      const nodeInstance = node.$INST;
 
-        if (nodeInstance !== undefined) {
-          const inst = nodeInstance.c;
-          inst.i.e(
-            inst,
-            event,
-            eventTargets.slice(targetIdx, idx).reverse(),
-            node,
-            0,
-          );
-          break;
-        }
+      if (nodeInstance !== undefined) {
+        const inst = nodeInstance.c;
+        inst.i.e(
+          inst,
+          event,
+          eventTargets.slice(targetIdx, idx).reverse(),
+          node,
+          0,
+        );
+        break;
       }
-
-      prevTargets.push(node);
-      return;
     }
 
+    prevTargets.push(node);
     return;
   }
 
@@ -1801,7 +1795,6 @@ function bubbleEventHandler(event) {
     }
     targets.push(node);
     node = node.parentNode;
-    if (node === null) break;
   }
   event.$TARGETS = [node];
 }
@@ -1831,7 +1824,6 @@ function captureEventHandler(event) {
     }
     targets.push(node);
     node = node.parentNode;
-    if (node === null) break;
   }
 }
 
