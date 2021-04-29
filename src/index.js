@@ -937,7 +937,7 @@ function textNodeSize(vnode) {
   return 1;
 }
 
-function getTextDomNode(vnode) {
+function getTextHeadDomNode(vnode) {
   return vnode.n;
 }
 
@@ -956,7 +956,7 @@ const textNodeImpl = {
   z: unmountTextNode,
   r: removeTextNode,
   s: textNodeSize,
-  d: getTextDomNode,
+  d: getTextHeadDomNode,
   i: insertTextNode,
   e: textNodeEventHandler,
   a: getTextTailDomNode,
@@ -1061,7 +1061,7 @@ function arrayNodeSize(vnode) {
   return size;
 }
 
-function getArrayDomNode(vnode) {
+function getArrayHeadDomNode(vnode) {
   const nodes = vnode.n;
 
   let node;
@@ -1113,7 +1113,7 @@ const arrayNodeImpl = {
   z: unmountArrayNode,
   r: removeArrayNode,
   s: arrayNodeSize,
-  d: getArrayDomNode,
+  d: getArrayHeadDomNode,
   i: insertArrayNode,
   e: arrayNodeEventHandler,
   a: getArrayTailDomNode,
@@ -1185,7 +1185,7 @@ function templateNodeSize(vnode) {
   return 1;
 }
 
-function getTemplateDomNode(vnode) {
+function getTemplateHeadDomNode(vnode) {
   return vnode.r[0];
 }
 
@@ -1333,7 +1333,7 @@ const templateNodeImpl = {
   z: unmountTemplateNode,
   r: removeTemplateNode,
   s: templateNodeSize,
-  d: getTemplateDomNode,
+  d: getTemplateHeadDomNode,
   i: insertTemplateNode,
   e: templateNodeEventHandler,
   a: getTemplateTailDomNode,
@@ -1419,7 +1419,7 @@ function componentNodeSize(vnode) {
   return child.i.s(child);
 }
 
-function getComponentDomNode(vnode) {
+function getComponentHeadDomNode(vnode) {
   const child = vnode.q;
   return child.i.d(child);
 }
@@ -1444,7 +1444,7 @@ const componentNodeImpl = {
   z: unmountComponentNode,
   r: removeComponentNode,
   s: componentNodeSize,
-  d: getComponentDomNode,
+  d: getComponentHeadDomNode,
   i: insertComponentNode,
   e: componentNodeEventHandler,
   a: getComponentTailDomNode,
@@ -1495,7 +1495,7 @@ function voidNodeSize(vnode) {
   return 0;
 }
 
-function getVoidDomNode(vnode) {}
+function getVoidHeadDomNode(vnode) {}
 
 function getVoidTailDomNode(vnode) {}
 
@@ -1508,7 +1508,7 @@ const voidNodeImpl = {
   z: unmountVoidNode,
   r: removeVoidNode,
   s: voidNodeSize,
-  d: getVoidDomNode,
+  d: getVoidHeadDomNode,
   i: insertVoidNode,
   e: voidNodeEventHandler,
   a: getVoidTailDomNode,
@@ -2271,7 +2271,7 @@ let _flags = 0;
 const _resolvedPromise = Promise.resolve();
 const _pendingUpdates = box({});
 
-function getSiblingVNode(vnode) {
+function getNextSiblingVNode(vnode) {
   let child = vnode;
   let parent = child.x;
   let result;
@@ -2311,7 +2311,7 @@ function checkUpdates(vnode) {
   const currentDepth = vnode.d;
   _depth = currentDepth + 1;
 
-  _getAfterNode = () => getSiblingVNode(vnode);
+  _getAfterNode = () => getNextSiblingVNode(vnode);
 
   const child = vnode.q;
   vnode.q = child.i.u(vnode.v(vnode.c), child);
