@@ -1108,6 +1108,27 @@ function arrayNodeEventHandler(vnode, event, targets, parent, outerShift) {
   nodeInstance.i.e(nodeInstance, event, targets, parent, shift);
 }
 
+function getNextSiblingInArray(vnode, target) {
+  const nodes = vnode.n;
+  let idx = nodes.indexOf(target);
+  let node = nodes[idx + 1];
+  let result;
+  while (node) {
+    const dom = node.i.d(node);
+    if (dom) {
+      result = dom;
+      break;
+    }
+    idx++;
+    node = nodes[idx];
+  }
+  if (result) return result;
+
+  const parent = vnode.x;
+  if (parent) return parent.i.w(parent, vnode);
+  return null;
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
@@ -1117,6 +1138,7 @@ const arrayNodeImpl = {
   i: insertArrayNode,
   e: arrayNodeEventHandler,
   a: getArrayTailDomNode,
+  w: getNextSiblingInArray,
 };
 
 const createArrayVirtualNode = () => ({
@@ -1328,6 +1350,12 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
   }
 }
 
+function getNextSiblingInTemplate(vnode, target) {
+  const arg = target.a;
+  const refs = vnode.r;
+  return arg.afterNodeFn(refs);
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
@@ -1337,6 +1365,7 @@ const templateNodeImpl = {
   i: insertTemplateNode,
   e: templateNodeEventHandler,
   a: getTemplateTailDomNode,
+  w: getNextSiblingInTemplate,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -1439,6 +1468,12 @@ function componentNodeEventHandler(vnode, event, targets, parent, outerShift) {
   child.i.e(child, event, targets, parent, outerShift);
 }
 
+function getNextSiblingInComponent(vnode, target) {
+  const parent = vnode.x;
+  if (parent) return parent.i.w(parent, vnode);
+  return null;
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
@@ -1448,6 +1483,7 @@ const componentNodeImpl = {
   i: insertComponentNode,
   e: componentNodeEventHandler,
   a: getComponentTailDomNode,
+  w: getNextSiblingInComponent,
 };
 
 const createComponentVirtualNode = () => ({
@@ -2271,47 +2307,15 @@ let _flags = 0;
 const _resolvedPromise = Promise.resolve();
 const _pendingUpdates = box({});
 
-function getNextSiblingVNode(vnode) {
-  let child = vnode;
-  let parent = child.x;
-  let result;
-  while (parent) {
-    const { t } = parent;
-    if ((t & 2) !== 0) {
-      const nodes = parent.n;
-      let idx = nodes.indexOf(child);
-      let node = nodes[idx + 1];
-      while (node) {
-        const dom = node.i.d(node);
-        if (dom) {
-          result = dom;
-          break;
-        }
-        idx++;
-        node = nodes[idx];
-      }
-      child = parent;
-      parent = child.x;
-    } else if ((t & 16) !== 0) {
-      child = parent;
-      parent = child.x;
-    } else {
-      // Template
-      const arg = child.a;
-      const refs = parent.r;
-      const dom = arg.afterNodeFn(refs);
-      result = dom;
-      break;
-    }
-  }
-  return result;
-}
-
 function checkUpdates(vnode) {
   const currentDepth = vnode.d;
   _depth = currentDepth + 1;
 
-  _getAfterNode = () => getNextSiblingVNode(vnode);
+  _getAfterNode = () => {
+    const parent = vnode.x;
+    if (parent) return parent.i.w(parent, vnode);
+    return null;
+  };
 
   const child = vnode.q;
   vnode.q = child.i.u(vnode.v(vnode.c), child);
