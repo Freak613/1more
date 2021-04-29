@@ -963,7 +963,6 @@ const textNodeImpl = {
 };
 
 const createTextVirtualNode = () => ({
-  t: 1,
   n: undefined, // text node
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
@@ -1142,7 +1141,6 @@ const arrayNodeImpl = {
 };
 
 const createArrayVirtualNode = () => ({
-  t: 2,
   v: undefined, // props
   n: undefined, // nodes
   x: undefined, // parent vdom node
@@ -1369,7 +1367,6 @@ const templateNodeImpl = {
 };
 
 const createTemplateVirtualNode = () => ({
-  t: 4,
   p: undefined, // props
   r: undefined, // refs
   x: undefined, // parent vdom node
@@ -1487,7 +1484,6 @@ const componentNodeImpl = {
 };
 
 const createComponentVirtualNode = () => ({
-  t: 16,
   c: undefined, // props
   n: undefined, // init
   v: undefined, // render
@@ -1551,7 +1547,6 @@ const voidNodeImpl = {
 };
 
 const createVoidVirtualNode = () => ({
-  t: 32,
   x: undefined, // parent vdom node
   w: undefined, // parent dom node
   g: undefined, // notSingleNode flag
