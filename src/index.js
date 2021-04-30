@@ -1248,23 +1248,33 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
 
       const parent = insertionParents[i2];
 
-      const nodeIndex = indexOf.call(
-        nodeGetChildNodes.call(parent),
-        targets[idx + 1],
-      );
+      const currentInsertionPoint = insertionPoints[i2];
 
       let nodeInstance;
       let shift = 0;
-      for (let insertionEl of insertionPoints[i2].points) {
-        shift += insertionEl.staticElemsBefore;
+      if (
+        currentInsertionPoint.points.length === 1 &&
+        currentInsertionPoint.points[0].isSingleNode
+      ) {
+        const insertionEl = currentInsertionPoint.points[0];
+        nodeInstance = refs[insertionEl.instKey];
+      } else {
+        const nodeIndex = indexOf.call(
+          nodeGetChildNodes.call(parent),
+          targets[idx + 1],
+        );
 
-        const inst = refs[insertionEl.instKey];
-        const size = inst.i.s(inst);
-        if (nodeIndex <= size - 1 + shift) {
-          nodeInstance = inst;
-          break;
-        } else {
-          shift += size;
+        for (let insertionEl of currentInsertionPoint.points) {
+          shift += insertionEl.staticElemsBefore;
+
+          const inst = refs[insertionEl.instKey];
+          const size = inst.i.s(inst);
+          if (nodeIndex <= size - 1 + shift) {
+            nodeInstance = inst;
+            break;
+          } else {
+            shift += size;
+          }
         }
       }
 
