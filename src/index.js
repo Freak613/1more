@@ -568,14 +568,6 @@ const compileRoot = (vdom, domNode) => {
         nextArgNode.isDelegationRoot = true;
       }
 
-      insertionPoints[parentRefIdx] = insertionPoints[parentRefIdx] || [];
-
-      insertionPoints[parentRefIdx].push({
-        staticElemsBefore: staticsBefore,
-        instKey: nextArgNode.instKey,
-        propIdx: nextArgNode.propIdx,
-      });
-
       const nextSibling = parent.children[idx + 1];
       if (nextSibling) {
         const hasNextStaticSibling = nextSibling.type === "static";
@@ -591,6 +583,15 @@ const compileRoot = (vdom, domNode) => {
 
       const prevSibling = parent.children[idx - 1];
       if (prevSibling) nextArgNode.flag |= 2;
+
+      insertionPoints[parentRefIdx] = insertionPoints[parentRefIdx] || [];
+
+      insertionPoints[parentRefIdx].push({
+        staticElemsBefore: staticsBefore,
+        instKey: nextArgNode.instKey,
+        propIdx: nextArgNode.propIdx,
+        isSingleNode: nextArgNode.flag === 0,
+      });
 
       activeWayNodes[parentRefIdx] = 1;
 

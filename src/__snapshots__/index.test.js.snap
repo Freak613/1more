@@ -29,6 +29,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 2,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
@@ -45,6 +46,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 2,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
@@ -121,11 +123,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 2,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 3,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 0,
         },
@@ -142,11 +146,13 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 2,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 3,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 0,
     },
@@ -306,6 +312,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 5,
+          "isSingleNode": true,
           "propIdx": 2,
           "staticElemsBefore": 0,
         },
@@ -316,6 +323,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 6,
+          "isSingleNode": true,
           "propIdx": 4,
           "staticElemsBefore": 0,
         },
@@ -354,11 +362,13 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 5,
+      "isSingleNode": true,
       "propIdx": 2,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 6,
+      "isSingleNode": true,
       "propIdx": 4,
       "staticElemsBefore": 0,
     },
@@ -882,6 +892,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": true,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
@@ -896,6 +907,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": true,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
@@ -1408,6 +1420,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
@@ -1426,6 +1439,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
@@ -1581,6 +1595,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -1601,6 +1616,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
@@ -1661,6 +1677,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
@@ -1677,6 +1694,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
@@ -1718,6 +1736,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
@@ -1734,6 +1753,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
@@ -2044,6 +2064,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": true,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
@@ -2058,6 +2079,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": true,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
@@ -2095,6 +2117,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": true,
           "propIdx": 2,
           "staticElemsBefore": 0,
         },
@@ -2109,6 +2132,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": true,
       "propIdx": 2,
       "staticElemsBefore": 0,
     },
@@ -2159,6 +2183,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
@@ -2175,6 +2200,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
@@ -2259,16 +2285,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 4,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 5,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -2287,16 +2316,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 4,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 5,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -2530,11 +2562,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 15,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 16,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -2545,11 +2579,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 17,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 18,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
@@ -2560,16 +2596,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 19,
+          "isSingleNode": false,
           "propIdx": 5,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 20,
+          "isSingleNode": false,
           "propIdx": 6,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 21,
+          "isSingleNode": false,
           "propIdx": 7,
           "staticElemsBefore": 1,
         },
@@ -2580,16 +2619,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 22,
+          "isSingleNode": false,
           "propIdx": 8,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 23,
+          "isSingleNode": false,
           "propIdx": 9,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 24,
+          "isSingleNode": false,
           "propIdx": 10,
           "staticElemsBefore": 1,
         },
@@ -2623,51 +2665,61 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 15,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 16,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 17,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 18,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 19,
+      "isSingleNode": false,
       "propIdx": 5,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 20,
+      "isSingleNode": false,
       "propIdx": 6,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 21,
+      "isSingleNode": false,
       "propIdx": 7,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 22,
+      "isSingleNode": false,
       "propIdx": 8,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 23,
+      "isSingleNode": false,
       "propIdx": 9,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 24,
+      "isSingleNode": false,
       "propIdx": 10,
       "staticElemsBefore": 1,
     },
@@ -2878,16 +2930,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 7,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 8,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -2909,16 +2964,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 7,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 8,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -3060,16 +3118,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 4,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 7,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
@@ -3080,6 +3141,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 5,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -3100,21 +3162,25 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 4,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 7,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 5,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
@@ -3225,16 +3291,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 4,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 5,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -3253,16 +3322,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 4,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 5,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -3370,16 +3442,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 3,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 4,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 5,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -3397,16 +3472,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 3,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 4,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 5,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -3507,16 +3585,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 8,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 9,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 10,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -3541,16 +3622,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 8,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 9,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 10,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -3706,11 +3790,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 12,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 8,
         },
         Object {
           "instKey": 13,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 2,
         },
@@ -3740,11 +3826,13 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 12,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 8,
     },
     Object {
       "instKey": 13,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 2,
     },
@@ -3920,11 +4008,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 12,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 8,
         },
         Object {
           "instKey": 13,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 2,
         },
@@ -3954,11 +4044,13 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 12,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 8,
     },
     Object {
       "instKey": 13,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 2,
     },
@@ -4105,11 +4197,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 12,
+          "isSingleNode": false,
           "propIdx": 7,
           "staticElemsBefore": 8,
         },
         Object {
           "instKey": 13,
+          "isSingleNode": false,
           "propIdx": 8,
           "staticElemsBefore": 2,
         },
@@ -4139,11 +4233,13 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 12,
+      "isSingleNode": false,
       "propIdx": 7,
       "staticElemsBefore": 8,
     },
     Object {
       "instKey": 13,
+      "isSingleNode": false,
       "propIdx": 8,
       "staticElemsBefore": 2,
     },
@@ -4326,16 +4422,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 4,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 2,
         },
         Object {
           "instKey": 5,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 2,
         },
@@ -4355,16 +4454,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 4,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 2,
     },
     Object {
       "instKey": 5,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 2,
     },
@@ -4476,16 +4578,19 @@ Object {
       "points": Array [
         Object {
           "instKey": 6,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 4,
         },
         Object {
           "instKey": 7,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 0,
         },
         Object {
           "instKey": 8,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 2,
         },
@@ -4507,16 +4612,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 6,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 4,
     },
     Object {
       "instKey": 7,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 0,
     },
     Object {
       "instKey": 8,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 2,
     },
@@ -4603,6 +4711,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 6,
         },
@@ -4626,6 +4735,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 6,
     },
@@ -4700,6 +4810,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -4718,6 +4829,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
@@ -4774,6 +4886,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 1,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
@@ -4792,6 +4905,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 1,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
@@ -4863,6 +4977,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 3,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -4882,6 +4997,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 3,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
@@ -4951,6 +5067,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 3,
+          "isSingleNode": false,
           "propIdx": 4,
           "staticElemsBefore": 1,
         },
@@ -4970,6 +5087,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 3,
+      "isSingleNode": false,
       "propIdx": 4,
       "staticElemsBefore": 1,
     },
@@ -5073,11 +5191,13 @@ Object {
       "points": Array [
         Object {
           "instKey": 8,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 1,
         },
         Object {
           "instKey": 9,
+          "isSingleNode": false,
           "propIdx": 2,
           "staticElemsBefore": 1,
         },
@@ -5088,6 +5208,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 10,
+          "isSingleNode": false,
           "propIdx": 3,
           "staticElemsBefore": 1,
         },
@@ -5113,16 +5234,19 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 8,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 9,
+      "isSingleNode": false,
       "propIdx": 2,
       "staticElemsBefore": 1,
     },
     Object {
       "instKey": 10,
+      "isSingleNode": false,
       "propIdx": 3,
       "staticElemsBefore": 1,
     },
@@ -5246,6 +5370,7 @@ Object {
       "points": Array [
         Object {
           "instKey": 2,
+          "isSingleNode": false,
           "propIdx": 1,
           "staticElemsBefore": 0,
         },
@@ -5267,6 +5392,7 @@ Object {
   "unmountPoints": Array [
     Object {
       "instKey": 2,
+      "isSingleNode": false,
       "propIdx": 1,
       "staticElemsBefore": 0,
     },
