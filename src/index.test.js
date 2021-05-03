@@ -1170,6 +1170,10 @@ describe("reconcile", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("reconcile 35", () => {
+    testReconcile([1, 2, 3, 4, 5], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  });
 });
 
 describe("update", () => {
