@@ -8159,6 +8159,38 @@ exports[`update update 36 2`] = `
 </div>
 `;
 
+exports[`update update 37 1`] = `
+<div
+  id="app"
+>
+  1
+</div>
+`;
+
+exports[`update update 37 2`] = `
+<div
+  id="app"
+>
+  1
+</div>
+`;
+
+exports[`update update 38 1`] = `
+<div
+  id="app"
+>
+  1
+</div>
+`;
+
+exports[`update update 38 2`] = `
+<div
+  id="app"
+>
+  1
+</div>
+`;
+
 exports[`webcomponents slots slots 01 1`] = `
 <div
   id="app"

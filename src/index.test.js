@@ -1628,6 +1628,56 @@ describe("update", () => {
     render(App(), container);
     expect(container).toMatchSnapshot();
   });
+
+  it("update 37", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let ref;
+
+    const Content = component(c => {
+      ref = c;
+      return () => {
+        return state ? "1" : [1];
+      };
+    });
+
+    const App = component(() => () => {
+      return Content();
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(ref);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("update 38", () => {
+    const container = document.getElementById("app");
+
+    let state = false;
+    let ref;
+
+    const Content = component(c => {
+      ref = c;
+      return () => {
+        return state ? "1" : [1];
+      };
+    });
+
+    const App = component(() => () => {
+      return [Content()];
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+
+    state = true;
+    invalidate(ref);
+    expect(container).toMatchSnapshot();
+  });
 });
 
 describe("events", () => {
