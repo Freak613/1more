@@ -1129,6 +1129,12 @@ function getNextSiblingInArray(vnode, target) {
   return null;
 }
 
+function lookupContextInArray(vnode, token) {
+  const parent = vnode.x;
+  if (parent) return parent.i.b(parent, token);
+  return null;
+}
+
 const arrayNodeImpl = {
   u: updateArrayNode,
   z: unmountArrayNode,
@@ -1139,6 +1145,7 @@ const arrayNodeImpl = {
   e: arrayNodeEventHandler,
   a: getArrayTailDomNode,
   w: getNextSiblingInArray,
+  b: lookupContextInArray,
 };
 
 const createArrayVirtualNode = () => ({
@@ -1365,6 +1372,12 @@ function getNextSiblingInTemplate(vnode, target) {
   return arg.afterNodeFn(refs);
 }
 
+function lookupContextInTemplate(vnode, token) {
+  const parent = vnode.x;
+  if (parent) return parent.i.b(parent, token);
+  return null;
+}
+
 const templateNodeImpl = {
   u: updateTemplateNode,
   z: unmountTemplateNode,
@@ -1375,6 +1388,7 @@ const templateNodeImpl = {
   e: templateNodeEventHandler,
   a: getTemplateTailDomNode,
   w: getNextSiblingInTemplate,
+  b: lookupContextInTemplate,
 };
 
 const createTemplateVirtualNode = () => ({
@@ -1482,6 +1496,22 @@ function getNextSiblingInComponent(vnode, target) {
   return null;
 }
 
+function lookupContextInComponent(vnode, token) {
+  if (vnode.b !== undefined) {
+    const contexts = vnode.b;
+    if (contexts instanceof Array) {
+      const targetContext = contexts.find(c => c.t === token);
+      if (targetContext) return targetContext;
+    } else {
+      if (contexts.t === token) return contexts;
+    }
+  }
+
+  const parent = vnode.x;
+  if (parent) return parent.i.b(parent, token);
+  return null;
+}
+
 const componentNodeImpl = {
   u: updateComponentNode,
   z: unmountComponentNode,
@@ -1492,6 +1522,7 @@ const componentNodeImpl = {
   e: componentNodeEventHandler,
   a: getComponentTailDomNode,
   w: getNextSiblingInComponent,
+  b: lookupContextInComponent,
 };
 
 const createComponentVirtualNode = () => ({
@@ -1509,6 +1540,7 @@ const createComponentVirtualNode = () => ({
   i: componentNodeImpl,
   j: undefined, // root vnode
   z: false, // isDelegationRoot
+  b: undefined, // contexts
 });
 
 function updateVoidNode(b, vnode) {
@@ -2296,11 +2328,11 @@ function addHook(hooks, hook) {
   if (!hooks) {
     return hook;
   }
-  if (typeof hooks === "function") {
-    return [hooks, hook];
+  if (hooks instanceof Array) {
+    hooks.push(hook);
+    return hooks;
   }
-  hooks.push(hook);
-  return hooks;
+  return [hooks, hook];
 }
 
 export function useUnmount(component, hook) {
@@ -2361,4 +2393,22 @@ export function invalidate(vnode) {
     _flags = 2;
     _resolvedPromise.then(flushUpdates);
   }
+}
+
+export const createContext = d => ({
+  t: {}, // token
+  d, // default value
+});
+
+const createContextProvider = (t, v) => ({
+  t, // token
+  v, // value
+});
+
+export function provide(component, context, value) {
+  component.b = addHook(component.b, createContextProvider(context.t, value));
+}
+
+export function lookupContext(component, context) {
+  return component.i.b(component, context.t);
 }

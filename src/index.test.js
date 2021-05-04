@@ -7,6 +7,9 @@ import {
   useUnmount,
   invalidate,
   propertyToAttribute,
+  createContext,
+  lookupContext,
+  provide,
 } from "./index";
 
 const wait = t => {
@@ -5180,5 +5183,220 @@ describe("webcomponents", () => {
         "parent",
       ]);
     });
+  });
+});
+
+describe("contexts", () => {
+  beforeEach(() => {
+    _resetTemplateCounter();
+
+    document.body.innerHTML = "<div id='app'></div>";
+  });
+
+  it("contexts 01", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme.v}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, ThemeContext, "light");
+
+      return () => {
+        return Child();
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 02", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme.v}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, ThemeContext, "light");
+
+      return () => {
+        return html`<div>${Child()}</div>`;
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 03", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme.v}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, ThemeContext, "light");
+
+      return () => {
+        return [Child()];
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 04", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme ? theme.v : "not found"}</div>`;
+      };
+    });
+
+    render([Child()], container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 05", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme ? theme.v : "not found"}</div>`;
+      };
+    });
+
+    render(html`<div>${Child()}</div>`, container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 06", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+    const StoreContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme.v}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, ThemeContext, "light");
+      provide(c, StoreContext, {});
+
+      return () => {
+        return Child();
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 07", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme ? theme.v : "not found"}</div>`;
+      };
+    });
+
+    render(Child(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 08", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+    const StoreContext = createContext();
+    const SomeContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme ? theme.v : "not found"}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, StoreContext, {});
+      provide(c, SomeContext, {});
+
+      return () => {
+        return Child();
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
+  });
+
+  it("contexts 09", () => {
+    const container = document.getElementById("app");
+
+    const ThemeContext = createContext();
+    const StoreContext = createContext();
+
+    const Child = component(c => {
+      const theme = lookupContext(c, ThemeContext);
+
+      return () => {
+        return html`<div>${theme ? theme.v : "not found"}</div>`;
+      };
+    });
+
+    const App = component(c => {
+      provide(c, StoreContext, {});
+
+      return () => {
+        return Child();
+      };
+    });
+
+    render(App(), container);
+    expect(container).toMatchSnapshot();
   });
 });

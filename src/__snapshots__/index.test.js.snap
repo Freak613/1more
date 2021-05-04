@@ -5422,6 +5422,100 @@ exports[`compiler mixed content mixed 17 2`] = `
 </div>
 `;
 
+exports[`contexts contexts 01 1`] = `
+<div
+  id="app"
+>
+  <div>
+    light
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 02 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div>
+      light
+    </div>
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 03 1`] = `
+<div
+  id="app"
+>
+  <div>
+    light
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 04 1`] = `
+<div
+  id="app"
+>
+  <div>
+    not found
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 05 1`] = `
+<div
+  id="app"
+>
+  <div>
+    <div>
+      not found
+    </div>
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 06 1`] = `
+<div
+  id="app"
+>
+  <div>
+    light
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 07 1`] = `
+<div
+  id="app"
+>
+  <div>
+    not found
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 08 1`] = `
+<div
+  id="app"
+>
+  <div>
+    not found
+  </div>
+</div>
+`;
+
+exports[`contexts contexts 09 1`] = `
+<div
+  id="app"
+>
+  <div>
+    not found
+  </div>
+</div>
+`;
+
 exports[`events bubbling bubbling 01 1`] = `
 <div
   id="app"
