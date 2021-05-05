@@ -7,9 +7,10 @@ import {
   useUnmount,
   invalidate,
   propertyToAttribute,
-  createContext,
-  lookupContext,
-  addProvider,
+  createContextConfig,
+  createContextProvider,
+  addContextProvider,
+  getContextProvider,
 } from "./index";
 
 const wait = t => {
@@ -5196,10 +5197,10 @@ describe("contexts", () => {
   it("contexts 01", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme.v}</div>`;
@@ -5207,7 +5208,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, ThemeContext, "light");
+      const p = createContextProvider(ThemeContext, "light");
+      addContextProvider(c, p);
 
       return () => {
         return Child();
@@ -5221,10 +5223,10 @@ describe("contexts", () => {
   it("contexts 02", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme.v}</div>`;
@@ -5232,7 +5234,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, ThemeContext, "light");
+      const p = createContextProvider(ThemeContext, "light");
+      addContextProvider(c, p);
 
       return () => {
         return html`<div>${Child()}</div>`;
@@ -5246,10 +5249,10 @@ describe("contexts", () => {
   it("contexts 03", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme.v}</div>`;
@@ -5257,7 +5260,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, ThemeContext, "light");
+      const p = createContextProvider(ThemeContext, "light");
+      addContextProvider(c, p);
 
       return () => {
         return [Child()];
@@ -5271,10 +5275,10 @@ describe("contexts", () => {
   it("contexts 04", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme ? theme.v : "not found"}</div>`;
@@ -5288,10 +5292,10 @@ describe("contexts", () => {
   it("contexts 05", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme ? theme.v : "not found"}</div>`;
@@ -5305,11 +5309,11 @@ describe("contexts", () => {
   it("contexts 06", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
-    const StoreContext = createContext();
+    const ThemeContext = createContextConfig();
+    const StoreContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme.v}</div>`;
@@ -5317,8 +5321,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, ThemeContext, "light");
-      addProvider(c, StoreContext, {});
+      addContextProvider(c, createContextProvider(ThemeContext, "light"));
+      addContextProvider(c, createContextProvider(StoreContext, {}));
 
       return () => {
         return Child();
@@ -5332,10 +5336,10 @@ describe("contexts", () => {
   it("contexts 07", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
+    const ThemeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme ? theme.v : "not found"}</div>`;
@@ -5349,12 +5353,12 @@ describe("contexts", () => {
   it("contexts 08", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
-    const StoreContext = createContext();
-    const SomeContext = createContext();
+    const ThemeContext = createContextConfig();
+    const StoreContext = createContextConfig();
+    const SomeContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme ? theme.v : "not found"}</div>`;
@@ -5362,8 +5366,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, StoreContext, {});
-      addProvider(c, SomeContext, {});
+      addContextProvider(c, createContextProvider(StoreContext, {}));
+      addContextProvider(c, createContextProvider(SomeContext, {}));
 
       return () => {
         return Child();
@@ -5377,11 +5381,11 @@ describe("contexts", () => {
   it("contexts 09", () => {
     const container = document.getElementById("app");
 
-    const ThemeContext = createContext();
-    const StoreContext = createContext();
+    const ThemeContext = createContextConfig();
+    const StoreContext = createContextConfig();
 
     const Child = component(c => {
-      const theme = lookupContext(c, ThemeContext);
+      const theme = getContextProvider(c, ThemeContext);
 
       return () => {
         return html`<div>${theme ? theme.v : "not found"}</div>`;
@@ -5389,7 +5393,7 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      addProvider(c, StoreContext, {});
+      addContextProvider(c, createContextProvider(StoreContext, {}));
 
       return () => {
         return Child();
