@@ -9,7 +9,7 @@ import {
   propertyToAttribute,
   createContext,
   lookupContext,
-  provide,
+  addProvider,
 } from "./index";
 
 const wait = t => {
@@ -5207,7 +5207,7 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, ThemeContext, "light");
+      addProvider(c, ThemeContext, "light");
 
       return () => {
         return Child();
@@ -5232,7 +5232,7 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, ThemeContext, "light");
+      addProvider(c, ThemeContext, "light");
 
       return () => {
         return html`<div>${Child()}</div>`;
@@ -5257,7 +5257,7 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, ThemeContext, "light");
+      addProvider(c, ThemeContext, "light");
 
       return () => {
         return [Child()];
@@ -5317,8 +5317,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, ThemeContext, "light");
-      provide(c, StoreContext, {});
+      addProvider(c, ThemeContext, "light");
+      addProvider(c, StoreContext, {});
 
       return () => {
         return Child();
@@ -5362,8 +5362,8 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, StoreContext, {});
-      provide(c, SomeContext, {});
+      addProvider(c, StoreContext, {});
+      addProvider(c, SomeContext, {});
 
       return () => {
         return Child();
@@ -5389,7 +5389,7 @@ describe("contexts", () => {
     });
 
     const App = component(c => {
-      provide(c, StoreContext, {});
+      addProvider(c, StoreContext, {});
 
       return () => {
         return Child();

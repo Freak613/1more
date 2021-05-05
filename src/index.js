@@ -2405,7 +2405,7 @@ const createContextProvider = (t, v) => ({
   v, // value
 });
 
-export function provide(component, context, value) {
+export function addProvider(component, context, value) {
   component.b = addHook(component.b, createContextProvider(context.t, value));
 }
 
