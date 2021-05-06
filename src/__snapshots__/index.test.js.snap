@@ -8737,6 +8737,79 @@ exports[`webcomponents slots slots 24 1`] = `
 </div>
 `;
 
+exports[`webcomponents slots slots 25 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-25>
+      <div>
+        <div>
+          <div
+            id="target1"
+          />
+        </div>
+      </div>
+      <div>
+        <div>
+          <div
+            id="target2"
+          />
+        </div>
+      </div>
+    </x-search-slots-25>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 26 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-26>
+      <div>
+        <div
+          id="target1"
+        />
+      </div>
+      <div>
+        <div
+          id="target2"
+        />
+      </div>
+    </x-search-slots-26>
+    !
+  </div>
+</div>
+`;
+
+exports[`webcomponents slots slots 27 1`] = `
+<div
+  id="app"
+>
+  <div>
+    Hello
+    <x-search-slots-27>
+      <div>
+        <div>
+          Hello
+        </div>
+      </div>
+      <div>
+        <div
+          id="target2"
+        />
+      </div>
+    </x-search-slots-27>
+    !
+  </div>
+</div>
+`;
+
 exports[`webcomponents webcomponents 01 1`] = `
 <div>
   Web Component 
