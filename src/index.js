@@ -2412,3 +2412,7 @@ export function addContextProvider(component, provider) {
 export function getContextProvider(component, context) {
   return component.i.b(component, context.t);
 }
+
+export function getContextProviderValue(provider) {
+  return provider.v;
+}

@@ -11,6 +11,7 @@ import {
   createContextProvider,
   addContextProvider,
   getContextProvider,
+  getContextProviderValue,
 } from "./index";
 
 const wait = t => {
@@ -5368,7 +5369,7 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme.v}</div>`;
+        return html`<div>${getContextProviderValue(theme)}</div>`;
       };
     });
 
@@ -5394,7 +5395,7 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme.v}</div>`;
+        return html`<div>${getContextProviderValue(theme)}</div>`;
       };
     });
 
@@ -5420,7 +5421,7 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme.v}</div>`;
+        return html`<div>${getContextProviderValue(theme)}</div>`;
       };
     });
 
@@ -5446,7 +5447,9 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme ? theme.v : "not found"}</div>`;
+        return html`
+          <div>${theme ? getContextProviderValue(theme) : "not found"}</div>
+        `;
       };
     });
 
@@ -5463,7 +5466,9 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme ? theme.v : "not found"}</div>`;
+        return html`
+          <div>${theme ? getContextProviderValue(theme) : "not found"}</div>
+        `;
       };
     });
 
@@ -5481,7 +5486,7 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme.v}</div>`;
+        return html`<div>${getContextProviderValue(theme)}</div>`;
       };
     });
 
@@ -5507,7 +5512,9 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme ? theme.v : "not found"}</div>`;
+        return html`
+          <div>${theme ? getContextProviderValue(theme) : "not found"}</div>
+        `;
       };
     });
 
@@ -5526,7 +5533,9 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme ? theme.v : "not found"}</div>`;
+        return html`
+          <div>${theme ? getContextProviderValue(theme) : "not found"}</div>
+        `;
       };
     });
 
@@ -5553,7 +5562,9 @@ describe("contexts", () => {
       const theme = getContextProvider(c, ThemeContext);
 
       return () => {
-        return html`<div>${theme ? theme.v : "not found"}</div>`;
+        return html`
+          <div>${theme ? getContextProviderValue(theme) : "not found"}</div>
+        `;
       };
     });
 
