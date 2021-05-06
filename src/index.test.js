@@ -12,6 +12,9 @@ import {
   addContextProvider,
   getContextProvider,
   getContextProviderValue,
+  subscribeToContextProvider,
+  setContextProviderValue,
+  invalidateContextProvider,
 } from "./index";
 
 const wait = t => {
@@ -5578,5 +5581,83 @@ describe("contexts", () => {
 
     render(App(), container);
     expect(container).toMatchSnapshot();
+  });
+
+  describe("subscribe", () => {
+    it("subscribe 01", () => {
+      const container = document.getElementById("app");
+
+      const ThemeContext = createContextConfig();
+
+      const themeProvider = createContextProvider(ThemeContext, "light");
+      let renderCount = 0;
+
+      const Child = component(c => {
+        const themeProvider = getContextProvider(c, ThemeContext);
+        subscribeToContextProvider(c, themeProvider);
+
+        return () => {
+          renderCount++;
+
+          return html`<div>${getContextProviderValue(themeProvider)}</div>`;
+        };
+      });
+
+      const App = component(c => {
+        addContextProvider(c, themeProvider);
+
+        return () => {
+          return Child();
+        };
+      });
+
+      render(App(), container);
+      expect(container).toMatchSnapshot();
+      expect(renderCount).toBe(1);
+
+      setContextProviderValue(themeProvider, "dark");
+      invalidateContextProvider(themeProvider);
+
+      expect(container).toMatchSnapshot();
+      expect(renderCount).toBe(2);
+    });
+
+    it("subscribe 02", () => {
+      const container = document.getElementById("app");
+
+      const ThemeContext = createContextConfig();
+
+      const themeProvider = createContextProvider(ThemeContext, "light");
+      let renderCount = 0;
+
+      const Child = component(c => {
+        const themeProvider = getContextProvider(c, ThemeContext);
+        subscribeToContextProvider(c, themeProvider);
+
+        return () => {
+          renderCount++;
+
+          return html`<div>${getContextProviderValue(themeProvider)}</div>`;
+        };
+      });
+
+      const App = component(c => {
+        addContextProvider(c, themeProvider);
+
+        return () => {
+          return [Child(), Child()];
+        };
+      });
+
+      render(App(), container);
+      expect(container).toMatchSnapshot();
+      expect(renderCount).toBe(2);
+
+      setContextProviderValue(themeProvider, "dark");
+      invalidateContextProvider(themeProvider);
+
+      expect(container).toMatchSnapshot();
+      expect(renderCount).toBe(4);
+    });
   });
 });

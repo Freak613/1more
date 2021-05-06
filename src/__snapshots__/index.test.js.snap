@@ -5516,6 +5516,52 @@ exports[`contexts contexts 09 1`] = `
 </div>
 `;
 
+exports[`contexts subscribe subscribe 01 1`] = `
+<div
+  id="app"
+>
+  <div>
+    light
+  </div>
+</div>
+`;
+
+exports[`contexts subscribe subscribe 01 2`] = `
+<div
+  id="app"
+>
+  <div>
+    dark
+  </div>
+</div>
+`;
+
+exports[`contexts subscribe subscribe 02 1`] = `
+<div
+  id="app"
+>
+  <div>
+    light
+  </div>
+  <div>
+    light
+  </div>
+</div>
+`;
+
+exports[`contexts subscribe subscribe 02 2`] = `
+<div
+  id="app"
+>
+  <div>
+    dark
+  </div>
+  <div>
+    dark
+  </div>
+</div>
+`;
+
 exports[`events bubbling bubbling 01 1`] = `
 <div
   id="app"
