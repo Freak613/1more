@@ -2398,36 +2398,6 @@ export function invalidate(vnode) {
 
 // Contexts
 
-const createLinkedList = () => ({
-  h: undefined, // head
-  t: undefined, // tail
-});
-
-const createLinkedNode = v => ({
-  p: undefined, // prev
-  n: undefined, // next
-  v, // value
-});
-
-const appendLinkedNode = (n, l) => {
-  if (l.t === undefined) {
-    l.h = n;
-  } else {
-    l.t.n = n;
-    n.p = l.t;
-  }
-  l.t = n;
-};
-
-const removeLinkedNode = (n, l) => {
-  const prev = n.p;
-  const next = n.n;
-  if (prev) prev.n = next;
-  if (next) next.p = prev;
-  if (n === l.h) l.h = next;
-  if (n === l.t) l.t = prev;
-};
-
 export const createContextConfig = d => ({
   t: {}, // token
   d, // default value
@@ -2436,7 +2406,6 @@ export const createContextConfig = d => ({
 export const createContextProvider = (context, v) => ({
   t: context.t, // token
   v, // value
-  s: createLinkedList(), // subscriptions
 });
 
 export function addContextProvider(component, provider) {
@@ -2449,49 +2418,4 @@ export function getContextProvider(component, context) {
 
 export function getContextProviderValue(provider) {
   return provider.v;
-}
-
-export function setContextProviderValue(provider, value) {
-  provider.v = value;
-}
-
-export function subscribeToContextProvider(component, provider) {
-  const n = createLinkedNode(component);
-  appendLinkedNode(n, provider.s);
-  return n;
-}
-
-export function unsubscribeFromContextProvider(subscription, provider) {
-  removeLinkedNode(subscription, provider.s);
-}
-
-export function invalidateContextProvider(provider) {
-  const subs = provider.s;
-
-  const index = {};
-
-  let next = subs.h;
-  while (next !== undefined) {
-    const vnode = next.v;
-    vnode.f = 2;
-
-    const depth = vnode.d;
-    let d;
-    if ((d = index[depth])) {
-      d.push(vnode);
-    } else {
-      index[depth] = [vnode];
-    }
-
-    next = next.n;
-  }
-
-  for (const depth of Object.keys(index)) {
-    const vnodes = index[depth];
-    for (const vnode of vnodes) {
-      if ((vnode.f & 2) !== 0) {
-        checkUpdates(vnode);
-      }
-    }
-  }
 }
