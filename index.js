@@ -5,4 +5,7 @@ export {
   key,
   useUnmount,
   invalidate,
+  createContext,
+  addContext,
+  useContext,
 } from "./src/index";
