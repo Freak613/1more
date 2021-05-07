@@ -1412,6 +1412,7 @@ function updateComponentNode(b, vnode) {
   ) {
     if (b.p !== vnode.c) {
       vnode.c = b.p;
+      vnode.f = 0;
 
       const currentDepth = vnode.d;
       _depth = currentDepth + 1;
@@ -1420,8 +1421,6 @@ function updateComponentNode(b, vnode) {
       vnode.q = child.i.u(vnode.v(b.p), child);
 
       _depth = currentDepth;
-
-      vnode.f = 0;
     }
   } else {
     const parent = vnode.w;
@@ -2346,6 +2345,8 @@ const _resolvedPromise = Promise.resolve();
 const _pendingUpdates = box({});
 
 function checkUpdates(vnode) {
+  vnode.f = 0;
+
   const currentDepth = vnode.d;
   _depth = currentDepth + 1;
 
@@ -2359,12 +2360,14 @@ function checkUpdates(vnode) {
   vnode.q = child.i.u(vnode.v(vnode.c), child);
 
   _depth = currentDepth;
-
-  vnode.f = 0;
 }
 
 function flushUpdates() {
   const index = _pendingUpdates.v;
+
+  _flags = 0;
+  _pendingUpdates.v = {};
+
   for (const depth of Object.keys(index)) {
     const vnodes = index[depth];
     for (const vnode of vnodes) {
@@ -2373,8 +2376,6 @@ function flushUpdates() {
       }
     }
   }
-  _flags = 0;
-  _pendingUpdates.v = {};
 }
 
 export function invalidate(vnode) {

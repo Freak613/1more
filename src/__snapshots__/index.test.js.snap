@@ -6020,6 +6020,25 @@ exports[`invalidate invalidate 12 2`] = `
 </div>
 `;
 
+exports[`invalidate invalidate 13 1`] = `
+<div
+  id="app"
+/>
+`;
+
+exports[`invalidate invalidate 13 2`] = `
+Array [
+  "Controller render",
+  "Child render",
+  "Controller render",
+  "Child render",
+  "Controller render",
+  "Child render",
+  "Controller render",
+  "Child render",
+]
+`;
+
 exports[`reconcile reconcile 01 1`] = `
 <div
   id="app"

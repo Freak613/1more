@@ -2811,6 +2811,55 @@ describe("invalidate", () => {
 
     expect(container).toMatchSnapshot();
   });
+
+  it("invalidate 13", async () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    const log = [];
+
+    let controllerRenders = 0;
+    let controllerRef;
+
+    const Controller = component(c => {
+      controllerRef = c;
+
+      return () => {
+        controllerRenders++;
+        log.push("Controller render");
+      };
+    });
+
+    let childRenders = 0;
+    let childRef;
+
+    const Child = component(c => {
+      childRef = c;
+
+      return () => {
+        childRenders++;
+        log.push("Child render");
+
+        if (state < 3) {
+          state++;
+          invalidate(childRef);
+          invalidate(controllerRef);
+        }
+      };
+    });
+
+    const App = component(() => () => Child());
+
+    render([Controller(), App()], container);
+
+    expect(container).toMatchSnapshot();
+
+    await wait(100);
+    expect(log).toMatchSnapshot();
+    expect(childRenders).toBe(4);
+    expect(controllerRenders).toBe(4);
+  });
 });
 
 describe("propertyToAttribute", () => {
