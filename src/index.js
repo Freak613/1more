@@ -2398,24 +2398,21 @@ export function invalidate(vnode) {
 
 // Contexts
 
-export const createContextConfig = d => ({
+export const createContext = d => ({
   t: {}, // token
   d, // default value
 });
 
-export const createContextProvider = (context, v) => ({
+const createContextProvider = (context, v) => ({
   t: context.t, // token
   v, // value
 });
 
-export function addContextProvider(component, provider) {
-  component.b = addHook(component.b, provider);
+export function addContext(component, context, v) {
+  component.b = addHook(component.b, createContextProvider(context, v));
 }
 
-export function getContextProvider(component, context) {
-  return component.i.b(component, context.t);
-}
-
-export function getContextProviderValue(provider) {
-  return provider.v;
+export function useContext(component, context) {
+  const p = component.i.b(component, context.t);
+  return p ? p.v : context.d;
 }
