@@ -214,6 +214,54 @@ const SomeComponent = component(c => {
 
 Allows to attach callback, that going to be called before component unmounted.
 
+### Contexts
+
+Context API can be used to provide static values for children elements. Context providers are not part of the rendering tree, instead they attached to some host components.
+
+Context API consists of three functions:
+
+- `createContext(defaultValue)` - creates context configuration that can be used to provide and discover them in the tree.
+- `addContext(component, context, value)` - create provider for given context and attach it to the host component.
+- `useContext(component, context)` - get value from the closest context provider in the rendered tree or return context's default value.
+
+```js
+import {
+  html,
+  component,
+  render,
+  createContext,
+  addContext,
+  useContext,
+} from "1more";
+
+const ThemeContext = createContext();
+
+const Child = component(c => {
+  const theme = useContext(c, ThemeContext);
+
+  return () => {
+    // prettier-ignore
+    return html`
+      <div style=${{ color: theme.textColor }}>
+        Hello world!
+      </div>
+    `;
+  };
+});
+
+const App = component(c => {
+  addContext(c, ThemeContext, { textColor: "#111111" });
+
+  return () => {
+    return Child();
+  };
+});
+
+render(App(), container);
+```
+
+Note: contexts do not support propagating and changing values in them. Since this is one of the main performance problems when using them in React, and it can be solved in a lot of different ways, system defaults to focus only on providing and discovering static values. Reactivity can be achieved by using additional libraries that provide some way to subscribe to changes and putting their "stores" into context provider.
+
 ### Observables
 
 #### box
