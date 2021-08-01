@@ -738,6 +738,10 @@ const compileRoot = (vdom, domNode) => {
 
     let hasNestedData = false;
 
+    if (vdom.type === "static") {
+      isPreviousInsertion = false;
+    }
+
     vdom.children.forEach((child, idx) => {
       fullPath = [...fullPath, idx === 0 ? 1 : 0];
       eventsPath = [...eventsPath, idx === 0 ? 1 : 0];
@@ -763,7 +767,9 @@ const compileRoot = (vdom, domNode) => {
         lastDataRefIdx =
           resultChild.t === "argNode" ? resultChild.instKey : nextChildRefIdx;
         eventsPath = [];
-        if (resultChild.t === "argNode") isPreviousInsertion = true;
+        if (resultChild.t === "argNode") {
+          isPreviousInsertion = true;
+        }
       }
 
       if (nextChildRefIdx === lastChildRefIdx) {

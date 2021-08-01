@@ -2333,8 +2333,8 @@ describe("events", () => {
     const App = component(c => {
       return () => {
         return html`
-          <div role="alert" class="jake">
-            <i id="target" class="button" onclick=${() => state++}></i>
+          <div>
+            <i id="target" onclick=${() => state++}></i>
             ${"1"}
           </div>
         `;
@@ -2347,6 +2347,36 @@ describe("events", () => {
     target.dispatchEvent(new Event("click", { bubbles: true }));
 
     expect(state).toBe(1);
+  });
+
+  it("events 33", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    const App = component(c => {
+      return () => {
+        return html`
+          <div>
+            <div onclick=${() => {}}></div>
+            <form>
+              ${html`<input type="hidden" value=${1} />`}
+              <header>
+                <h5 id="target">${"Test"}</h5>
+                <span onclick=${() => {}}></span>
+              </header>
+            </form>
+          </div>
+        `;
+      };
+    });
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(0);
   });
 
   describe("bubbling", () => {
