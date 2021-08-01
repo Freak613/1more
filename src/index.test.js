@@ -487,10 +487,10 @@ describe("compiler", () => {
         html`
           <div>
             <!--
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-              sed do eiusmod tempor incididunt ut labore et dolore magna 
-              aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
-              ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo consequat.
             -->
 
             <!-- Render a string or number directly -->
@@ -528,9 +528,10 @@ describe("reconcile", () => {
 
     const Item = component(() => item => html`<span>${item}</span>`);
 
-    const App = component(() => state => html`
-      <div>${state.map(item => key(item, Item(item)))}</div>
-    `);
+    const App = component(
+      () => state =>
+        html` <div>${state.map(item => key(item, Item(item)))}</div> `,
+    );
 
     render(App(first), container);
     expect(container).toMatchSnapshot();
@@ -600,9 +601,10 @@ describe("reconcile", () => {
 
     const Item = component(() => item => html`<span>${item}</span>`);
 
-    const App = component(() => state => html`
-      <div>${state.map(item => key(item, Item(item)))} After</div>
-    `);
+    const App = component(
+      () => state =>
+        html` <div>${state.map(item => key(item, Item(item)))} After</div> `,
+    );
 
     render(App([1, 2, 3, 4, 5]), container);
     expect(container).toMatchSnapshot();
@@ -1215,9 +1217,9 @@ describe("update", () => {
   it("update 04", () => {
     const container = document.getElementById("app");
 
-    const App = component(() => state => html`
-      <div>${state} After content</div>
-    `);
+    const App = component(
+      () => state => html` <div>${state} After content</div> `,
+    );
 
     const Child = component(() => () => html`<span>child</span>`);
 
@@ -1240,9 +1242,9 @@ describe("update", () => {
   it("update 07", () => {
     const container = document.getElementById("app");
 
-    const App = component(() => state => html`
-      <div>${state} After content</div>
-    `);
+    const App = component(
+      () => state => html` <div>${state} After content</div> `,
+    );
 
     render(App([]), container);
     expect(container).toMatchSnapshot();
@@ -1374,8 +1376,8 @@ describe("update", () => {
 
     const Child = component(() => () => html`<span>child</span>`);
 
-    const App = component(() => state =>
-      html`<div>${state} ${[Child()]}</div>`,
+    const App = component(
+      () => state => html`<div>${state} ${[Child()]}</div>`,
     );
 
     render(App("test"), container);
@@ -1435,8 +1437,9 @@ describe("update", () => {
   });
 
   it("update 26", () => {
-    const Child = component(() => v =>
-      html`<span>First row: ${v}</span><span>Second row: ${v}</span>`,
+    const Child = component(
+      () => v =>
+        html`<span>First row: ${v}</span><span>Second row: ${v}</span>`,
     );
     testUpdate(
       [key(1, Child(1)), key(2, Child(2))],
@@ -1694,8 +1697,9 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`<div id="target" onclick=${() => state++}>${"text"}</div>`,
+    const App = component(
+      () => () =>
+        html`<div id="target" onclick=${() => state++}>${"text"}</div>`,
     );
 
     render(App(), container);
@@ -1714,8 +1718,8 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const Child = component(() => () =>
-      html`<div id="target" onclick=${() => (state = 1)} />`,
+    const Child = component(
+      () => () => html`<div id="target" onclick=${() => (state = 1)} />`,
     );
     const App = component(() => () => html`<div>${Child()}</div>`);
 
@@ -1731,8 +1735,8 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const Child = component(() => () =>
-      html`<div id="target" onclick=${() => (state = 1)} />`,
+    const Child = component(
+      () => () => html`<div id="target" onclick=${() => (state = 1)} />`,
     );
     const App = component(() => () => html`<div>${"test"}${Child()}</div>`);
 
@@ -1748,11 +1752,12 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const Child = component(() => () =>
-      html`
-        <div></div>
-        <div id="target" onclick=${() => (state = 1)}></div>
-      `,
+    const Child = component(
+      () => () =>
+        html`
+          <div></div>
+          <div id="target" onclick=${() => (state = 1)}></div>
+        `,
     );
     const App = component(() => () => html`<div>${Child()}</div>`);
 
@@ -1770,17 +1775,20 @@ describe("events", () => {
     let state1 = 0;
     let state2 = 0;
 
-    const Child = component(() => ({ id, onclick }) =>
-      html`
-        <div></div>
-        <div id=${id} onclick=${onclick}></div>
-      `,
+    const Child = component(
+      () =>
+        ({ id, onclick }) =>
+          html`
+            <div></div>
+            <div id=${id} onclick=${onclick}></div>
+          `,
     );
-    const App = component(() => () =>
-      html`<div>
-        ${Child({ id: "target1", onclick: () => (state1 = 1) })}
-        ${Child({ id: "target2", onclick: () => (state2 = 1) })}
-      </div>`,
+    const App = component(
+      () => () =>
+        html`<div>
+          ${Child({ id: "target1", onclick: () => (state1 = 1) })}
+          ${Child({ id: "target2", onclick: () => (state2 = 1) })}
+        </div>`,
     );
 
     render(App(), container);
@@ -1797,14 +1805,17 @@ describe("events", () => {
 
     let state1 = 0;
     let state2 = 0;
-    const Child = component(() => ({ id, onclick }) =>
-      html`<div id=${id} onclick=${onclick}></div>`,
+    const Child = component(
+      () =>
+        ({ id, onclick }) =>
+          html`<div id=${id} onclick=${onclick}></div>`,
     );
-    const App = component(() => () =>
-      html`<div>
-        ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
-        ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
-      </div>`,
+    const App = component(
+      () => () =>
+        html`<div>
+          ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
+          ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
+        </div>`,
     );
 
     render(App(), container);
@@ -1821,17 +1832,20 @@ describe("events", () => {
 
     let state1 = 0;
     let state2 = 0;
-    const Child = component(() => ({ id, onclick }) =>
-      html`
-        <div></div>
-        <div id=${id} onclick=${onclick}></div>
-      `,
+    const Child = component(
+      () =>
+        ({ id, onclick }) =>
+          html`
+            <div></div>
+            <div id=${id} onclick=${onclick}></div>
+          `,
     );
-    const App = component(() => () =>
-      html`<div>
-        ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
-        ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
-      </div>`,
+    const App = component(
+      () => () =>
+        html`<div>
+          ${[Child({ id: "target1", onclick: () => (state1 = 1) })]}
+          ${[Child({ id: "target2", onclick: () => (state2 = 1) })]}
+        </div>`,
     );
 
     render(App(), container);
@@ -1847,12 +1861,13 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div id="target" onkeydown=${() => {}} onclick=${() => state++}>
-          <div onclick=${() => {}}></div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div id="target" onkeydown=${() => {}} onclick=${() => state++}>
+            <div onclick=${() => {}}></div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -1871,16 +1886,17 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const Child = component(() => () =>
-      html`<div onclick=${() => state++}></div>`,
+    const Child = component(
+      () => () => html`<div onclick=${() => state++}></div>`,
     );
-    const App = component(() => () =>
-      html`
-        <div>
-          ${Child()}
-          <div id="target"></div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div>
+            ${Child()}
+            <div id="target"></div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -1895,11 +1911,11 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const Child = component(() => () =>
-      html`<div onclick=${() => (state = 1)} />`,
+    const Child = component(
+      () => () => html`<div onclick=${() => (state = 1)} />`,
     );
-    const App = component(() => () =>
-      html`<div id="target">${"test"}${Child()}</div>`,
+    const App = component(
+      () => () => html`<div id="target">${"test"}${Child()}</div>`,
     );
 
     render(App(), container);
@@ -2111,12 +2127,13 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div>
-          <div id="target" onclick=${() => state++}>${"text"}</div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div>
+            <div id="target" onclick=${() => state++}>${"text"}</div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -2135,8 +2152,9 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html` <div id="target" onclick=${() => state++}>${"text"}</div> `,
+    const App = component(
+      () => () =>
+        html` <div id="target" onclick=${() => state++}>${"text"}</div> `,
     );
 
     render(App(), container);
@@ -2151,12 +2169,13 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div>
-          <div id="target" onclick=${() => state++}>${"text"}</div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div>
+            <div id="target" onclick=${() => state++}>${"text"}</div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -2171,12 +2190,13 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div onclick=${() => state++}>
-          <div id="target"></div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div onclick=${() => state++}>
+            <div id="target"></div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -2191,14 +2211,15 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div onclick=${() => state++}>
-          <div>
-            <div id="target"></div>
+    const App = component(
+      () => () =>
+        html`
+          <div onclick=${() => state++}>
+            <div>
+              <div id="target"></div>
+            </div>
           </div>
-        </div>
-      `,
+        `,
     );
 
     render(App(), container);
@@ -2213,14 +2234,15 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div onany=${() => state++}>
-          <div>
-            <div id="target"></div>
+    const App = component(
+      () => () =>
+        html`
+          <div onany=${() => state++}>
+            <div>
+              <div id="target"></div>
+            </div>
           </div>
-        </div>
-      `,
+        `,
     );
 
     render(App(), container);
@@ -2235,14 +2257,15 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div onclick=${null}>
-          <div>
-            <div id="target"></div>
+    const App = component(
+      () => () =>
+        html`
+          <div onclick=${null}>
+            <div>
+              <div id="target"></div>
+            </div>
           </div>
-        </div>
-      `,
+        `,
     );
 
     render(App(), container);
@@ -2262,13 +2285,14 @@ describe("events", () => {
     const container = document.getElementById("app");
 
     let state = 0;
-    const App = component(() => () =>
-      html`
-        <div>
-          ${"Text"}
-          <div id="target" onclick=${() => state++}></div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div>
+            ${"Text"}
+            <div id="target" onclick=${() => state++}></div>
+          </div>
+        `,
     );
 
     render(App(), container);
@@ -2284,12 +2308,13 @@ describe("events", () => {
 
     const order = [];
 
-    const App = component(() => () =>
-      html`
-        <div onfocus=${() => order.push("parent")}>
-          <div id="target" onclick=${() => order.push("target")}></div>
-        </div>
-      `,
+    const App = component(
+      () => () =>
+        html`
+          <div onfocus=${() => order.push("parent")}>
+            <div id="target" onclick=${() => order.push("target")}></div>
+          </div>
+        `,
     );
 
     render(App(), container);
