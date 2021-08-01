@@ -1277,7 +1277,9 @@ function templateNodeEventHandler(vnode, event, targets, parent, outerShift) {
           const inst = refs[insertionEl.instKey];
           const size = inst.i.s(inst);
           if (nodeIndex <= size - 1 + shift) {
-            nodeInstance = inst;
+            if (nodeIndex >= shift) {
+              nodeInstance = inst;
+            }
             break;
           } else {
             shift += size;

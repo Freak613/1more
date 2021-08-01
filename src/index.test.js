@@ -2325,6 +2325,30 @@ describe("events", () => {
     expect(order).toEqual(["target"]);
   });
 
+  it("events 32", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    const App = component(c => {
+      return () => {
+        return html`
+          <div role="alert" class="jake">
+            <i id="target" class="button" onclick=${() => state++}></i>
+            ${"1"}
+          </div>
+        `;
+      };
+    });
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(1);
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
