@@ -5350,7 +5350,7 @@ Object {
       "flag": 0,
       "instKey": null,
       "isDelegationRoot": false,
-      "isPreviousInsertion": true,
+      "isPreviousInsertion": false,
       "knownEvents": null,
       "path": Array [
         0,

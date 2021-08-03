@@ -2379,6 +2379,50 @@ describe("events", () => {
     expect(state).toBe(0);
   });
 
+  it("events 34", () => {
+    const container = document.getElementById("app");
+
+    let state = 0;
+
+    const App = component(c => {
+      const items = [1];
+      return () => {
+        return html`
+          <form>
+            <section>
+              ${items.map(
+                () => html`
+                  <div id="target2">
+                    <label>
+                      <button id="target" onclick=${() => state++}></button>
+                    </label>
+                  </div>
+                `,
+              )}
+              <div>
+                <label>
+                  <i onclick=${() => {}}></i>
+                </label>
+              </div>
+            </section>
+          </form>
+        `;
+      };
+    });
+
+    render(App(), container);
+
+    const target = document.getElementById("target");
+    target.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(1);
+
+    const target2 = document.getElementById("target2");
+    target2.dispatchEvent(new Event("click", { bubbles: true }));
+
+    expect(state).toBe(1);
+  });
+
   describe("bubbling", () => {
     it("bubbling 01", () => {
       const container = document.getElementById("app");
